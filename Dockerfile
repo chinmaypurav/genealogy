@@ -51,13 +51,7 @@ RUN install-php-extensions intl gd xsl exif pcov
 ############################################
 # Composer stage for installing PHP dependencies
 ############################################
-FROM base AS composer-stage
-
-USER root
-
-# Install composer and git
-RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+FROM composer:2 AS composer-stage
 
 WORKDIR /app
 
@@ -65,10 +59,15 @@ WORKDIR /app
 COPY composer.json composer.lock ./
 
 # Install PHP dependencies (needed for Filament CSS files)
-# Disable SSL verification temporarily due to Docker environment constraints
+# Ignore platform requirements since we're only extracting CSS files
+# Disable SSL verification due to Docker build environment constraints  
 RUN composer config --global disable-tls true && \
     composer config --global secure-http false && \
-    composer install --no-dev --no-scripts --no-autoloader --prefer-dist
+    composer install --no-dev --no-scripts --no-autoloader --prefer-dist \
+        --ignore-platform-req=ext-intl \
+        --ignore-platform-req=ext-exif \
+        --ignore-platform-req=ext-gd \
+        --ignore-platform-req=ext-xsl
 
 ############################################
 # Node stage for compiling assets
@@ -78,10 +77,10 @@ FROM node:20 AS node
 WORKDIR /app
 
 # Copy package files
-COPY package.json ./
+COPY package.json package-lock.json* ./
 
-# Install dependencies using yarn 
-# Disable strict SSL temporarily due to Docker environment constraints
+# Install dependencies using yarn (pre-installed and more reliable than npm in Docker)
+# Disable strict SSL temporarily due to Docker build environment constraints
 RUN yarn config set strict-ssl false && \
     yarn install --network-timeout 1000000 && \
     yarn config set strict-ssl true
@@ -91,6 +90,7 @@ COPY resources ./resources
 COPY public ./public
 COPY vite.config.js ./
 COPY tailwind.config.js ./
+COPY storage ./storage
 
 # Copy vendor directory from composer stage (needed for Filament CSS imports)
 COPY --from=composer-stage /app/vendor ./vendor
