@@ -37,7 +37,7 @@ services:
     container_name: genealogy-vite
     working_dir: /app
     ports:
-      - "${VITE_PORT:-5173}:5173"
+      - "${VITE_PORT:-5173}:${VITE_PORT:-5173}"
     volumes:
       - .:/app
       - node_modules:/app/node_modules
