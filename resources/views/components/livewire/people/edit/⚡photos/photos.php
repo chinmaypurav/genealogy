@@ -9,11 +9,11 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Number;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use TallStackUi\Traits\Interactions;
 
 new class extends Component
@@ -50,42 +50,12 @@ new class extends Component
     }
 
     /**
-     * Computed property for photos - eliminates unnecessary database queries.
-     * Only recalculates when the person model changes.
-     *
-     * @return Collection<int, array{name: string, extension: string, is_primary: bool, url_original: string, url_large: string, url_medium: string, url_small: string, size: string, name_download: string, path: string}>
+     * @return Collection<int, Media>
      */
     #[Computed]
     public function photos(): Collection
     {
-        try {
-            $personPhotos = new PersonPhotos($this->person);
-            $photosData   = $personPhotos->getAllPhotos();
-
-            return collect($photosData)->map(function ($photo) {
-                // Add file size if available
-                $path = storage_path('app/public/photos/' . $this->person->team_id . '/' . $this->person->id . '/' . $photo['name'] . '.' . $photo['extension']);
-
-                $fileSize = 0;
-                if (file_exists($path)) {
-                    $fileSizeResult = filesize($path);
-                    $fileSize       = $fileSizeResult !== false ? $fileSizeResult : 0;
-                }
-
-                return array_merge($photo, [
-                    'size'          => Number::fileSize($fileSize, 2),
-                    'name_download' => "{$this->person->name} - {$photo['name']}.{$photo['extension']}",
-                    'path'          => dirname($path),
-                ]);
-            })->sortBy('name');
-        } catch (Exception $e) {
-            Log::error('Failed to load person photos', [
-                'person_id' => $this->person->id,
-                'error'     => $e->getMessage(),
-            ]);
-
-            return collect();
-        }
+        return new PersonPhotos($this->person)->all();
     }
 
     /**
@@ -174,8 +144,7 @@ new class extends Component
                 }
             }
 
-            $personPhotos = new PersonPhotos($this->person);
-            $savedCount   = $personPhotos->save($this->uploads);
+            $savedCount = new PersonPhotos($this->person)->save($this->uploads);
 
             if ($savedCount > 0) {
                 $this->toast()->success(__('app.save'), trans_choice('person.photos_saved', $savedCount))->send();
@@ -205,21 +174,12 @@ new class extends Component
     /**
      * Delete a specific photo.
      */
-    public function delete(string $photo): void
+    public function delete(int $photo): void
     {
         $this->authorizePermission('person:update');
 
         try {
-            $personPhotos = new PersonPhotos($this->person);
-
-            // Extract index from photo filename
-            $index = $this->extractPhotoIndex($photo);
-
-            if ($index === null) {
-                throw new Exception('Invalid photo filename format');
-            }
-
-            $deleted = $personPhotos->delete($index);
+            $deleted = new PersonPhotos($this->person)->delete($photo);
 
             if ($deleted) {
                 $this->toast()->success(__('app.delete'), __('person.photo_deleted'))->send();
@@ -249,19 +209,14 @@ new class extends Component
     /**
      * Set a photo as primary.
      */
-    public function setPrimary(string $photo): void
+    public function setPrimary(int $photo): void
     {
         $this->authorizePermission('person:update');
 
         try {
-            $personPhotos = new PersonPhotos($this->person);
-
-            // Verify photo exists
-            if (! $personPhotos->photoExists($photo)) {
+            if (! new PersonPhotos($this->person)->setPrimary($photo)) {
                 throw new Exception('Photo does not exist');
             }
-
-            $this->person->update(['photo' => $photo]);
 
             $this->toast()->success(__('app.saved'), __('person.photo_is_set_primary'))->send();
 
@@ -335,21 +290,6 @@ new class extends Component
     // -----------------------------------------------------------------------
     // Protected and Private Methods
     // -----------------------------------------------------------------------
-
-    /**
-     * Extract photo index from filename.
-     * Expects format: {personId}_{index}_{timestamp}
-     */
-    private function extractPhotoIndex(string $filename): ?int
-    {
-        $parts = explode('_', $filename);
-
-        if (count($parts) >= 3 && is_numeric($parts[1])) {
-            return (int) $parts[1];
-        }
-
-        return null;
-    }
 
     /**
      * Delete a temporary file from storage.

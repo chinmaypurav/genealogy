@@ -161,29 +161,9 @@ return [
         'max_archive_size'       => (int) env('GEDCOM_IMPORT_MAX_ARCHIVE_SIZE', 262144000),
     ],
 
-    // uploaded originals (needed for GEDCOM export) are always kept alongside the resized versions
-    // default values for resizing, watermarking and saving photo uploads
+    // photo uploads are stored in the media library, sizes of the conversions are defined in App\Enums\PersonPhotoConversion
     'upload_photo' => [
-        'max_width'     => 1920,
-        'max_height'    => 1080,
         'add_watermark' => env('PHOTOS_ADD_WATERMARK', false),
-        'sizes'         => [
-            'large' => [
-                'width'   => 1920,
-                'height'  => 1080,
-                'quality' => 90,  // 90 is sweet spot for WebP
-            ],
-            'medium' => [
-                'width'   => 384,
-                'height'  => null,
-                'quality' => 85,
-            ],
-            'small' => [
-                'width'   => 96,
-                'height'  => null,
-                'quality' => 80,
-            ],
-        ],
     ],
 
     // accepted file types for photo uploads

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\PersonMediaCollection;
 use App\Models\Person;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\On;
@@ -22,6 +23,6 @@ new class extends Component
     #[On('files_updated')]
     public function mount(): void
     {
-        $this->files = $this->person->getMedia('files');
+        $this->files = $this->person->getMedia(PersonMediaCollection::Files->value);
     }
 };

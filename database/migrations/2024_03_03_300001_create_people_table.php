@@ -46,7 +46,7 @@ return new class extends Migration
             $table->char('country', 2)->nullable();
             $table->string('phone', 50)->nullable();
 
-            $table->string('photo')->nullable();
+            $table->unsignedBigInteger('photo_id')->nullable();
 
             $table->unsignedBigInteger('team_id')->nullable()->index();
             // ---------------------------------------------------------------------

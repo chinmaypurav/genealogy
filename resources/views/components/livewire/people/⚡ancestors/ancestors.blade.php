@@ -80,7 +80,12 @@
                     <div class="overflow-x-auto">
                         <div class="tree-rtl @if ($count === 1) pb-2 @endif">
                             <ul>
-                                <x-tree-node.ancestors :person="$person" :ancestors="$ancestors" :level_max="$count" />
+                                <x-tree-node.ancestors
+                                    :person="$person"
+                                    :ancestors="$ancestors"
+                                    :photo_urls="$photoUrls"
+                                    :level_max="$count"
+                                />
                             </ul>
                         </div>
                     </div>

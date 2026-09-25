@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Gedcom\Import;
 
+use App\Enums\PersonMediaCollection;
 use App\Models\Person;
 use App\PersonPhotos;
 use Exception;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Handles importing media files referenced in GEDCOM to person records
@@ -22,6 +25,9 @@ class MediaImportHandler
 
     /** @var array<string, array<string>> */
     private array $personMediaMap = [];
+
+    /** @var array<int, string> Directories of the photos stored during this import */
+    private array $storedDirectories = [];
 
     /**
      * @param  array<string, string>  $mediaFiles  Array of basename => filepath mappings
@@ -236,8 +242,12 @@ class MediaImportHandler
             }
 
             try {
-                $personPhotos = new PersonPhotos($person);
-                $savedCount   = $personPhotos->save($photos);
+                $savedCount = new PersonPhotos($person)->save($photos);
+
+                $person->getMedia(PersonMediaCollection::Photos->value)
+                    ->each(function (Media $media): void {
+                        $this->storedDirectories[] = dirname($media->getPath());
+                    });
 
                 if ($savedCount > 0) {
                     $stats['succeeded']++;
@@ -265,6 +275,19 @@ class MediaImportHandler
     }
 
     /**
+    /**
+     * Delete the photo files stored during this import.
+     * Used when the import transaction is rolled back, as files are not part of the transaction.
+     */
+    public function deleteStoredFiles(): void
+    {
+        foreach (array_unique($this->storedDirectories) as $directory) {
+            File::deleteDirectory($directory);
+        }
+
+        $this->storedDirectories = [];
+    }
+
     /**
      * Get the person-media mapping for debugging
      *

@@ -3,8 +3,8 @@
         <div class="flex flex-wrap items-start justify-center gap-2">
             <div class="max-w-full min-w-max flex-1 grow">
                 {{ __('person.files') }}
-                @if ($person->getMedia('files')?->count() > 0)
-                    <x-ts-badge color="emerald" sm text="{{ $person->getMedia('files')?->count() }}" />
+                @if ($files->count() > 0)
+                    <x-ts-badge color="emerald" sm text="{{ $files->count() }}" />
                 @endif
             </div>
 

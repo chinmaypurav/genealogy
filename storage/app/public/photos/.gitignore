@@ -6,9 +6,4 @@
 
 # But do not ignore access restrictions
 !.htaccess
-
-# Allow specific file patterns
-!*_demo_large.webp
-!*_demo_medium.webp
-!*_demo_small.webp
-!*_demo.webp
+!.gitignore

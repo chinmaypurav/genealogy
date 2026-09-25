@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Gedcom\Export;
 
+use App\Enums\PersonMediaCollection;
 use App\Models\Person;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 // ==============================================================================
 // GEDCOM MEDIA BUILDER - Handles media objects and files
@@ -30,7 +31,7 @@ class GedcomMediaBuilder
     /** @var array<int, array<int, array{id: int, filename: string, file_reference: string, mime_type: string, disk_path: string, url: string, title: string}>> Media objects by person ID */
     private array $mediaObjects = [];
 
-    /** @var array<string> Collection of all media files for ZIP export */
+    /** @var array<string, string> Absolute paths of all media files for ZIP export, keyed by archive filename */
     private array $mediaFiles = [];
 
     /**
@@ -58,6 +59,8 @@ class GedcomMediaBuilder
      */
     public function collectMediaObjects(Collection $individuals): void
     {
+        $individuals->loadMissing('media');
+
         foreach ($individuals as $person) {
             $personMedia = $this->getPersonImages($person);
 
@@ -67,7 +70,7 @@ class GedcomMediaBuilder
                 // Only collect file paths for ZIP export if format supports media
                 if (in_array($this->format, ['zipmedia', 'gedzip'])) {
                     foreach ($personMedia as $media) {
-                        $this->mediaFiles[] = $media['disk_path'];
+                        $this->mediaFiles[$media['file_reference']] = $media['disk_path'];
                     }
                 }
             }
@@ -79,7 +82,7 @@ class GedcomMediaBuilder
     /**
      * Get collected media files for ZIP export.
      *
-     * @return array<string> Array of media file paths
+     * @return array<string, string> Absolute media file paths keyed by archive filename
      */
     public function getMediaFiles(): array
     {
@@ -136,75 +139,25 @@ class GedcomMediaBuilder
     /**
      * Get images for a specific person.
      *
-     * Scans the person's photo directory and creates media object entries
-     * for all original files, filtering out resized variants.
+     * Creates media object entries for the original files of all photos of the person.
      *
      * @param  Person  $person  Person model instance
      * @return array<int, array{id: int, filename: string, file_reference: string, mime_type: string, disk_path: string, url: string, title: string}> Array of media objects
      */
     private function getPersonImages(Person $person): array
     {
-        $directory = "{$person->team_id}/{$person->id}";
-
-        if (! Storage::disk('photos')->exists($directory)) {
-            return [];
-        }
-
-        $allFiles     = Storage::disk('photos')->files($directory);
-        $mediaObjects = [];
-
-        // Get only original files (not _large, _medium, _small variants)
-        $images = collect($allFiles)
-            ->filter(fn ($file) => $this->isOriginalFile($file))
-            ->map(function ($originalFile) {
-                $filename           = basename($originalFile);
-                $filenameWithoutExt = pathinfo($filename, PATHINFO_FILENAME);
-                $mimeType           = Storage::disk('photos')->mimeType($originalFile);
-
-                return [
-                    'filename'       => $filenameWithoutExt,
-                    'file_reference' => $filename,   // Full filename with extension
-                    'mime_type'      => $mimeType ?: 'application/octet-stream',   // Default if detection fails
-                    'disk_path'      => $originalFile,
-                    'url'            => Storage::disk('photos')->url($originalFile),
-                ];
-            })
-            ->sortBy('filename')
-            ->values();
-
-        // Convert to media objects with GEDCOM IDs
-        foreach ($images as $image) {
-            $mediaId = $this->nextMediaId++;
-
-            $mediaObjects[] = [
-                'id'             => $mediaId,
-                'filename'       => $image['filename'],
-                'file_reference' => $image['file_reference'],
-                'mime_type'      => $image['mime_type'],
-                'disk_path'      => $image['disk_path'],
-                'url'            => $image['url'],
-                'title'          => $this->generateImageTitle($image['filename']),
-            ];
-        }
-
-        return $mediaObjects;
-    }
-
-    /**
-     * Check if file is an original file (not a resized variant).
-     *
-     * Filters out resized variants to include only original full-resolution images in the export.
-     *
-     * @param  string  $file  File path
-     * @return bool True if original file
-     */
-    private function isOriginalFile(string $file): bool
-    {
-        $filename = pathinfo($file, PATHINFO_FILENAME); // filename without extension
-
-        return ! str_ends_with($filename, '_large')
-            && ! str_ends_with($filename, '_medium')
-            && ! str_ends_with($filename, '_small');
+        return $person->getMedia(PersonMediaCollection::Photos->value)
+            ->map(fn (Media $media): array => [
+                'id'             => $this->nextMediaId++,
+                'filename'       => $media->name,
+                'file_reference' => "{$media->id}_{$media->file_name}",
+                'mime_type'      => $media->mime_type ?: 'application/octet-stream',
+                'disk_path'      => $media->getPath(),
+                'url'            => $media->getUrl(),
+                'title'          => $this->generateImageTitle($media->name),
+            ])
+            ->values()
+            ->all();
     }
 
     /**

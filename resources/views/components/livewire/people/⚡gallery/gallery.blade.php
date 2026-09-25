@@ -132,7 +132,7 @@
     {{-- image --}}
     <div class="user-image flex items-center justify-center">
         <div class="relative inline-block">
-            @if (count($images) > 0 && $images[$selected]['large'] && $images[$selected]['medium'])
+            @if (count($images) > 0)
                 <x-ts-link href="{{ $images[$selected]['large'] }}" target="_blank">
                     <img
                         class="max-w-sm rounded-sm shadow-lg dark:shadow-black/30"

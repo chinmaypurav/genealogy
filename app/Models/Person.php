@@ -6,6 +6,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Countries;
+use App\Enums\PersonMediaCollection;
+use App\Enums\PersonPhotoConversion;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,15 +18,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Korridor\LaravelHasManyMerged\HasManyMerged;
 use Korridor\LaravelHasManyMerged\HasManyMergedRelation;
 use Override;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
+use Spatie\Image\Enums\AlignPosition;
+use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property int $id
@@ -44,6 +48,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property string|null $dod
  * @property int|null $yod
  * @property string|null $pod
+ * @property int|null $photo_id
  * @property-read string|null $name
  * @property-read string|null $birth_formatted
  * @property-read string|null $death_formatted
@@ -53,6 +58,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property-read Collection<int, Person> $children
  * @property-read Collection<int, Couple> $couples
  * @property-read Collection<int, PersonEvent> $events
+ * @property-read Media|null $photo
  */
 final class Person extends Model implements HasMedia
 {
@@ -93,7 +99,7 @@ final class Person extends Model implements HasMedia
         'country',
         'phone',
 
-        'photo',
+        'photo_id',
 
         'team_id',
     ];
@@ -135,7 +141,7 @@ final class Person extends Model implements HasMedia
                 'country',
                 'phone',
 
-                'photo',
+                'photo_id',
 
                 'team.name',
             ])
@@ -385,6 +391,13 @@ final class Person extends Model implements HasMedia
     public function mother(): BelongsTo
     {
         return $this->belongsTo(self::class);
+    }
+
+    /* returns PRIMARY PHOTO (1 Media) based on photo_id */
+    /** @return BelongsTo<Media, $this> */
+    public function photo(): BelongsTo
+    {
+        return $this->belongsTo(Media::class, 'photo_id');
     }
 
     /* returns PARENTS (1 Couple) based on parents_id */
@@ -687,6 +700,44 @@ final class Person extends Model implements HasMedia
     }
 
     /* -------------------------------------------------------------------------------------------- */
+    // Media
+    /* -------------------------------------------------------------------------------------------- */
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection(PersonMediaCollection::Photos->value)
+            ->useDisk(PersonMediaCollection::Photos->disk())
+            ->acceptsMimeTypes(array_keys(config('app.upload_photo_accept')));
+
+        $this->addMediaCollection(PersonMediaCollection::Files->value)
+            ->useDisk(PersonMediaCollection::Files->disk());
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $watermark     = public_path('img/watermark.png');
+        $addsWatermark = config('app.upload_photo.add_watermark') && file_exists($watermark);
+
+        foreach (PersonPhotoConversion::cases() as $photoConversion) {
+            $conversion = $this->addMediaConversion($photoConversion->value)
+                ->performOnCollections(PersonMediaCollection::Photos->value)
+                ->nonOptimized()
+                ->nonQueued();
+
+            $conversion->format('webp')->quality($photoConversion->quality());
+
+            if ($photoConversion->height() === null) {
+                $conversion->width($photoConversion->width());
+            } else {
+                $conversion->fit(Fit::Max, $photoConversion->width(), $photoConversion->height());
+            }
+
+            if ($addsWatermark) {
+                $conversion->watermark($watermark, AlignPosition::BottomLeft, 5, 5);
+            }
+        }
+    }
+
+    /* -------------------------------------------------------------------------------------------- */
     // Scopes (global)
     /* -------------------------------------------------------------------------------------------- */
     #[Override]
@@ -709,11 +760,8 @@ final class Person extends Model implements HasMedia
 
         // Handle force deletes (permanent deletion only)
         self::forceDeleted(function (Person $person): void {
-            // Clean up photos
-            Storage::disk('photos')->deleteDirectory($person->team_id . '/' . $person->id);
-
-            // Clean up files
-            $person->clearMediaCollection('files');
+            $person->clearMediaCollection(PersonMediaCollection::Photos->value);
+            $person->clearMediaCollection(PersonMediaCollection::Files->value);
         });
     }
 

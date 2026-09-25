@@ -101,7 +101,7 @@ new class extends Component
             'dod', 'yod', 'pod',
             'summary',
             'street', 'number', 'postal_code', 'city', 'province', 'state', 'country',
-            'phone', 'photo',
+            'phone', 'photo_id',
             'team.name',
         ];
 

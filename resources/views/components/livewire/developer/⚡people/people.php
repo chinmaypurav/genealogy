@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\PersonPhotoConversion;
 use App\Models\Person;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\Concerns\InteractsWithActions;
@@ -34,15 +35,15 @@ new class extends Component implements HasActions, HasSchemas, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(Person::query()->with(['children', 'couples']))
+            ->query(Person::query()->with(['children', 'couples', 'photo']))
             ->columns([
                 TextColumn::make('id')
                     ->label(__('person.id'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                ImageColumn::make('photo')->disk('photos')
+                ImageColumn::make('photo')
                     ->label(__('person.avatar'))
-                    ->getStateUsing(fn (Person $record) => $record->photo ? "{$record->team_id}/{$record->id}/{$record->photo}_small.webp" : url('/img/avatar.png'))
+                    ->getStateUsing(fn (Person $record): string => $record->photo?->getUrl(PersonPhotoConversion::Small->value) ?? url('/img/avatar.png'))
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->extraImgAttributes(['alt' => 'Avatar', 'loading' => 'lazy'])
                     ->alignment('center'),

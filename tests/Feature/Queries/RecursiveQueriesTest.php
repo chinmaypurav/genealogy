@@ -27,7 +27,7 @@ test('SQLite recursive queries traverse a tree and stop at a cycle', function ()
             $table->date('dod')->nullable();
             $table->unsignedInteger('yod')->nullable();
             $table->unsignedBigInteger('team_id')->nullable();
-            $table->string('photo')->nullable();
+            $table->unsignedBigInteger('photo_id')->nullable();
             $table->date('dob')->nullable();
             $table->unsignedInteger('yob')->nullable();
             $table->softDeletes();

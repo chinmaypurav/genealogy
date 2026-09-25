@@ -76,7 +76,7 @@ class GedcomFileHandler
      * includes media files based on the export format.
      *
      * @param  string  $gedcom  GEDCOM content to archive
-     * @param  array<string>  $mediaFiles  Media files to include
+     * @param  array<string, string>  $mediaFiles  Absolute media file paths keyed by archive filename
      * @return StreamedResponse Laravel streamed response
      *
      * @throws RuntimeException When ZIP creation fails
@@ -154,7 +154,7 @@ class GedcomFileHandler
      * @param  string  $zipPath  ZIP file path
      * @param  string  $gedcomPath  GEDCOM file path
      * @param  string  $gedcomFile  GEDCOM filename for archive
-     * @param  array<string>  $mediaFiles  Media files to include
+     * @param  array<string, string>  $mediaFiles  Absolute media file paths keyed by archive filename
      *
      * @throws RuntimeException When ZIP creation fails
      */
@@ -188,17 +188,14 @@ class GedcomFileHandler
         // Add media files
         $mediaDir   = 'media/';
         $addedFiles = 0;
-        foreach ($mediaFiles as $mediaPath) {
-            $diskPath = Storage::disk('photos')->path($mediaPath);
-
+        foreach ($mediaFiles as $filename => $diskPath) {
             if (file_exists($diskPath) && is_readable($diskPath)) {
-                $filename    = basename($mediaPath);
                 $archivePath = $mediaDir . $filename;
 
                 if ($zip->addFile($diskPath, $archivePath)) {
                     $addedFiles++;
                 } else {
-                    Log::warning("Failed to add media file to ZIP: {$mediaPath}");
+                    Log::warning("Failed to add media file to ZIP: {$diskPath}");
                 }
             } else {
                 Log::warning("Media file not found or not readable: {$diskPath}");
