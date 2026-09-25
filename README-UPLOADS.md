@@ -20,7 +20,7 @@ Every photo gets its own folder, named after its id in the `media` table:
 storage/app/public/photos/12/portrait.jpg                          (original, untouched)
 storage/app/public/photos/12/conversions/portrait-large.webp       (large,  fits within 1920 x 1080)
 storage/app/public/photos/12/conversions/portrait-medium.webp      (medium, 384px wide)
-storage/app/public/photos/12/conversions/portrait-small.webp       (small,  96px wide)
+storage/app/public/photos/12/conversions/portrait-small.webp       (small,  192px wide)
 ```
 
 The first photo of the collection (lowest `order_column`) is the primary photo of a person. Setting another photo as primary moves it to the front of the collection.
@@ -48,7 +48,7 @@ Uploaded images are processed as follows:
 
 | Case     | Max width | Max height         | Quality |
 | -------- | --------- | ------------------ | ------- |
-| `Small`  | 96        | (keeps proportion) | 80      |
+| `Small`  | 192       | (keeps proportion) | 80      |
 | `Medium` | 384       | (keeps proportion) | 85      |
 | `Large`  | 1920      | 1080               | 90      |
 

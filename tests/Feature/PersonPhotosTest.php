@@ -45,7 +45,7 @@ it('generates a webp conversion for every size', function (PersonPhotoConversion
         ->and($path)->toEndWith("portrait-{$conversion->value}.webp")
         ->and(array_slice(getimagesize($path), 0, 2))->toBe([$expectedWidth, $expectedHeight]);
 })->with([
-    'small'  => [PersonPhotoConversion::Small, 96, 120],
+    'small'  => [PersonPhotoConversion::Small, 192, 240],
     'medium' => [PersonPhotoConversion::Medium, 384, 480],
     'large'  => [PersonPhotoConversion::Large, 864, 1080],
 ]);
