@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Livewire\Traits\AuthorizesPersonActions;
 use App\Enums\PersonMediaCollection;
+use App\Livewire\Traits\AuthorizesPersonActions;
 use App\Models\Person;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
