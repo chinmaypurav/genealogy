@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\PersonMediaCollection;
 use App\Enums\PersonPhotoConversion;
 use App\Models\Person;
 use Filament\Actions\BulkActionGroup;
@@ -35,7 +36,7 @@ new class extends Component implements HasActions, HasSchemas, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(Person::query()->with(['children', 'couples', 'photo']))
+            ->query(Person::query()->with(['children', 'couples', 'media']))
             ->columns([
                 TextColumn::make('id')
                     ->label(__('person.id'))
@@ -43,7 +44,7 @@ new class extends Component implements HasActions, HasSchemas, HasTable
                     ->toggleable(isToggledHiddenByDefault: true),
                 ImageColumn::make('photo')
                     ->label(__('person.avatar'))
-                    ->getStateUsing(fn (Person $record): string => $record->photo?->getUrl(PersonPhotoConversion::Small->value) ?? url('/img/avatar.png'))
+                    ->getStateUsing(fn (Person $record): string => $record->getFirstMediaUrl(PersonMediaCollection::Photos->value, PersonPhotoConversion::Small->value) ?: url('/img/avatar.png'))
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->extraImgAttributes(['alt' => 'Avatar', 'loading' => 'lazy'])
                     ->alignment('center'),

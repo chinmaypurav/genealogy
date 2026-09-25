@@ -15,35 +15,39 @@ use Throwable;
 
 /**
  * Manages the photos of a person, stored in the media library "photos" collection.
- * The primary photo is referenced by the person's photo_id.
+ * The first photo of the collection (by order_column) is the primary photo.
  */
 final readonly class PersonPhotos
 {
     public function __construct(private Person $person) {}
 
     /**
-     * Resolve the conversion URLs of many photos with a single query.
+     * Resolve the primary photo conversion URLs of many people with a single query.
      *
-     * @param  iterable<int, int|null>  $mediaIds
-     * @return array<int, string> URLs keyed by media id
+     * @param  iterable<int, int>  $personIds
+     * @return array<int, string> URLs keyed by person id
      */
-    public static function urls(iterable $mediaIds, PersonPhotoConversion $conversion): array
+    public static function primaryUrls(iterable $personIds, PersonPhotoConversion $conversion): array
     {
-        $mediaIds = collect($mediaIds)->filter()->unique();
+        $personIds = collect($personIds)->filter()->unique();
 
-        if ($mediaIds->isEmpty()) {
+        if ($personIds->isEmpty()) {
             return [];
         }
 
         return Media::query()
-            ->whereKey($mediaIds->all())
+            ->where('model_type', new Person()->getMorphClass())
+            ->where('collection_name', PersonMediaCollection::Photos->value)
+            ->whereIn('model_id', $personIds->all())
+            ->orderBy('order_column')
             ->get()
-            ->mapWithKeys(fn (Media $media): array => [$media->id => $media->getUrl($conversion->value)])
+            ->unique('model_id')
+            ->mapWithKeys(fn (Media $media): array => [$media->model_id => $media->getUrl($conversion->value)])
             ->all();
     }
 
     /**
-     * Add photos to the person. The first photo becomes primary when the person has none.
+     * Add photos to the person, after the existing ones.
      *
      * @param  array<int, UploadedFile|string>  $photos  Uploaded files or absolute file paths
      * @return int|null Number of successfully saved photos, null if none were saved
@@ -58,11 +62,7 @@ final readonly class PersonPhotos
                     ? $this->person->addMedia($photo)->usingName(pathinfo($photo->getClientOriginalName(), PATHINFO_FILENAME))
                     : $this->person->addMedia($photo)->preservingOriginal();
 
-                $media = $adder->toMediaCollection(PersonMediaCollection::Photos->value);
-
-                if ($this->person->photo_id === null) {
-                    $this->person->update(['photo_id' => $media->id]);
-                }
+                $adder->toMediaCollection(PersonMediaCollection::Photos->value);
 
                 $savedCount++;
             } catch (Throwable $e) {
@@ -75,9 +75,7 @@ final readonly class PersonPhotos
             }
         }
 
-        if ($savedCount > 0) {
-            $this->person->unsetRelation('media');
-        }
+        $this->person->unsetRelation('media');
 
         return $savedCount ?: null;
     }
@@ -90,13 +88,18 @@ final readonly class PersonPhotos
         return $this->person->getMedia(PersonMediaCollection::Photos->value)->toBase();
     }
 
+    public function primary(): ?Media
+    {
+        return $this->person->getFirstMedia(PersonMediaCollection::Photos->value);
+    }
+
     public function find(int $mediaId): ?Media
     {
         return $this->all()->firstWhere('id', $mediaId);
     }
 
     /**
-     * Delete a photo. When it was the primary photo, the next available photo becomes primary.
+     * Delete a photo. When it was the primary photo, the next photo automatically becomes primary.
      */
     public function delete(int $mediaId): bool
     {
@@ -109,28 +112,30 @@ final readonly class PersonPhotos
         $media->delete();
         $this->person->unsetRelation('media');
 
-        if ($this->person->photo_id === $mediaId) {
-            $this->person->update(['photo_id' => $this->all()->first()?->id]);
-        }
-
         return true;
     }
 
-    /**
-     * Delete all photos and clear the primary photo.
-     */
     public function deleteAll(): void
     {
         $this->person->clearMediaCollection(PersonMediaCollection::Photos->value);
-        $this->person->update(['photo_id' => null]);
+        $this->person->unsetRelation('media');
     }
 
+    /**
+     * Make a photo primary by moving it to the front of the collection.
+     */
     public function setPrimary(int $mediaId): bool
     {
-        if (! $this->find($mediaId)) {
+        $ids = $this->all()->pluck('id');
+
+        if (! $ids->contains($mediaId)) {
             return false;
         }
 
-        return $this->person->update(['photo_id' => $mediaId]);
+        Media::setNewOrder($ids->reject(fn (int $id): bool => $id === $mediaId)->prepend($mediaId)->all());
+
+        $this->person->unsetRelation('media');
+
+        return true;
     }
 }

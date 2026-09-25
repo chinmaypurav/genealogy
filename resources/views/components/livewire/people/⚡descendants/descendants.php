@@ -24,7 +24,6 @@ new class extends Component
      *     dod: string|null,
      *     yod: int|null,
      *     team_id: int|null,
-     *     photo_id: int|null,
      *     dob: string|null,
      *     yob: int|null,
      *     degree: int,
@@ -33,7 +32,7 @@ new class extends Component
      */
     public Collection $descendants;
 
-    /** @var array<int, string> Small photo URLs keyed by media id */
+    /** @var array<int, string> Small primary photo URLs keyed by person id */
     public array $photoUrls = [];
 
     public int $count_min = 1;
@@ -87,8 +86,8 @@ new class extends Component
     {
         $this->descendants = $descendantsQuery->getDescendants($this->person->id, (int) $this->person->team_id, $this->count_max);
 
-        $this->photoUrls = PersonPhotos::urls(
-            $this->descendants->pluck('photo_id')->push($this->person->photo_id),
+        $this->photoUrls = PersonPhotos::primaryUrls(
+            $this->descendants->pluck('id')->push($this->person->id),
             PersonPhotoConversion::Small
         );
 

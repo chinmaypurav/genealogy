@@ -48,7 +48,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string|null $dod
  * @property int|null $yod
  * @property string|null $pod
- * @property int|null $photo_id
  * @property-read string|null $name
  * @property-read string|null $birth_formatted
  * @property-read string|null $death_formatted
@@ -58,7 +57,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read Collection<int, Person> $children
  * @property-read Collection<int, Couple> $couples
  * @property-read Collection<int, PersonEvent> $events
- * @property-read Media|null $photo
  */
 final class Person extends Model implements HasMedia
 {
@@ -99,8 +97,6 @@ final class Person extends Model implements HasMedia
         'country',
         'phone',
 
-        'photo_id',
-
         'team_id',
     ];
 
@@ -140,8 +136,6 @@ final class Person extends Model implements HasMedia
                 'province', 'state',
                 'country',
                 'phone',
-
-                'photo_id',
 
                 'team.name',
             ])
@@ -391,13 +385,6 @@ final class Person extends Model implements HasMedia
     public function mother(): BelongsTo
     {
         return $this->belongsTo(self::class);
-    }
-
-    /* returns PRIMARY PHOTO (1 Media) based on photo_id */
-    /** @return BelongsTo<Media, $this> */
-    public function photo(): BelongsTo
-    {
-        return $this->belongsTo(Media::class, 'photo_id');
     }
 
     /* returns PARENTS (1 Couple) based on parents_id */

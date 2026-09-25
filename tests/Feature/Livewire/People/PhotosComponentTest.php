@@ -35,7 +35,7 @@ test('photos can be uploaded', function (): void {
     $photos = $this->person->fresh()->getMedia(PersonMediaCollection::Photos->value);
 
     expect($photos)->toHaveCount(2)
-        ->and($this->person->fresh()->photo_id)->toBe($photos->first()->id);
+        ->and(new PersonPhotos($this->person->fresh())->primary()->id)->toBe($photos->first()->id);
 });
 
 test('uploads below the minimum dimensions are rejected', function (): void {
@@ -59,13 +59,13 @@ test('a photo can be set as primary and deleted', function (): void {
         ->call('setPrimary', $second)
         ->assertDispatched('photos_updated');
 
-    expect($this->person->fresh()->photo_id)->toBe($second);
+    expect(new PersonPhotos($this->person->fresh())->primary()->id)->toBe($second);
 
     Livewire::test('people::edit.photos', ['person' => $this->person->fresh()])
         ->call('delete', $second)
         ->assertDispatched('photos_updated');
 
-    expect($this->person->fresh()->photo_id)->toBe($first);
+    expect(new PersonPhotos($this->person->fresh())->primary()->id)->toBe($first);
 });
 
 test('members without the person:update permission cannot manage photos', function (): void {
@@ -75,10 +75,10 @@ test('members without the person:update permission cannot manage photos', functi
     new PersonPhotos($person)->save([UploadedFile::fake()->image('photo.jpg')]);
 
     Livewire::test('people::edit.photos', ['person' => $person->fresh()])
-        ->call('delete', $person->fresh()->photo_id)
+        ->call('delete', new PersonPhotos($person->fresh())->primary()->id)
         ->assertForbidden();
 
-    expect($person->fresh()->photo_id)->not->toBeNull();
+    expect(new PersonPhotos($person->fresh())->primary())->not->toBeNull();
 });
 
 test('the gallery shows the primary photo in medium size linking to the large size', function (): void {
@@ -90,10 +90,10 @@ test('the gallery shows the primary photo in medium size linking to the large si
     $photos = new PersonPhotos($this->person->fresh())->all();
     $second = $photos->last();
 
-    $this->person->update(['photo_id' => $second->id]);
+    new PersonPhotos($this->person->fresh())->setPrimary($second->id);
 
     Livewire::test('people::gallery', ['person' => $this->person->fresh()])
-        ->assertSet('selected', 1)
+        ->assertSet('selected', 0)
         ->assertSee($second->getUrl(PersonPhotoConversion::Medium->value))
         ->assertSee($second->getUrl(PersonPhotoConversion::Large->value));
 });
@@ -105,5 +105,5 @@ test('the ancestors tree shows small photos', function (): void {
     new PersonPhotos($father)->save([UploadedFile::fake()->image('father.jpg')]);
 
     Livewire::test('people::ancestors', ['person' => $this->person->fresh()])
-        ->assertSee($father->fresh()->photo->getUrl(PersonPhotoConversion::Small->value));
+        ->assertSee(new PersonPhotos($father->fresh())->primary()->getUrl(PersonPhotoConversion::Small->value));
 });

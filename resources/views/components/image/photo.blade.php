@@ -1,12 +1,17 @@
 @props(['person' => null])
 
+@use('App\Enums\PersonMediaCollection')
 @use('App\Enums\PersonPhotoConversion')
 
+@php
+    $photoUrl = $person->getFirstMediaUrl(PersonMediaCollection::Photos->value, PersonPhotoConversion::Medium->value);
+@endphp
+
 <div class="user-image">
-    @if ($person->photo)
+    @if ($photoUrl)
         <img
             {{ $attributes->merge(['class' => 'w-full rounded-sm shadow-lg dark:shadow-black/30']) }}
-            src="{{ $person->photo->getUrl(PersonPhotoConversion::Medium->value) }}"
+            src="{{ $photoUrl }}"
             alt="{{ $person->name }}"
             title="{{ $person->name }}"
         />

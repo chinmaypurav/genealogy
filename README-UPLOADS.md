@@ -23,7 +23,7 @@ storage/app/public/photos/12/conversions/portrait-medium.webp      (medium, 384p
 storage/app/public/photos/12/conversions/portrait-small.webp       (small,  96px wide)
 ```
 
-The primary photo of a person is referenced by the `photo_id` column of the `people` table.
+The first photo of the collection (lowest `order_column`) is the primary photo of a person. Setting another photo as primary moves it to the front of the collection.
 
 These versions allow the application to serve optimized image sizes depending on the context:
 

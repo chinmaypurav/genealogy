@@ -20,8 +20,8 @@ test('media objects reference the original photo files with unique archive names
     new PersonPhotos($first)->save([UploadedFile::fake()->image('portrait.jpg')]);
     new PersonPhotos($second)->save([UploadedFile::fake()->image('portrait.jpg')]);
 
-    $firstPhoto  = $first->fresh()->photo;
-    $secondPhoto = $second->fresh()->photo;
+    $firstPhoto  = new PersonPhotos($first->fresh())->primary();
+    $secondPhoto = new PersonPhotos($second->fresh())->primary();
 
     $builder = new GedcomMediaBuilder('zipmedia', new GedcomFormatter());
     $builder->collectMediaObjects(Person::query()->whereKey([$first->id, $second->id])->get());

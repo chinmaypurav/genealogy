@@ -31,7 +31,7 @@ new class extends Component
             ->values()
             ->all();
 
-        $this->selected = $this->getPrimaryImageIndex();
+        $this->selected = empty($this->images) ? null : 0;
     }
 
     public function previousImage(): void
@@ -55,19 +55,5 @@ new class extends Component
     public function selectImage(?int $index): void
     {
         $this->selected = $index;
-    }
-
-    /**
-     * Get the index of the primary image, falling back to the first image.
-     */
-    protected function getPrimaryImageIndex(): ?int
-    {
-        if (empty($this->images)) {
-            return null;
-        }
-
-        $index = collect($this->images)->search(fn (array $image): bool => $image['id'] === $this->person->photo_id);
-
-        return $index !== false ? $index : 0;
     }
 };

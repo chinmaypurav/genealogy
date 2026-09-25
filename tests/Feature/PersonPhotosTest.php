@@ -16,7 +16,7 @@ beforeEach(function (): void {
     Storage::fake('photos');
 });
 
-it('stores uploaded photos in the photos collection and makes the first one primary', function (): void {
+it('stores uploaded photos in the photos collection with the first one as primary', function (): void {
     $person = Person::factory()->create();
 
     $savedCount = new PersonPhotos($person)->save([
@@ -30,7 +30,7 @@ it('stores uploaded photos in the photos collection and makes the first one prim
         ->and($photos)->toHaveCount(2)
         ->and($photos->first()->disk)->toBe('photos')
         ->and($photos->pluck('name')->all())->toBe(['first', 'second'])
-        ->and($person->fresh()->photo_id)->toBe($photos->first()->id);
+        ->and(new PersonPhotos($person->fresh())->primary()->id)->toBe($photos->first()->id);
 });
 
 it('generates a webp conversion for every size', function (PersonPhotoConversion $conversion, int $expectedWidth, int $expectedHeight): void {
@@ -38,7 +38,7 @@ it('generates a webp conversion for every size', function (PersonPhotoConversion
 
     new PersonPhotos($person)->save([UploadedFile::fake()->image('portrait.jpg', 2400, 3000)]);
 
-    $media = $person->fresh()->photo;
+    $media = new PersonPhotos($person->fresh())->primary();
     $path  = $media->getPath($conversion->value);
 
     expect($media->hasGeneratedConversion($conversion->value))->toBeTrue()
@@ -57,7 +57,7 @@ it('keeps the original upload untouched', function (): void {
 
     new PersonPhotos($person)->save([$upload]);
 
-    expect(file_get_contents($person->fresh()->photo->getPath()))->toBe($bytes);
+    expect(file_get_contents(new PersonPhotos($person->fresh())->primary()->getPath()))->toBe($bytes);
 });
 
 it('stores photos from a file path without removing the source file', function (): void {
@@ -69,7 +69,7 @@ it('stores photos from a file path without removing the source file', function (
 
     expect($savedCount)->toBe(1)
         ->and(file_exists($source))->toBeTrue()
-        ->and($person->fresh()->photo)->not->toBeNull();
+        ->and(new PersonPhotos($person->fresh())->primary())->not->toBeNull();
 });
 
 it('rejects files that are not an accepted image type', function (): void {
@@ -78,19 +78,16 @@ it('rejects files that are not an accepted image type', function (): void {
     $savedCount = new PersonPhotos($person)->save([UploadedFile::fake()->create('document.pdf', 10, 'application/pdf')]);
 
     expect($savedCount)->toBeNull()
-        ->and($person->getMedia(PersonMediaCollection::Photos->value))->toBeEmpty()
-        ->and($person->fresh()->photo_id)->toBeNull();
+        ->and($person->getMedia(PersonMediaCollection::Photos->value))->toBeEmpty();
 });
 
-it('clears the primary photo when deleting the last photo', function (): void {
+it('has no primary photo after deleting the last photo', function (): void {
     $person = Person::factory()->create();
     $photos = new PersonPhotos($person);
     $photos->save([UploadedFile::fake()->image('photo.jpg')]);
 
-    $mediaId = $person->fresh()->photo_id;
-
-    expect($photos->delete($mediaId))->toBeTrue()
-        ->and($person->fresh()->photo_id)->toBeNull()
+    expect($photos->delete($photos->primary()->id))->toBeTrue()
+        ->and($photos->primary())->toBeNull()
         ->and($person->fresh()->getMedia(PersonMediaCollection::Photos->value))->toBeEmpty();
 });
 
@@ -106,7 +103,7 @@ it('selects a new primary when deleting the current primary photo', function ():
 
     $photos->delete($first);
 
-    expect($person->fresh()->photo_id)->toBe($second);
+    expect($photos->primary()->id)->toBe($second);
 });
 
 it('keeps the primary photo when deleting another photo', function (): void {
@@ -121,7 +118,7 @@ it('keeps the primary photo when deleting another photo', function (): void {
 
     $photos->delete($second);
 
-    expect($person->fresh()->photo_id)->toBe($first);
+    expect($photos->primary()->id)->toBe($first);
 });
 
 it('only sets photos of the person as primary', function (): void {
@@ -131,14 +128,15 @@ it('only sets photos of the person as primary', function (): void {
     new PersonPhotos($person)->save([UploadedFile::fake()->image('mine.jpg'), UploadedFile::fake()->image('mine-too.jpg')]);
     new PersonPhotos($other)->save([UploadedFile::fake()->image('theirs.jpg')]);
 
-    $photos    = new PersonPhotos($person);
-    $secondId  = $photos->all()->last()->id;
-    $foreignId = $other->fresh()->photo_id;
+    $photos               = new PersonPhotos($person);
+    [$firstId, $secondId] = $photos->all()->pluck('id')->all();
+    $foreignId            = new PersonPhotos($other)->primary()->id;
 
     expect($photos->setPrimary($foreignId))->toBeFalse()
         ->and($photos->delete($foreignId))->toBeFalse()
         ->and($photos->setPrimary($secondId))->toBeTrue()
-        ->and($person->fresh()->photo_id)->toBe($secondId);
+        ->and($photos->primary()->id)->toBe($secondId)
+        ->and(new PersonPhotos($person->fresh())->all()->pluck('id')->all())->toBe([$secondId, $firstId]);
 });
 
 it('deletes all photos and their files', function (): void {
@@ -146,11 +144,11 @@ it('deletes all photos and their files', function (): void {
     $photos = new PersonPhotos($person);
     $photos->save([UploadedFile::fake()->image('photo.jpg')]);
 
-    $directory = dirname($person->fresh()->photo->getPath());
+    $directory = dirname(new PersonPhotos($person->fresh())->primary()->getPath());
 
     $photos->deleteAll();
 
-    expect($person->fresh()->photo_id)->toBeNull()
+    expect($photos->primary())->toBeNull()
         ->and($person->fresh()->getMedia(PersonMediaCollection::Photos->value))->toBeEmpty()
         ->and(is_dir($directory))->toBeFalse();
 });
@@ -159,30 +157,28 @@ it('removes the photos when a person is force deleted', function (): void {
     $person = Person::factory()->create();
     new PersonPhotos($person)->save([UploadedFile::fake()->image('photo.jpg')]);
 
-    $directory = dirname($person->fresh()->photo->getPath());
+    $directory = dirname(new PersonPhotos($person->fresh())->primary()->getPath());
 
     $person->forceDelete();
 
     expect(is_dir($directory))->toBeFalse();
 });
 
-it('resolves conversion urls for many photos at once', function (): void {
-    $first  = Person::factory()->create();
-    $second = Person::factory()->create();
+it('resolves the primary photo urls of many people at once', function (): void {
+    $first   = Person::factory()->create();
+    $second  = Person::factory()->create();
+    $without = Person::factory()->create();
 
-    new PersonPhotos($first)->save([UploadedFile::fake()->image('first.jpg')]);
+    new PersonPhotos($first)->save([UploadedFile::fake()->image('first.jpg'), UploadedFile::fake()->image('first-2.jpg')]);
     new PersonPhotos($second)->save([UploadedFile::fake()->image('second.jpg')]);
 
-    $first->refresh();
-    $second->refresh();
+    $conversion = PersonPhotoConversion::Small;
 
-    $urls = PersonPhotos::urls([$first->photo_id, $second->photo_id, null], PersonPhotoConversion::Small);
-
-    expect($urls)->toBe([
-        $first->photo_id  => $first->photo->getUrl(PersonPhotoConversion::Small->value),
-        $second->photo_id => $second->photo->getUrl(PersonPhotoConversion::Small->value),
+    expect(PersonPhotos::primaryUrls([$first->id, $second->id, $without->id], $conversion))->toBe([
+        $first->id  => new PersonPhotos($first->fresh())->primary()->getUrl($conversion->value),
+        $second->id => new PersonPhotos($second->fresh())->primary()->getUrl($conversion->value),
     ])
-        ->and(PersonPhotos::urls([null], PersonPhotoConversion::Small))->toBe([]);
+        ->and(PersonPhotos::primaryUrls([], $conversion))->toBe([]);
 });
 
 it('watermarks the conversions when enabled', function (): void {
@@ -200,6 +196,6 @@ it('watermarks the conversions when enabled', function (): void {
 
     $conversion = PersonPhotoConversion::Large->value;
 
-    expect(md5_file($watermarked->fresh()->photo->getPath($conversion)))
-        ->not->toBe(md5_file($plain->fresh()->photo->getPath($conversion)));
+    expect(md5_file(new PersonPhotos($watermarked->fresh())->primary()->getPath($conversion)))
+        ->not->toBe(md5_file(new PersonPhotos($plain->fresh())->primary()->getPath($conversion)));
 });

@@ -59,7 +59,7 @@
                                 <x-ts-link
                                     href="{{ $photo->getUrl() }}"
                                     target="_blank"
-                                    class="text-sm {{ $photo->id === $person->photo_id ? ' text-yellow-500 dark:text-yellow-200' : '' }}"
+                                    class="text-sm {{ $loop->first ? ' text-yellow-500 dark:text-yellow-200' : '' }}"
                                 >
                                     {{ $photo->file_name }}
                                 </x-ts-link>
@@ -78,7 +78,7 @@
                             <div class="flex w-full items-center justify-between">
                                 {{-- Left side --}}
                                 <div class="flex items-center gap-2">
-                                    @if ($photo->id !== $person->photo_id)
+                                    @if (! $loop->first)
                                         <x-ts-button
                                             color="secondary"
                                             class="p-2!"

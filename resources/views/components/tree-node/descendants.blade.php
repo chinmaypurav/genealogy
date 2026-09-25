@@ -15,9 +15,9 @@
         <x-link href="/people/{{ $person->id }}" title="{{ $person->sex === 'm' ? __('app.male') : __('app.female') }}">
             <figure class="w-24">
                 <div class="user-image">
-                    @if (isset($photo_urls[$person->photo_id]))
+                    @if (isset($photo_urls[$person->id]))
                         <img
-                            src="{{ $photo_urls[$person->photo_id] }}"
+                            src="{{ $photo_urls[$person->id] }}"
                             class="w-full rounded-sm shadow-lg dark:shadow-black/30"
                             alt="{{ $person->id }}"
                         />

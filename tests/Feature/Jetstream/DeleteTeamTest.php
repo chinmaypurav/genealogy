@@ -56,13 +56,13 @@ test('photos of the team are deleted with the team', function (): void {
     new PersonPhotos($person)->save([UploadedFile::fake()->image('photo.jpg')]);
     new PersonPhotos($other)->save([UploadedFile::fake()->image('photo.jpg')]);
 
-    $teamPhotoDirectory  = dirname(Person::withoutGlobalScopes()->find($person->id)->photo->getPath());
-    $otherPhotoDirectory = dirname($other->fresh()->photo->getPath());
+    $teamPhotoDirectory  = dirname(new PersonPhotos(Person::withoutGlobalScopes()->find($person->id))->primary()->getPath());
+    $otherPhotoDirectory = dirname(new PersonPhotos($other->fresh())->primary()->getPath());
 
     Livewire::test(DeleteTeamForm::class, ['team' => $team->fresh()])
         ->call('deleteTeam');
 
     expect(is_dir($teamPhotoDirectory))->toBeFalse()
         ->and(is_dir($otherPhotoDirectory))->toBeTrue()
-        ->and($other->fresh()->photo)->not->toBeNull();
+        ->and(new PersonPhotos($other->fresh())->primary())->not->toBeNull();
 });

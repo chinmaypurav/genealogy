@@ -23,7 +23,6 @@ final class PgSqlDescendantsQuery implements DescendantsQueryInterface
      *     dod: string|null,
      *     yod: int|null,
      *     team_id: int|null,
-     *     photo_id: int|null,
      *     dob: string|null,
      *     yob: int|null,
      *     degree: int,
@@ -61,7 +60,7 @@ final class PgSqlDescendantsQuery implements DescendantsQueryInterface
         return "
             WITH RECURSIVE descendants AS (
                 SELECT
-                    id, firstname, surname, sex, father_id, mother_id, dod, yod, team_id, photo_id, dob, yob,
+                    id, firstname, surname, sex, father_id, mother_id, dod, yod, team_id, dob, yob,
                     0 AS degree,
                     CAST(id AS VARCHAR(1024)) AS sequence
                 FROM people
@@ -70,7 +69,7 @@ final class PgSqlDescendantsQuery implements DescendantsQueryInterface
                 UNION ALL
 
                 SELECT
-                    p.id, p.firstname, p.surname, p.sex, p.father_id, p.mother_id, p.dod, p.yod, p.team_id, p.photo_id, p.dob, p.yob,
+                    p.id, p.firstname, p.surname, p.sex, p.father_id, p.mother_id, p.dod, p.yod, p.team_id, p.dob, p.yob,
                     d.degree + 1 AS degree,
                     d.sequence || ',' || p.id AS sequence
                 FROM people p
@@ -80,7 +79,7 @@ final class PgSqlDescendantsQuery implements DescendantsQueryInterface
                 UNION ALL
 
                 SELECT
-                    p.id, p.firstname, p.surname, p.sex, p.father_id, p.mother_id, p.dod, p.yod, p.team_id, p.photo_id, p.dob, p.yob,
+                    p.id, p.firstname, p.surname, p.sex, p.father_id, p.mother_id, p.dod, p.yod, p.team_id, p.dob, p.yob,
                     d.degree + 1 AS degree,
                     d.sequence || ',' || p.id AS sequence
                 FROM people p

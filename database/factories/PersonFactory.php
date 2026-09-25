@@ -40,7 +40,6 @@ class PersonFactory extends Factory
             'state'       => $this->faker->optional()->state(),
             'country'     => $this->faker->optional()->countryCode(),
             'phone'       => $this->faker->optional()->phoneNumber(),
-            'photo_id'    => null,
             'team_id'     => null,
         ];
     }
