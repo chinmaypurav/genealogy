@@ -61,7 +61,7 @@ jobs:
         run: cp .env.testing .env
 
       - name: Run Tests
-        run: php artisan test --coverage-clover coverage.xml
+        run: composer test:ci
         env:
           DB_CONNECTION: mysql
           DB_HOST: 127.0.0.1
