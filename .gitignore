@@ -3,6 +3,8 @@
 /node_modules
 
 /public/hot
+/public/css/filament
+/public/js/filament
 /public/storage
 /storage/*.key
 /vendor
