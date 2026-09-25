@@ -6,8 +6,6 @@ use App\Gedcom\Import\Import;
 use App\Gedcom\Import\ZipImporter;
 use App\Models\Team;
 use App\Models\User;
-use Exception;
-use ZipArchive;
 
 uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
 
