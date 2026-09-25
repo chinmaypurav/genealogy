@@ -42,7 +42,7 @@ final readonly class PersonPhotos
             ->orderBy('order_column')
             ->get()
             ->unique('model_id')
-            ->mapWithKeys(fn (Media $media): array => [$media->model_id => $media->getUrl($conversion->value)])
+            ->mapWithKeys(fn (Media $media): array => [(int) $media->model_id => $media->getUrl($conversion->value)])
             ->all();
     }
 
