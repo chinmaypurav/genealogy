@@ -58,6 +58,7 @@
         "larastan/larastan": "^3.10",
         "laravel/boost": "^2.5",
         "laravel/pail": "^1.2",
+        "laravel/pao": "^1.1",
         "laravel/pint": "^1.30",
         "larswiegers/laravel-translations-checker": "^0.9.4",
         "mockery/mockery": "^1.6",
