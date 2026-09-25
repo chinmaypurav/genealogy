@@ -115,6 +115,11 @@
             "@php artisan config:clear --ansi",
             "@php artisan test"
         ],
+        "test:ci": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php artisan config:clear --ansi",
+            "@php artisan test --parallel --coverage-clover coverage.xml"
+        ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
         ]
