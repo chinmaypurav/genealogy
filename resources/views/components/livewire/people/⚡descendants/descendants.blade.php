@@ -82,6 +82,7 @@
                             <x-tree-node.descendants
                                 :person="$person"
                                 :descendants="$descendants"
+                                :photo_urls="$photoUrls"
                                 :level_max="$count"
                             />
                         </ul>

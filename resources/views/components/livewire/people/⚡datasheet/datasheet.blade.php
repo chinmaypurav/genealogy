@@ -375,7 +375,7 @@
             <div>
                 <img
                     class="max-w-48 rounded-sm"
-                    src="{{ asset('storage/photos/' . $person->team_id . '/' . $person->id . '/' . $image) }}"
+                    src="{{ $image }}"
                     alt="{{ $person->name }}"
                 />
             </div>

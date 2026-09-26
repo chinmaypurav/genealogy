@@ -9,7 +9,6 @@ use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Laravel\Jetstream\Contracts\CreatesTeams;
 use Laravel\Jetstream\Events\AddingTeam;
 
@@ -259,9 +258,7 @@ final class Import implements CreatesTeams
      */
     private function deleteFailedImportFiles(): void
     {
-        if (isset($this->team)) {
-            Storage::disk('photos')->deleteDirectory((string) $this->team->id);
-        }
+        $this->mediaHandler?->deleteStoredFiles();
     }
 
     /**
@@ -279,11 +276,6 @@ final class Import implements CreatesTeams
         ]);
 
         $this->user->switchTeam($team);
-
-        // Create team photo folder
-        if (! Storage::disk('photos')->exists((string) $team->id)) {
-            Storage::disk('photos')->makeDirectory((string) $team->id);
-        }
 
         return $team;
     }

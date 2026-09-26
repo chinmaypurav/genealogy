@@ -1,4 +1,4 @@
-@props(['person', 'ancestors', 'level_current' => 0, 'level_max'])
+@props(['person', 'ancestors', 'photo_urls' => [], 'level_current' => 0, 'level_max'])
 
 @php
     $level_current++;
@@ -15,13 +15,9 @@
         <x-link href="/people/{{ $person->id }}" title="{{ $person->sex === 'm' ? __('app.male') : __('app.female') }}">
             <figure class="w-24">
                 <div class="user-image">
-                    @php
-                        $photoPath = $person->team_id . '/' . $person->id . '/' . $person->photo . '_small.webp';
-                    @endphp
-
-                    @if ($person->photo && Storage::disk('photos')->exists($photoPath))
+                    @if (isset($photo_urls[$person->id]))
                         <img
-                            src="{{ Storage::disk('photos')->url($photoPath) }}"
+                            src="{{ $photo_urls[$person->id] }}"
                             class="w-full rounded-sm shadow-lg dark:shadow-black/30"
                             alt="{{ $person->id }}"
                         />
@@ -58,6 +54,7 @@
                         <x-tree-node.ancestors
                             :person="$ancestor"
                             :ancestors="$ancestors"
+                            :photo_urls="$photo_urls"
                             :level_current="$level_current"
                             :level_max="$level_max"
                         />

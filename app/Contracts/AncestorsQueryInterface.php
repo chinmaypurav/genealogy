@@ -21,7 +21,6 @@ interface AncestorsQueryInterface
      *     dod: string|null,
      *     yod: int|null,
      *     team_id: int|null,
-     *     photo: string|null,
      *     dob: string|null,
      *     yob: int|null,
      *     degree: int,

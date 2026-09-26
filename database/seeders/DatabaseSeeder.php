@@ -38,6 +38,7 @@ final class DatabaseSeeder extends Seeder
         // - the database seeder /database/seeders/UserSeeder.php
         //
         // - the folder /public/xml
+        // - the folder /database/seeders/photos
         // - the CONTENT of folder /storage/app/public/photos
         // - the CONTENT of folder /storage/app/public/profile-photos
         // - the CONTENT of folder /storage/app/backups/genealogy

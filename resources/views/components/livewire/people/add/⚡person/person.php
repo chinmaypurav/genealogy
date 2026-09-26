@@ -55,7 +55,7 @@ new class extends Component
 
         $teamId = $user->isDeveloper() ? null : $user->currentTeam->id;
 
-        return PersonModel::similarTo($teamId, $nameFields)->get();
+        return PersonModel::similarTo($teamId, $nameFields)->with('media')->get();
     }
 
     /**

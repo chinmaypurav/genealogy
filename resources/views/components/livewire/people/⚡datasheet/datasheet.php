@@ -2,52 +2,36 @@
 
 declare(strict_types=1);
 
+use App\Enums\PersonMediaCollection;
+use App\Enums\PersonPhotoConversion;
 use App\Models\Person;
+use App\PersonPhotos;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 new class extends Component
 {
     public Person $person;
 
     /**
-     * @var Collection<int, string>
+     * @var Collection<int, string> Medium photo URLs
      */
     #[Locked]
     public Collection $images;
 
     /**
-     * @var Collection<int, Spatie\MediaLibrary\MediaCollections\Models\Media>
+     * @var Collection<int, Media>
      */
     #[Locked]
     public Collection $files;
 
     public function mount(): void
     {
-        $this->loadImages();
+        $this->images = new PersonPhotos($this->person)->all()
+            ->map(fn (Media $media): string => $media->getUrl(PersonPhotoConversion::Medium->value));
 
-        $this->files = $this->person->getMedia('files');
-    }
-
-    protected function loadImages(): void
-    {
-        $disk       = Storage::disk('photos');
-        $personPath = "{$this->person->team_id}/{$this->person->id}";
-
-        if (! $disk->exists($personPath)) {
-            $this->images = collect();
-
-            return;
-        }
-
-        // List all files in the person's folder
-        $allFiles = collect($disk->files($personPath));
-
-        // Filter only medium images that belong to this person
-        $this->images = $allFiles
-            ->filter(fn ($file) => str_starts_with(basename($file), "{$this->person->id}_") && str_ends_with($file, '_medium.webp'))
-            ->map(fn ($file) => basename($file));
+        $this->files = $this->person->getMedia(PersonMediaCollection::Files->value);
     }
 };

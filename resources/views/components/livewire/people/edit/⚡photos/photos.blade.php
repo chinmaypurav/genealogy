@@ -1,3 +1,5 @@
+@use('App\Enums\PersonPhotoConversion')
+
 <div class="flex flex-col rounded-sm bg-white text-neutral-800 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] md:w-3xl dark:bg-neutral-700 dark:text-neutral-50">
     {{-- card header --}}
     <div class="flex h-14 min-h-min flex-col rounded-t border-b-2 border-neutral-100 p-2 text-lg font-medium dark:border-neutral-600 dark:text-neutral-50">
@@ -55,36 +57,40 @@
                         <x-slot:header>
                             <div class="p-4">
                                 <x-ts-link
-                                    href="{{ url($photo['url_original']) }}"
+                                    href="{{ $photo->getUrl() }}"
                                     target="_blank"
-                                    class="text-sm {{ $photo['name'] === $person->photo ? ' text-yellow-500 dark:text-yellow-200' : '' }}"
+                                    class="text-sm {{ $loop->first ? ' text-yellow-500 dark:text-yellow-200' : '' }}"
                                 >
-                                    {{ $photo['name'] }}
+                                    {{ $photo->file_name }}
                                 </x-ts-link>
                             </div>
                         </x-slot:header>
 
-                        <x-ts-link href="{{ $photo['url_original'] }}" target="_blank" title="{{ __('app.show') }}">
-                            <img src="{{ $photo['url_medium'] }}" alt="{{ $photo['name'] }}" class="rounded-sm" />
+                        <x-ts-link href="{{ $photo->getUrl() }}" target="_blank" title="{{ __('app.show') }}">
+                            <img
+                                src="{{ $photo->getUrl(PersonPhotoConversion::Medium->value) }}"
+                                alt="{{ $photo->name }}"
+                                class="rounded-sm"
+                            />
                         </x-ts-link>
 
                         <x-slot:footer>
                             <div class="flex w-full items-center justify-between">
                                 {{-- Left side --}}
                                 <div class="flex items-center gap-2">
-                                    @if ($photo['name'] !== $person->photo)
+                                    @if (! $loop->first)
                                         <x-ts-button
                                             color="secondary"
                                             class="p-2!"
                                             title="{{ __('person.photo_set_primary') }}"
-                                            wire:click="setPrimary('{{ $photo['name'] }}')"
+                                            wire:click="setPrimary({{ $photo->id }})"
                                             wire:loading.attr="disabled"
-                                            wire:target="setPrimary('{{ $photo['name'] }}')"
+                                            wire:target="setPrimary({{ $photo->id }})"
                                         >
-                                            <span wire:loading.remove wire:target="setPrimary('{{ $photo['name'] }}')">
+                                            <span wire:loading.remove wire:target="setPrimary({{ $photo->id }})">
                                                 <x-ts-icon icon="tabler.star" class="inline-block size-5" />
                                             </span>
-                                            <span wire:loading wire:target="setPrimary('{{ $photo['name'] }}')">
+                                            <span wire:loading wire:target="setPrimary({{ $photo->id }})">
                                                 <x-ts-icon
                                                     icon="tabler.loader-2"
                                                     class="inline-block size-5 animate-spin"
@@ -102,29 +108,29 @@
                                 {{-- Right side --}}
                                 <div class="flex items-center gap-2">
                                     <x-ts-button
-                                        href="{{ $photo['url_original'] }}"
+                                        href="{{ $photo->getUrl() }}"
                                         color="secondary"
                                         class="p-2!"
                                         title="{{ __('app.download') }}"
-                                        download="{{ $photo['name_download'] }}"
+                                        download="{{ $person->name }} - {{ $photo->file_name }}"
                                     >
                                         <x-ts-icon icon="tabler.download" class="inline-block size-5" />
                                     </x-ts-button>
 
-                                    <span class="min-w-12.5 text-center text-sm leading-none">{{ $photo['size'] }}</span>
+                                    <span class="min-w-12.5 text-center text-sm leading-none">{{ $photo->human_readable_size }}</span>
 
                                     <x-ts-button
                                         color="red"
                                         class="p-2! text-white"
                                         title="{{ __('app.delete') }}"
-                                        wire:click="delete('{{ $photo['name'] }}')"
+                                        wire:click="delete({{ $photo->id }})"
                                         wire:loading.attr="disabled"
-                                        wire:target="delete('{{ $photo['name'] }}')"
+                                        wire:target="delete({{ $photo->id }})"
                                     >
-                                        <span wire:loading.remove wire:target="delete('{{ $photo['name'] }}')">
+                                        <span wire:loading.remove wire:target="delete({{ $photo->id }})">
                                             <x-ts-icon icon="tabler.trash" class="inline-block size-5" />
                                         </span>
-                                        <span wire:loading wire:target="delete('{{ $photo['name'] }}')">
+                                        <span wire:loading wire:target="delete({{ $photo->id }})">
                                             <x-ts-icon
                                                 icon="tabler.loader-2"
                                                 class="inline-block size-5 animate-spin"

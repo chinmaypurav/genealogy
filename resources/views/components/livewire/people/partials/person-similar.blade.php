@@ -1,3 +1,6 @@
+@use('App\Enums\PersonMediaCollection')
+@use('App\Enums\PersonPhotoConversion')
+
 <div class="max-w-3xl">
     <x-ts-card class="max-w-max min-w-max">
         <x-slot:header>
@@ -46,9 +49,9 @@
                     >
                         {{-- Photo / avatar --}}
                         <div class="flex size-10 shrink-0 items-center justify-center overflow-hidden bg-neutral-200 dark:bg-neutral-600">
-                            @if ($person->photo)
+                            @if ($person->hasMedia(PersonMediaCollection::Photos->value))
                                 <img
-                                    src="{{ Storage::url('photos/' . $person->team->id . '/' . $person->id . '/' . $person->photo . '.webp') }}"
+                                    src="{{ $person->getFirstMediaUrl(PersonMediaCollection::Photos->value, PersonPhotoConversion::Small->value) }}"
                                     alt="{{ $person->name }}"
                                     class="h-full w-full object-cover"
                                 />

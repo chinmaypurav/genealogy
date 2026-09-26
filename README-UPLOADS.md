@@ -7,57 +7,32 @@ Below is a guide to help you understand how uploads are handled and what types o
 
 ---
 
-<div style="background-color: #ffebee; border: 2px solid #f44336; border-radius: 8px; padding: 16px; margin: 16px 0;">
-<h2 style="color: #c62828; margin-top: 0;">⚠️ Important Migration Notice</h2>
-
-**If you are upgrading from a version prior to 4.5.0**, the photo folder structure has been completely reorganized. Before using the application with version 4.5.0 or higher, you **MUST** run the photo migration command **ONCE**:
-
-```bash
-# First, preview what will happen (recommended)
-php artisan photos:migrate --dry-run
-
-# Then run the actual migration
-php artisan photos:migrate
-```
-
-**What changed in version 4.5.0:**
-
-- **Before 4.5.0**: Photos were stored in separate folders (`photos/`, `photos-096/`, `photos-384/`) with a flat `teamId/filename` structure
-- **From 4.5.0**: Photos are stored in a unified `photos/` folder with a nested `teamId/personId/` structure
-
-**Migration features:**
-
-- ✅ Automatic backup creation before migration
-- ✅ Support for all image formats (not just WebP)
-- ✅ Run-once protection to prevent accidental re-execution
-- ✅ Dry-run mode to preview changes: `php artisan photos:migrate --dry-run`
-
-**This migration is mandatory and safe** - your original photos will be backed up automatically before any changes are made.
-
-📖 **For complete migration documentation, examples, and recovery procedures, see [README-PHOTO-MIGRATION.md](README-PHOTO-MIGRATION.md)**
-
-</div>
-
----
-
 ## 📸 Image Uploads
 
 ### Storage Folder
 
-Uploaded photos are saved in the `storage/app/public/photos/` folder using the filename template:
-
-`teamId/personId/personId_sequence_timestamp[_size].extension`
+Photos are managed by <a href="https://spatie.be/docs/laravel-medialibrary" target="_blank">Spatie Laravel Media Library</a> in the `photos` collection of a person, stored on the `photos` disk (`storage/app/public/photos/`).<br/>
+Every photo gets its own folder, named after its id in the `media` table:
 
 **Example:**
 
 ```
-storage/app/public/photos/1/552/552_001_1723709988.jpg          (original, untouched)
-storage/app/public/photos/1/552/552_001_1723709988_large.webp   (large size, 1920px wide by default)
-storage/app/public/photos/1/552/552_001_1723709988_medium.webp  (medium size, 384px wide by default)
-storage/app/public/photos/1/552/552_001_1723709988_small.webp   (small size, 96px wide by default)
+storage/app/public/photos/12/portrait.jpg                          (original, untouched)
+storage/app/public/photos/12/conversions/portrait-large.webp       (large,  fits within 1920 x 1080)
+storage/app/public/photos/12/conversions/portrait-medium.webp      (medium, 384px wide)
+storage/app/public/photos/12/conversions/portrait-small.webp       (small,  192px wide)
 ```
 
-These versions allow the application to serve optimized image sizes depending on the context (e.g., thumbnails, previews, full image).
+The first photo of the collection (lowest `order_column`) is the primary photo of a person. Setting another photo as primary moves it to the front of the collection.
+
+These versions allow the application to serve optimized image sizes depending on the context:
+
+| Conversion | Used for                                                              |
+| ---------- | --------------------------------------------------------------------- |
+| `small`    | Avatars, family tree nodes (ancestors / descendants), similar persons |
+| `medium`   | Profile card, gallery, photo management, datasheet                    |
+| `large`    | Full view when a photo is opened from the gallery                     |
+| original   | Download and GEDCOM export                                            |
 
 ---
 
@@ -66,40 +41,30 @@ These versions allow the application to serve optimized image sizes depending on
 Uploaded images are processed as follows:
 
 1. **Original File**: Always stored untouched in its original format (needed for GEDCOM export)
-2. **Resized Versions**: Three WebP versions are created (large, medium, small) for optimal web performance
+2. **Conversions**: Three WebP conversions are created (large, medium, small) for optimal web performance
 3. **Security Validation**: All uploads undergo multiple security checks before being saved
+
+**Conversions are defined in `/app/Enums/PersonPhotoConversion.php`:**
+
+| Case     | Max width | Max height         | Quality |
+| -------- | --------- | ------------------ | ------- |
+| `Small`  | 192       | (keeps proportion) | 80      |
+| `Medium` | 384       | (keeps proportion) | 85      |
+| `Large`  | 1920      | 1080               | 90      |
+
+- **width / height**: Change the values in the enum to customize the sizes. The large conversion never upscales smaller images.
+- **quality**: Compression quality (0–100). Higher = better quality but larger file size.
+- After changing sizes, regenerate the existing conversions with `php artisan media-library:regenerate "App\Models\Person"`.
 
 **Configuration in `/config/app.php`:**
 
 ```php
 'upload_photo' => [
-    'max_width'     => 1920,
-    'max_height'    => 1080,
     'add_watermark' => env('PHOTOS_ADD_WATERMARK', false),
-    'sizes'         => [
-        'large' => [
-            'width'   => 1920,
-            'height'  => 1080,
-            'quality' => 90,  // 90 is sweet spot for WebP
-        ],
-        'medium' => [
-            'width'   => 384,
-            'height'  => null,
-            'quality' => 85,
-        ],
-        'small' => [
-            'width'   => 96,
-            'height'  => null,
-            'quality' => 80,
-        ],
-    ],
 ],
 ```
 
-- **max_width / max_height**: Images are resized to fit within these dimensions while maintaining aspect ratio.
-- **add_watermark**: Adds a watermark automatically to uploaded images (set in `.env` file).
-- **sizes**: You can customize the dimensions but the size names (large, medium, small) **MUST STAY** untouched as they are hardcoded in the application.
-- **quality**: Compression quality (0–100). Higher = better quality but larger file size.
+- **add_watermark**: Adds `public/img/watermark.png` to the bottom-left corner of every conversion (set in `.env` file). The original is never watermarked.
 
 ---
 
@@ -175,9 +140,9 @@ The application implements multiple layers of security to prevent malicious imag
 
 #### 3. **Image Re-encoding**
 
-- All images are re-encoded to WebP format using Intervention Image
+- All displayed images are WebP conversions generated by Spatie Media Library
 - This strips any potentially malicious code embedded in images
-- Original files are preserved separately for GEDCOM export
+- Original files are preserved separately for download and GEDCOM export
 
 #### 4. **Server Protection**
 
@@ -377,15 +342,14 @@ The `upload_max_size` value in `/config/app.php` should match or be lower than y
 
 ### Version Upgrade Issues
 
-- **For upgrades from pre-4.5.0**: Make sure you've run `php artisan photos:migrate` **ONCE** before using the application
 - **Missing Photos**: Check that the symbolic link exists: `php artisan storage:link`
 - **Permission Errors**: Ensure `storage/app/public/photos/` and `storage/app/files/` are writable by your web server
 
 ### Image Processing Issues
 
 - **Watermarking Fails**: Verify that `public/img/watermark.png` exists if watermarking is enabled
-- **Poor Quality**: Adjust the `quality` settings in the `upload_photo.sizes` configuration
-- **Slow Processing**: Large images take time to process; consider reducing `max_width` and `max_height`
+- **Poor Quality**: Adjust the `quality()` values in `App\Enums\PersonPhotoConversion`
+- **Missing Conversions**: Regenerate them with `php artisan media-library:regenerate "App\Models\Person"`
 
 ### Checking Your Configuration
 
@@ -445,7 +409,7 @@ tail -f storage/logs/laravel.log | grep -i upload
 ### Image Uploads
 
 - ✅ **Original files preserved** in uploaded format
-- ✅ **Three WebP versions** created for web performance
+- ✅ **Three WebP conversions** created for web performance
 - ✅ **Four-layer security validation** (Laravel, server-side, re-encoding, server config)
 - ✅ **Magic bytes verification** prevents file type spoofing
 - ✅ **Image structure validation** using getimagesize()

@@ -10,8 +10,13 @@ use App\Models\PersonEvent;
 use App\Models\PersonMetadata;
 use App\Models\Team;
 use App\Models\User;
+use App\PersonPhotos;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Spatie\Activitylog\Facades\Activity;
+use Symfony\Component\Finder\SplFileInfo;
 
 final class DemoSeeder extends Seeder
 {
@@ -59,6 +64,8 @@ final class DemoSeeder extends Seeder
 
         $this->generatedeveloperTestData();
 
+        $this->attachDemoPhotos();
+
         auth()->logout();
     }
 
@@ -93,8 +100,6 @@ final class DemoSeeder extends Seeder
                 'dod' => ! empty($person['dod']) ? $person['dod'] : null,
                 'yod' => ! empty($person['yod']) ? $person['yod'] : null,
                 'pod' => ! empty($person['death_place']) ? $person['death_place'] : null,
-
-                'photo' => ! empty($person['photo']) ? $person['id'] . '_001_demo' : null,
 
                 'summary' => ! empty($person['note']) ? $person['note'] : null,
 
@@ -414,8 +419,6 @@ final class DemoSeeder extends Seeder
                 'yod' => ! empty($person['yod']) ? $person['yod'] : null,
                 'pod' => ! empty($person['death_place']) ? $person['death_place'] : null,
 
-                'photo' => ! empty($person['photo']) ? $person['id'] . '_001_demo' : null,
-
                 'team_id' => $this->kennedy_team,
             ]);
         }
@@ -459,7 +462,6 @@ final class DemoSeeder extends Seeder
             'sex'       => 'm',
             'dob'       => '1963-01-01',
             'yob'       => '1963',
-            'photo'     => '209_001_demo',
 
             'team_id' => $this->developer_team,
         ]);
@@ -471,9 +473,24 @@ final class DemoSeeder extends Seeder
             'sex'       => 'm',
             'dob'       => '1963-01-01',
             'yob'       => '1963',
-            'photo'     => '210_001_demo',
 
             'team_id' => $this->developer_team,
         ]);
+    }
+
+    /**
+     * Attach the demo photos, named {personId}_{sequence}.webp, to their person.
+     * The first photo of each person becomes the primary photo.
+     */
+    protected function attachDemoPhotos(): void
+    {
+        collect(File::files(database_path('seeders/photos')))
+            ->sortBy(fn (SplFileInfo $file): string => $file->getFilename())
+            ->groupBy(fn (SplFileInfo $file): int => (int) Str::before($file->getFilename(), '_'))
+            ->each(function (Collection $files, int $personId): void {
+                $person = Person::query()->withoutGlobalScopes()->findOrFail($personId);
+
+                new PersonPhotos($person)->save($files->map(fn (SplFileInfo $file): string => $file->getPathname())->all());
+            });
     }
 }

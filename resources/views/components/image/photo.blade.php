@@ -1,14 +1,17 @@
 @props(['person' => null])
 
-<div class="user-image">
-    @php
-        $photoPath = $person->team_id . '/' . $person->id . '/' . $person->photo . '_medium.webp';
-    @endphp
+@use('App\Enums\PersonMediaCollection')
+@use('App\Enums\PersonPhotoConversion')
 
-    @if ($person->photo && Storage::disk('photos')->exists($photoPath))
+@php
+    $photoUrl = $person->getFirstMediaUrl(PersonMediaCollection::Photos->value, PersonPhotoConversion::Medium->value);
+@endphp
+
+<div class="user-image">
+    @if ($photoUrl)
         <img
             {{ $attributes->merge(['class' => 'w-full rounded-sm shadow-lg dark:shadow-black/30']) }}
-            src="{{ Storage::disk('photos')->url($photoPath) }}"
+            src="{{ $photoUrl }}"
             alt="{{ $person->name }}"
             title="{{ $person->name }}"
         />

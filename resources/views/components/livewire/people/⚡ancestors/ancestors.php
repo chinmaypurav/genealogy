@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use App\Contracts\AncestorsQueryInterface;
+use App\Enums\PersonPhotoConversion;
 use App\Models\Person;
+use App\PersonPhotos;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 
@@ -22,7 +24,6 @@ new class extends Component
      *     dod: string|null,
      *     yod: int|null,
      *     team_id: int|null,
-     *     photo: string|null,
      *     dob: string|null,
      *     yob: int|null,
      *     degree: int,
@@ -30,6 +31,9 @@ new class extends Component
      * }>
      */
     public Collection $ancestors;
+
+    /** @var array<int, string> Small primary photo URLs keyed by person id */
+    public array $photoUrls = [];
 
     public int $count_min = 1;
 
@@ -81,6 +85,11 @@ new class extends Component
     private function loadAncestors(AncestorsQueryInterface $ancestorsQuery): void
     {
         $this->ancestors = $ancestorsQuery->getAncestors($this->person->id, (int) $this->person->team_id, $this->count_max);
+
+        $this->photoUrls = PersonPhotos::primaryUrls(
+            $this->ancestors->pluck('id')->push($this->person->id),
+            PersonPhotoConversion::Small
+        );
 
         $maxDegree       = $this->ancestors->max('degree');
         $this->count_max = min($maxDegree + 1, $this->count_max);

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\PersonMediaCollection;
 use App\Livewire\Traits\AuthorizesPersonActions;
 use App\Models\Person;
 use Illuminate\Http\UploadedFile;
@@ -140,7 +141,7 @@ new class extends Component
 
         foreach ($validUploads as $upload) {
             try {
-                $file = $this->person->addMedia($upload)->toMediaCollection('files', 'files');
+                $file = $this->person->addMedia($upload)->toMediaCollection(PersonMediaCollection::Files->value);
 
                 if (isset($this->source)) {
                     $file->setCustomProperty('source', $this->source);
@@ -556,6 +557,6 @@ new class extends Component
 
     private function getFiles(): void
     {
-        $this->files = $this->person->getMedia('files');
+        $this->files = $this->person->getMedia(PersonMediaCollection::Files->value);
     }
 };
