@@ -31,16 +31,14 @@ final class PgSqlAncestorsQuery implements AncestorsQueryInterface
      */
     public function getAncestors(int $personId, int $teamId, int $maxDepth): Collection
     {
-        return collect(DB::select($this->getRecursiveQuery(), [$personId, $teamId, $teamId, $maxDepth, $teamId, $maxDepth]));
+        return collect(DB::select($this->getRecursiveQuery(), [$personId, $teamId, $teamId, $maxDepth]));
     }
 
     /**
      * Build the recursive query for ancestors.
      *
-     * Two separate UNION ALL branches are used (one for father, one for mother)
-     * rather than a single branch with OR. This allows MySQL to use indexes on
-     * both father_id and mother_id independently, which is significantly faster
-     * on large tables.
+     * PostgreSQL only allows a single recursive term, so both parents are visited
+     * through a LATERAL VALUES list, letting each lookup use the primary key index.
      *
      * The sequence column doubles as a cycle guard: if a person's
      * id already appears in the ancestor chain, the join condition excludes them.
@@ -71,19 +69,10 @@ final class PgSqlAncestorsQuery implements AncestorsQueryInterface
                 SELECT
                     p.id, p.firstname, p.surname, p.sex, p.father_id, p.mother_id, p.dod, p.yod, p.team_id, p.dob, p.yob,
                     a.degree + 1 AS degree,
-                    a.sequence || ',' || p.id AS sequence
-                FROM people p
-                JOIN ancestors a ON a.father_id = p.id
-                WHERE p.deleted_at IS NULL AND p.team_id = ? AND a.degree < ? AND POSITION(',' || p.id::text || ',' IN ',' || a.sequence || ',') = 0
-
-                UNION ALL
-
-                SELECT
-                    p.id, p.firstname, p.surname, p.sex, p.father_id, p.mother_id, p.dod, p.yod, p.team_id, p.dob, p.yob,
-                    a.degree + 1 AS degree,
-                    a.sequence || ',' || p.id AS sequence
-                FROM people p
-                JOIN ancestors a ON a.mother_id = p.id
+                    CAST(a.sequence || ',' || p.id AS VARCHAR(1024)) AS sequence
+                FROM ancestors a
+                CROSS JOIN LATERAL (VALUES (a.father_id), (a.mother_id)) AS parent(id)
+                JOIN people p ON p.id = parent.id
                 WHERE p.deleted_at IS NULL AND p.team_id = ? AND a.degree < ? AND POSITION(',' || p.id::text || ',' IN ',' || a.sequence || ',') = 0
             )
 
