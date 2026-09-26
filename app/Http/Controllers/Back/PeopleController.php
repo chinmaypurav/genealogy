@@ -7,6 +7,8 @@ namespace App\Http\Controllers\Back;
 use App\Http\Controllers\Controller;
 use App\Models\Couple;
 use App\Models\Person;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 
 final class PeopleController extends Controller
@@ -18,10 +20,24 @@ final class PeopleController extends Controller
 
     public function birthdays(int $months = 2): View
     {
-        $people = Person::whereNotNull('dob')
-            ->whereRaw('CASE WHEN MONTH(NOW()) +' . $months . " > 12 THEN date_format(dob, '%m-%d') >= date_format(NOW(), '%m-%d') OR date_format(dob, '%m-%d') <= date_format(NOW() + INTERVAL " . $months . " MONTH, '%m-%d') ELSE date_format(dob, '%m-%d') >= date_format(NOW(), '%m-%d') AND date_format(dob, '%m-%d') <= date_format(NOW() + INTERVAL " . $months . " MONTH, '%m-%d') END")
-            ->orderByRaw("(case when date_format(dob, '%m-%d') >= date_format(now(), '%m-%d') then 0 else 1 end), date_format(dob, '%m-%d')")
-            ->get();
+        $months = min(max($months, 0), 12);
+        $today  = Carbon::today();
+        $end    = $today->copy()->addMonthsNoOverflow($months);
+
+        $people = Person::query()
+            ->whereNotNull('dob')
+            ->where(function (Builder $query) use ($months, $today, $end): void {
+                foreach (range(0, $months) as $offset) {
+                    $query->orWhere(function (Builder $query) use ($offset, $months, $today, $end): void {
+                        $query->whereMonth('dob', $today->copy()->startOfMonth()->addMonths($offset)->month)
+                            ->when($offset === 0, fn (Builder $query): Builder => $query->whereDay('dob', '>=', $today->day))
+                            ->when($offset === $months, fn (Builder $query): Builder => $query->whereDay('dob', '<=', $end->day));
+                    });
+                }
+            })
+            ->get()
+            ->sortBy('next_birthday_remaining_days')
+            ->values();
 
         return view('back.people.birthdays', ['months' => $months, 'people' => $people]);
     }
