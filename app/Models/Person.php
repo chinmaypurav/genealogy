@@ -560,7 +560,7 @@ final class Person extends Model implements HasMedia
     /** @return HasMany<PersonEvent, $this> */
     public function events(): HasMany
     {
-        return $this->hasMany(PersonEvent::class)->orderByRaw('COALESCE(date, CONCAT(year, "-01-01"))');
+        return $this->hasMany(PersonEvent::class)->orderByRaw("COALESCE(CAST(date AS CHAR(10)), CONCAT(year, '-01-01'))");
     }
 
     /* returns a TIMELINE of all person events including birth and death (person and children), and relationships, ordered by date */

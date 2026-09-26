@@ -29,17 +29,35 @@ jobs:
         run: ./vendor/bin/pint --test
 
   pest:
+    name: pest (${{ matrix.database }})
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - database: mysql
+            image: mysql:8.4
+            port: 3306
+            health-cmd: mysqladmin ping --silent
+          - database: pgsql
+            image: postgres:17
+            port: 5432
+            health-cmd: pg_isready -U root -d genealogy_test
+
     services:
-      mysql:
-        image: mysql:8.4
+      database:
+        image: ${{ matrix.image }}
         env:
           MYSQL_DATABASE: genealogy_test
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          POSTGRES_DB: genealogy_test
+          POSTGRES_USER: root
+          POSTGRES_HOST_AUTH_METHOD: trust
         ports:
-          - 3306:3306
+          - ${{ matrix.port }}:${{ matrix.port }}
         options: >-
-          --health-cmd="mysqladmin ping --silent"
+          --health-cmd="${{ matrix.health-cmd }}"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
@@ -63,9 +81,9 @@ jobs:
       - name: Run Tests
         run: composer test:ci
         env:
-          DB_CONNECTION: mysql
+          DB_CONNECTION: ${{ matrix.database }}
           DB_HOST: 127.0.0.1
-          DB_PORT: 3306
+          DB_PORT: ${{ matrix.port }}
           DB_DATABASE: genealogy_test
           DB_USERNAME: root
           DB_PASSWORD: ""

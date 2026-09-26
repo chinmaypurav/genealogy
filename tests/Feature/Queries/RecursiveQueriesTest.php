@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Models\Person;
+use App\Models\Team;
+use App\Queries\PgSqlAncestorsQuery;
+use App\Queries\PgSqlDescendantsQuery;
 use App\Queries\SQLiteAncestorsQuery;
 use App\Queries\SQLiteDescendantsQuery;
 use Illuminate\Database\Schema\Blueprint;
@@ -87,3 +91,28 @@ test('SQLite recursive queries traverse a tree and stop at a cycle', function ()
         config()->set('database.default', $originalDefaultConnection);
     }
 });
+
+test('PostgreSQL recursive queries traverse both parents and respect team and depth', function (): void {
+    $team        = Team::factory()->create();
+    $foreignTeam = Team::factory()->create();
+
+    $grandfather = Person::factory()->create(['team_id' => $team->id, 'sex' => 'm']);
+    $father      = Person::factory()->create(['team_id' => $team->id, 'sex' => 'm', 'father_id' => $grandfather->id]);
+    $mother      = Person::factory()->create(['team_id' => $team->id, 'sex' => 'f']);
+    $child       = Person::factory()->create(['team_id' => $team->id, 'sex' => 'm', 'father_id' => $father->id, 'mother_id' => $mother->id]);
+    Person::factory()->create(['team_id' => $foreignTeam->id, 'father_id' => $child->id]);
+
+    $ancestors              = (new PgSqlAncestorsQuery())->getAncestors($child->id, $team->id, 10);
+    $depthLimitedAncestors  = (new PgSqlAncestorsQuery())->getAncestors($child->id, $team->id, 1);
+    $grandfatherDescendants = (new PgSqlDescendantsQuery())->getDescendants($grandfather->id, $team->id, 10);
+    $motherDescendants      = (new PgSqlDescendantsQuery())->getDescendants($mother->id, $team->id, 10);
+    $foreignTeamDescendants = (new PgSqlDescendantsQuery())->getDescendants($grandfather->id, $foreignTeam->id, 10);
+
+    expect($ancestors->pluck('id')->all())->toBe([$child->id, $father->id, $mother->id, $grandfather->id])
+        ->and($ancestors->pluck('degree')->all())->toBe([0, 1, 1, 2])
+        ->and($ancestors->last()->sequence)->toBe("{$child->id},{$father->id},{$grandfather->id}")
+        ->and($depthLimitedAncestors->pluck('id')->all())->toBe([$child->id, $father->id, $mother->id])
+        ->and($grandfatherDescendants->pluck('id')->all())->toBe([$grandfather->id, $father->id, $child->id])
+        ->and($motherDescendants->pluck('id')->all())->toBe([$mother->id, $child->id])
+        ->and($foreignTeamDescendants)->toBeEmpty();
+})->skip(fn (): bool => DB::connection()->getDriverName() !== 'pgsql', 'Requires a PostgreSQL connection.');

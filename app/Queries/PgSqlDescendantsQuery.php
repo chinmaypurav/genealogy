@@ -31,16 +31,15 @@ final class PgSqlDescendantsQuery implements DescendantsQueryInterface
      */
     public function getDescendants(int $personId, int $teamId, int $maxDepth): Collection
     {
-        return collect(DB::select($this->getRecursiveQuery(), [$personId, $teamId, $teamId, $maxDepth, $teamId, $maxDepth]));
+        return collect(DB::select($this->getRecursiveQuery(), [$personId, $teamId, $teamId, $maxDepth]));
     }
 
     /**
      * Build the recursive query for descendants.
      *
-     * Two separate UNION ALL branches are used (one for father, one for mother)
-     * rather than a single branch with OR. This allows MySQL to use indexes on
-     * both father_id and mother_id independently, which is significantly faster
-     * on large tables.
+     * PostgreSQL only allows a single recursive term, so children of either parent
+     * are matched with one OR join, which the planner resolves as a bitmap OR over
+     * the father_id and mother_id indexes.
      *
      * The sequence column doubles as a cycle guard: if a person's
      * id already appears in the descendant chain, the join condition excludes them.
@@ -71,19 +70,9 @@ final class PgSqlDescendantsQuery implements DescendantsQueryInterface
                 SELECT
                     p.id, p.firstname, p.surname, p.sex, p.father_id, p.mother_id, p.dod, p.yod, p.team_id, p.dob, p.yob,
                     d.degree + 1 AS degree,
-                    d.sequence || ',' || p.id AS sequence
-                FROM people p
-                JOIN descendants d ON p.father_id = d.id
-                WHERE p.deleted_at IS NULL AND p.team_id = ? AND d.degree < ? AND POSITION(',' || p.id::text || ',' IN ',' || d.sequence || ',') = 0
-
-                UNION ALL
-
-                SELECT
-                    p.id, p.firstname, p.surname, p.sex, p.father_id, p.mother_id, p.dod, p.yod, p.team_id, p.dob, p.yob,
-                    d.degree + 1 AS degree,
-                    d.sequence || ',' || p.id AS sequence
-                FROM people p
-                JOIN descendants d ON p.mother_id = d.id
+                    CAST(d.sequence || ',' || p.id AS VARCHAR(1024)) AS sequence
+                FROM descendants d
+                JOIN people p ON p.father_id = d.id OR p.mother_id = d.id
                 WHERE p.deleted_at IS NULL AND p.team_id = ? AND d.degree < ? AND POSITION(',' || p.id::text || ',' IN ',' || d.sequence || ',') = 0
             )
 
