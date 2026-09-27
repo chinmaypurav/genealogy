@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Models\User;
-use Laravel\Jetstream\Features;
 use Livewire\Livewire;
 use Spatie\Activitylog\Models\Activity;
 
@@ -20,10 +19,6 @@ afterEach(function (): void {
 });
 
 test('user accounts can be deleted', function (): void {
-    if (! Features::hasAccountDeletionFeatures()) {
-        $this->markTestSkipped('Account deletion is not enabled.');
-    }
-
     $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
     Livewire::test('profile::delete-user-form')
@@ -36,10 +31,6 @@ test('user accounts can be deleted', function (): void {
 });
 
 test('correct password must be provided before account can be deleted', function (): void {
-    if (! Features::hasAccountDeletionFeatures()) {
-        $this->markTestSkipped('Account deletion is not enabled.');
-    }
-
     $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
     Livewire::test('profile::delete-user-form')

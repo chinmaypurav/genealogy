@@ -13,7 +13,7 @@ uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
 // Guard: partners::confirm() / partners::delete() require couple:delete
 
 test('deleting a couple is forbidden without the couple:delete permission', function (): void {
-    // 'editor' role has couple:update but NOT couple:delete (see JetstreamServiceProvider)
+    // 'editor' role has couple:update but NOT couple:delete (see config/teams.php)
     $editor = $this->memberWithRole('editor');
     $this->actingAs($editor);
 
@@ -41,7 +41,7 @@ test('deleting a couple is forbidden without the couple:delete permission', func
 });
 
 test('a user with the couple:delete permission can delete a couple', function (): void {
-    // 'manager' role includes couple:delete (see JetstreamServiceProvider)
+    // 'manager' role includes couple:delete (see config/teams.php)
     $manager = $this->memberWithRole('manager');
     $this->actingAs($manager);
 

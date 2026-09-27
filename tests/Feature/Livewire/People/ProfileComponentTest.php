@@ -12,7 +12,7 @@ uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
 // Guard: profile::confirm() / profile::delete() require person:delete
 
 test('deleting a person is forbidden without the person:delete permission', function (): void {
-    // 'editor' role has person:update but NOT person:delete (see JetstreamServiceProvider)
+    // 'editor' role has person:update but NOT person:delete (see config/teams.php)
     $editor = $this->memberWithRole('editor');
     $this->actingAs($editor);
 
@@ -34,7 +34,7 @@ test('deleting a person is forbidden without the person:delete permission', func
 });
 
 test('a user with the person:delete permission can delete a deletable person', function (): void {
-    // 'manager' role includes person:delete (see JetstreamServiceProvider)
+    // 'manager' role includes person:delete (see config/teams.php)
     $manager = $this->memberWithRole('manager');
     $this->actingAs($manager);
 

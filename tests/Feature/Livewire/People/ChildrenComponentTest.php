@@ -12,7 +12,7 @@ uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
 // Guard: children::confirm() / children::disconnect() require person:update
 
 test('disconnecting a child is forbidden without the person:update permission', function (): void {
-    // 'member' role only has person:read (see JetstreamServiceProvider)
+    // 'member' role only has person:read (see config/teams.php)
     $member = $this->memberWithRole('member');
     $this->actingAs($member);
 
@@ -34,7 +34,7 @@ test('disconnecting a child is forbidden without the person:update permission', 
 });
 
 test('a user with the person:update permission can disconnect a child', function (): void {
-    // 'editor' role includes person:update (see JetstreamServiceProvider)
+    // 'editor' role includes person:update (see config/teams.php)
     $editor = $this->memberWithRole('editor');
     $this->actingAs($editor);
 

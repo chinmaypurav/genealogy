@@ -148,34 +148,32 @@
                 </div>
             </div>
 
-            @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
-                <hr class="my-4 h-px border-0 bg-gray-200 dark:bg-gray-700" />
+            <hr class="my-4 h-px border-0 bg-gray-200 dark:bg-gray-700" />
 
-                <div class="mt-4">
-                    <x-label for="terms">
-                        <div class="flex items-center">
-                            <x-checkbox name="terms" id="terms" required />
+            <div class="mt-4">
+                <x-label for="terms">
+                    <div class="flex items-center">
+                        <x-checkbox name="terms" id="terms" required />
 
-                            <div class="ml-2">
-                                {!!
-                                    __('auth.agree', [
-                                        'terms_of_service' => '<a target="_blank" href="' .
-                                        route('terms.show') .
-                                        '" class="text-sm text-gray-600 underline rounded-sm hover:text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">' .
-                                        __('app.terms_of_service') .
-                                        '</a>',
-                                        'privacy_policy' => '<a target="_blank" href="' .
-                                        route('policy.show') .
-                                        '" class="text-sm text-gray-600 underline rounded-sm hover:text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">' .
-                                        __('app.privacy_policy') .
-                                        '</a>',
-                                    ])
-                                !!}
-                            </div>
+                        <div class="ml-2">
+                            {!!
+                                __('auth.agree', [
+                                    'terms_of_service' => '<a target="_blank" href="' .
+                                    route('terms.show') .
+                                    '" class="text-sm text-gray-600 underline rounded-sm hover:text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">' .
+                                    __('app.terms_of_service') .
+                                    '</a>',
+                                    'privacy_policy' => '<a target="_blank" href="' .
+                                    route('policy.show') .
+                                    '" class="text-sm text-gray-600 underline rounded-sm hover:text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">' .
+                                    __('app.privacy_policy') .
+                                    '</a>',
+                                ])
+                            !!}
                         </div>
-                    </x-label>
-                </div>
-            @endif
+                    </div>
+                </x-label>
+            </div>
 
             <div class="mt-4 flex items-center justify-end">
                 <a
