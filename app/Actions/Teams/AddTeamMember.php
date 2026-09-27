@@ -9,8 +9,8 @@ use App\Models\User;
 use Closure;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
-use Laravel\Jetstream\Contracts\AddsTeamMembers;
 use Illuminate\Validation\Rule;
+use Laravel\Jetstream\Contracts\AddsTeamMembers;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
