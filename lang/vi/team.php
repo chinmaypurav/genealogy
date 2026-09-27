@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 return [
-    'all_teams'     => 'Tất cả các đội',
     'cancel'        => 'Hủy',
     'couples'       => 'Cặp đôi',
     'create'        => 'Tạo đội',

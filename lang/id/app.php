@@ -5,16 +5,13 @@ declare(strict_types=1);
 return [
     // Menus
     'about'            => 'Tentang',
-    'dependencies'     => 'Dependensi',
     'help'             => 'Bantuan',
     'home'             => 'Beranda',
     'menu'             => 'Menu',
     'privacy_policy'   => 'Kebijakan Privasi',
-    'session'          => 'Sesi',
     'terms_of_service' => 'Ketentuan Layanan',
     'useful_links'     => 'Tautan Berguna',
     'impressum'        => 'Informasi Legal',
-    'log_viewer'       => 'Penampil Log',
 
     // Labels
     'all'               => 'Semua',
@@ -141,8 +138,6 @@ return [
     'event_invited'     => 'diundang',
     'event_removed'     => 'dikeluarkan',
     'event_transferred' => 'dipindahkan',
-
-    'settings' => 'Pengaturan',
 
     'people_logbook' => 'Buku log orang',
     'team_logbook'   => 'Buku log tim',

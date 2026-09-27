@@ -87,3 +87,16 @@ test('returns full name even when firstname is missing', function (): void {
 
     expect($person->name)->toBe('Doe');
 });
+
+test('similar persons are limited to the given team', function (): void {
+    $user = User::factory()->withPersonalTeam()->create();
+
+    $this->actingAs($user);
+
+    $ownTeamMatch = Person::factory()->create(['team_id' => $user->current_team_id, 'firstname' => 'Johnathan']);
+
+    Person::factory()->create(['firstname' => 'Johnathan']);
+
+    expect(Person::query()->withoutGlobalScopes()->similarTo($user->current_team_id, ['John'])->pluck('id')->all())
+        ->toBe([$ownTeamMatch->id]);
+});

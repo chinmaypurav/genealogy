@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 return [
-    'all_teams'     => '所有家族',
     'cancel'        => '取消',
     'couples'       => '夫妻',
     'create'        => '创建家族',

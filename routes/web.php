@@ -29,7 +29,6 @@ Route::middleware([
     Route::livewire('team', 'livewire::team')->name('team');
     Route::livewire('teamlog', 'livewire::teamlog')->name('teamlog');
     Route::livewire('peoplelog', 'livewire::peoplelog')->name('peoplelog');
-    Route::livewire('test', 'livewire::test')->name('test');
 
     Route::controller(App\Http\Controllers\Back\TeamController::class)->group(function (): void {
         Route::put('/teams/{team}/transfer-ownership', 'transferOwnership')->name('teams.transfer-ownership');
@@ -73,32 +72,6 @@ Route::middleware([
     // -----------------------------------------------------------------------------------
     Route::livewire('exportteam', 'gedcom::exportteam')->name('gedcom.exportteam');
     Route::livewire('importteam', 'gedcom::importteam')->name('gedcom.importteam');
-
-    // -----------------------------------------------------------------------------------
-    // developer
-    // -----------------------------------------------------------------------------------
-    Route::middleware(App\Http\Middleware\IsDeveloper::class)->prefix('developer')->as('developer.')->group(function (): void {
-        Route::livewire('teams', 'developer::teams')->name('teams');
-        Route::livewire('people', 'developer::people')->name('people');
-
-        Route::livewire('users', 'developer::users')->name('users');
-
-        Route::livewire('settings', 'developer::settings')->name('settings');
-        Route::livewire('backups', 'developer::backups')->name('backups');
-
-        // -----------------------------------------------------------------------------------
-        // pages
-        // -----------------------------------------------------------------------------------
-        Route::controller(App\Http\Controllers\Back\DeveloperController::class)->group(function (): void {
-            Route::get('dependencies', 'dependencies')->name('dependencies');
-            Route::get('session', 'session')->name('session');
-
-            Route::get('userlog/log', 'userlogLog')->name('userlog.log');
-            Route::get('userlog/origin', 'userlogOrigin')->name('userlog.origin');
-            Route::get('userlog/originmap', 'userlogOriginMap')->name('userlog.origin-map');
-            Route::get('userlog/period', 'userlogPeriod')->name('userlog.period');
-        });
-    });
 });
 
 // -----------------------------------------------------------------------------------

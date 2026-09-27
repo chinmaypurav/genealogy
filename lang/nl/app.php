@@ -5,16 +5,13 @@ declare(strict_types=1);
 return [
     // Menus
     'about'            => 'Over',
-    'dependencies'     => 'Afhankelijkheden',
     'help'             => 'Help',
     'home'             => 'Start',
     'menu'             => 'Menu',
     'privacy_policy'   => 'Privacybeleid',
-    'session'          => 'Sessie',
     'terms_of_service' => 'Algemene voorwaarden',
     'useful_links'     => 'Bruikbare links',
     'impressum'        => 'Impressum',
-    'log_viewer'       => 'Log Viewer',
 
     // Labels
     'all'               => 'Alles',
@@ -141,8 +138,6 @@ return [
     'event_invited'     => 'uitgenodigd',
     'event_removed'     => 'verwijderd',
     'event_transferred' => 'overgedragen',
-
-    'settings' => 'Instellingen',
 
     'people_logbook' => 'Personenlogboek',
     'team_logbook'   => 'Teamlogboek',

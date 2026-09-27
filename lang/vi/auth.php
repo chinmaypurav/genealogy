@@ -24,8 +24,6 @@ return [
     'change_password_success' => 'Mật khẩu của bạn đã được thay đổi',
     'change_password_error'   => 'Ôi, đổi mật khẩu không thành công',
 
-    'developer' => 'Nhà phát triển',
-
     'email' => 'Email',
 
     'forgot_password'           => 'Quên Mật Khẩu?',

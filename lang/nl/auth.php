@@ -24,8 +24,6 @@ return [
     'change_password_success' => 'Uw wachtwoord werd gewijzig',
     'change_password_error'   => 'Oeps, het wijzigen van het wachtwoord is mislukt',
 
-    'developer' => 'Beheerder',
-
     'email' => 'E-mail',
 
     'forgot_password'           => 'Wachtwoord vergeten?',

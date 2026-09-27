@@ -54,9 +54,7 @@ new class extends Component
             return new Collection;
         }
 
-        $teamId = $user->isDeveloper() ? null : $user->currentTeam->id;
-
-        return PersonModel::similarTo($teamId, $nameFields)->with('media')->get();
+        return PersonModel::similarTo($user->currentTeam->id, $nameFields)->with('media')->get();
     }
 
     /**

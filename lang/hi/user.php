@@ -18,7 +18,6 @@ return [
     'confirm_new_password'           => 'नए पासवर्ड की पुष्टि करें',
     'language'                       => 'भाषा',
     'timezone'                       => 'टाइमज़ोन',
-    'developer'                      => 'डेवलपर',
     'team'                           => 'टीम',
     'current_team'                   => 'मौजूदा टीम',
     'email_verified'                 => 'ईमेल सत्यापित',

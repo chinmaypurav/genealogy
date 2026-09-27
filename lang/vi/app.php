@@ -5,16 +5,13 @@ declare(strict_types=1);
 return [
     // Menus
     'about'            => 'Giới thiệu',
-    'dependencies'     => 'Các phụ thuộc',
     'help'             => 'Trợ giúp',
     'home'             => 'Trang chủ',
     'menu'             => 'Menu',
     'privacy_policy'   => 'Chính sách bảo mật',
-    'session'          => 'Phiên',
     'terms_of_service' => 'Điều khoản dịch vụ',
     'useful_links'     => 'Liên kết hữu ích',
     'impressum'        => 'Gây ấn tượng',
-    'log_viewer'       => 'Trình xem nhật ký',
 
     // Labels
     'all'               => 'Tất cả',
@@ -141,8 +138,6 @@ return [
     'event_invited'     => 'được mời',
     'event_removed'     => 'loẠi bỎ',
     'event_transferred' => 'đã chuyển',
-
-    'settings' => 'Cài đặt',
 
     'people_logbook' => 'Nhật ký những người',
     'team_logbook'   => 'Nhật ký đội',

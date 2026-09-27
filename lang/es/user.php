@@ -18,7 +18,6 @@ return [
     'confirm_new_password'           => 'Confirmar nueva contraseña',
     'language'                       => 'Idioma',
     'timezone'                       => 'Zona horaria',
-    'developer'                      => 'Revelador',
     'team'                           => 'Equipo',
     'current_team'                   => 'Equipo actual',
     'email_verified'                 => 'Correo electrónico verificado',

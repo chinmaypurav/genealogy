@@ -14,23 +14,6 @@ final class UserSeeder extends Seeder
     public function run(): void
     {
         // -----------------------------------------------------------------------------------
-        // create developer user
-        // -----------------------------------------------------------------------------------
-        $developer = User::factory([
-            'firstname'    => '_',
-            'surname'      => 'Developer',
-            'email'        => 'developer@genealogy.test',
-            'is_developer' => true,
-            'timezone'     => 'Europe/Brussels',
-        ])->withPersonalTeam()->create();
-
-        if (app()->isLocal()) {
-            $this->createUserlogs($developer);
-        }
-
-        Activity::defaultCauser($developer);
-
-        // -----------------------------------------------------------------------------------
         // create administrator user
         // -----------------------------------------------------------------------------------
         $administrator = User::factory([
@@ -42,6 +25,8 @@ final class UserSeeder extends Seeder
         if (app()->isLocal()) {
             $this->createUserlogs($administrator);
         }
+
+        Activity::defaultCauser($administrator);
 
         // -----------------------------------------------------------------------------------
         // create manager user

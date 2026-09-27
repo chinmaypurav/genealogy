@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 return [
     'about'            => 'Sobre',
-    'dependencies'     => 'Dependências',
     'help'             => 'Ajuda',
     'home'             => 'Lar',
     'menu'             => 'Menu',
     'privacy_policy'   => 'Política de Privacidade',
-    'session'          => 'Sessão',
     'terms_of_service' => 'Termos de serviço',
     'useful_links'     => 'Links úteis',
     'impressum'        => 'Impressão',
-    'log_viewer'       => 'Visualizador de registros',
 
     'all'               => 'Todos',
     'filter'            => 'Filtro',
@@ -119,8 +116,6 @@ return [
     'event_invited'     => 'convidada/convidado',
     'event_removed'     => 'removida/removido',
     'event_transferred' => 'transferido',
-
-    'settings' => 'Configurações',
 
     'people_logbook' => 'Diário de bordo de pessoas',
     'team_logbook'   => 'Diário de bordo da equipe',

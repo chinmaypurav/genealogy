@@ -29,9 +29,6 @@ use Spatie\Activitylog\Support\LogOptions;
  * Represents a user in the application with team management capabilities,
  * activity logging, and two-factor authentication support.
  *
- * Note: The 'is_developer' attribute should be set directly in the database
- * by the application developer for administrative access.
- *
  * @property int $id
  * @property string $firstname
  * @property string $surname
@@ -39,7 +36,6 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property string $password
  * @property string $language
  * @property string $timezone
- * @property bool $is_developer
  * @property Carbon|null $seen_at
  * @property Carbon|null $email_verified_at
  * @property Carbon|null $created_at
@@ -82,7 +78,6 @@ final class User extends Authenticatable
 
         'language',
         'timezone',
-        'is_developer',
 
         'seen_at',
     ];
@@ -128,8 +123,6 @@ final class User extends Authenticatable
                 'email',
 
                 'language', 'timezone',
-
-                'is_developer',
             ])
             ->logOnlyDirty()
             ->dontLogEmptyChanges();
@@ -174,14 +167,6 @@ final class User extends Authenticatable
         );
 
         return $this->isDeletableCache = ($totalAssociations === 0);
-    }
-
-    /**
-     * Check if user is a developer with admin privileges
-     */
-    public function isDeveloper(): bool
-    {
-        return $this->is_developer === true;
     }
 
     /* -------------------------------------------------------------------------------------------- */
@@ -234,7 +219,6 @@ final class User extends Authenticatable
         return [
             'email_verified_at'       => 'datetime',
             'password'                => 'hashed',
-            'is_developer'            => 'boolean',
             'seen_at'                 => 'datetime',
             'two_factor_confirmed_at' => 'datetime',
         ];

@@ -37,10 +37,6 @@ Cette démo présente 2 arbres généalogiques : **BRITISH ROYALS** et **KENNEDY
             <td><b>member_4@genealogy.test</b><br/>password</td>
             <td>pour voir l'équipe <b>KENNEDY</b> en tant que <b>membre</b> normal</td>
         </tr>
-        <tr>
-            <td><b>developer@genealogy.test</b><br/>password</td>
-            <td>pour voir les options réservées au <b>développeur</b>, comme la <b>gestion des utilisateurs</b> et l'accès aux <b>personnes dans toutes les équipes</b></td>
-        </tr>
     </tbody>
 </table>
 

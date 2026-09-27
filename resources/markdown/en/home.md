@@ -37,10 +37,6 @@ This demo has 2 family trees implemented, **BRITISH ROYALS** and **KENNEDY**.
             <td><b>member_4@genealogy.test</b><br/>password</td>
             <td>to view team <b>KENNEDY</b> as normal <b>member</b></td>
         </tr>
-        <tr>
-            <td><b>developer@genealogy.test</b><br/>password</td>
-            <td>to view options reserved for the <b>developer</b>, like the <b>user management</b> and access to <b>persons in all teams</b></td>
-        </tr>
     </tbody>
 </table>
 

@@ -47,121 +47,20 @@
     {{-- offcanvas menu --}}
     <div class="grow overflow-y-auto">
         @auth
-            @if ($user?->is_developer)
-                {{-- developer --}}
-                <div class="text-yellow-500 dark:text-yellow-200">{{ __('auth.developer') }} ...</div>
+            <div class="text-yellow-500 dark:text-yellow-200">
+                {{ $role?->name ?? __('auth.role_unknown') }} ...
+            </div>
 
-                {{-- Primary Team Routes --}}
-                <x-hr.narrow />
-                <x-nav-link-responsive href="{{ route('team') }}" :active="request()->routeIs('team')">
-                    {{ __('team.team') }}
-                </x-nav-link-responsive>
-                <x-nav-link-responsive href="{{ route('teamlog') }}" :active="request()->routeIs('teamlog')">
-                    {{ __('app.team_logbook') }}
-                </x-nav-link-responsive>
-                <x-nav-link-responsive href="{{ route('peoplelog') }}" :active="request()->routeIs('peoplelog')">
-                    {{ __('app.people_logbook') }}
-                </x-nav-link-responsive>
-
-                {{-- Developer Section --}}
-                <x-hr.narrow />
-                <x-nav-link-responsive
-                    href="{{ route('developer.teams') }}"
-                    :active="request()->routeIs('developer.teams')"
-                >
-                    {{ __('team.teams') }}
-                </x-nav-link-responsive>
-                <x-nav-link-responsive
-                    href="{{ route('developer.people') }}"
-                    :active="request()->routeIs('developer.people')"
-                >
-                    {{ __('person.people') }}
-                </x-nav-link-responsive>
-
-                <x-hr.narrow />
-                <x-nav-link-responsive
-                    href="{{ route('developer.users') }}"
-                    :active="request()->routeIs('developer.users')"
-                >
-                    {{ __('user.users') }}
-                </x-nav-link-responsive>
-                <x-nav-link-responsive
-                    href="{{ route('developer.userlog.origin') }}"
-                    :active="request()->routeIs('developer.userlog.origin')"
-                >
-                    {{ __('userlog.users_origin') }}
-                </x-nav-link-responsive>
-                <x-nav-link-responsive
-                    href="{{ route('developer.userlog.origin-map') }}"
-                    :active="request()->routeIs('developer.userlog.origin-map')"
-                >
-                    {{ __('userlog.users_origin') }} (Map)
-                </x-nav-link-responsive>
-                <x-nav-link-responsive
-                    href="{{ route('developer.userlog.period') }}"
-                    :active="request()->routeIs('developer.userlog.period')"
-                >
-                    {{ __('userlog.users_stats') }}
-                </x-nav-link-responsive>
-                <x-nav-link-responsive
-                    href="{{ route('developer.userlog.log') }}"
-                    :active="request()->routeIs('developer.userlog.log')"
-                >
-                    {{ __('userlog.users_log') }}
-                </x-nav-link-responsive>
-
-                <x-hr.narrow />
-                <x-nav-link-responsive
-                    href="{{ route('developer.settings') }}"
-                    :active="request()->routeIs('developer.settings')"
-                >
-                    {{ __('app.settings') }}
-                </x-nav-link-responsive>
-                <x-nav-link-responsive
-                    href="{{ route('developer.backups') }}"
-                    :active="request()->routeIs('developer.backups')"
-                >
-                    {{ __('backup.backups') }}
-                </x-nav-link-responsive>
-                <x-nav-link-responsive href="{{ url('log-viewer') }}" target="_blank">
-                    {{ __('app.log_viewer') }}
-                </x-nav-link-responsive>
-
-                <x-hr.narrow />
-                <x-nav-link-responsive
-                    href="{{ route('developer.dependencies') }}"
-                    :active="request()->routeIs('developer.dependencies')"
-                >
-                    {{ __('app.dependencies') }}
-                </x-nav-link-responsive>
-                <x-nav-link-responsive
-                    href="{{ route('developer.session') }}"
-                    :active="request()->routeIs('developer.session')"
-                >
-                    {{ __('app.session') }}
-                </x-nav-link-responsive>
-
-                <x-hr.narrow />
-                <x-nav-link-responsive href="{{ route('test') }}" :active="request()->routeIs('test')">
-                    Test
-                </x-nav-link-responsive>
-            @else
-                {{-- other --}}
-                <div class="text-yellow-500 dark:text-yellow-200">
-                    {{ $role?->name ?? __('auth.role_unknown') }} ...
-                </div>
-
-                <x-hr.narrow />
-                <x-nav-link-responsive href="{{ route('team') }}" :active="request()->routeIs('team')">
-                    {{ __('team.team') }}
-                </x-nav-link-responsive>
-                <x-nav-link-responsive href="{{ route('teamlog') }}" :active="request()->routeIs('teamlog')">
-                    {{ __('app.team_logbook') }}
-                </x-nav-link-responsive>
-                <x-nav-link-responsive href="{{ route('peoplelog') }}" :active="request()->routeIs('peoplelog')">
-                    {{ __('app.people_logbook') }}
-                </x-nav-link-responsive>
-            @endif
+            <x-hr.narrow />
+            <x-nav-link-responsive href="{{ route('team') }}" :active="request()->routeIs('team')">
+                {{ __('team.team') }}
+            </x-nav-link-responsive>
+            <x-nav-link-responsive href="{{ route('teamlog') }}" :active="request()->routeIs('teamlog')">
+                {{ __('app.team_logbook') }}
+            </x-nav-link-responsive>
+            <x-nav-link-responsive href="{{ route('peoplelog') }}" :active="request()->routeIs('peoplelog')">
+                {{ __('app.people_logbook') }}
+            </x-nav-link-responsive>
 
             {{-- common links --}}
             <x-hr.narrow />

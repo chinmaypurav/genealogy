@@ -37,10 +37,6 @@
             <td><b>member_4@genealogy.test</b><br/>password</td>
             <td>查看家族 <b>KENNEDY</b>，作为普通用户拥有 <b>只读权限</b></td>
         </tr>
-        <tr>
-            <td><b>developer@genealogy.test</b><br/>password</td>
-            <td>查看仅限 <b>开发者</b> 的选项，如 <b>用户管理</b> 和访问 <b>所有家族中的管理员</b></td>
-        </tr>
     </tbody>
 </table>
 

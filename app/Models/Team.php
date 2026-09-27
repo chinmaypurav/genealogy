@@ -6,7 +6,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\DB;
 use Laravel\Jetstream\Events\TeamCreated;
 use Laravel\Jetstream\Events\TeamDeleted;
 use Laravel\Jetstream\Events\TeamUpdated;
@@ -101,11 +100,6 @@ final class Team extends JetstreamTeam
             return false;
         }
 
-        // Developers can delete any non-personal team
-        if (auth()->user()?->isDeveloper()) {
-            return true;
-        }
-
         // Use exists() queries instead of loading relationships
         // This only counts records without loading them into memory
         if ($this->users()->exists()) {
@@ -121,17 +115,6 @@ final class Team extends JetstreamTeam
         }
 
         return true;
-    }
-
-    public function delete(): ?bool
-    {
-        // If user is a developer and this is not a personal team, handle cleanup
-        if (auth()->user()?->isDeveloper() && ! $this->personal_team) {
-            $this->handleCurrentTeamSwitch();
-            $this->performDeveloperDelete();
-        }
-
-        return parent::delete();
     }
 
     /* -------------------------------------------------------------------------------------------- */
@@ -162,45 +145,5 @@ final class Team extends JetstreamTeam
         return [
             'personal_team' => 'boolean',
         ];
-    }
-
-    protected function handleCurrentTeamSwitch(): void
-    {
-        $user = auth()->user();
-
-        // If this team is the user's current team, switch to their personal team
-        if ($user && $user->currentTeam && $user->currentTeam->id === $this->id) {
-            $personalTeam = $user->personalTeam();
-
-            if ($personalTeam) {
-                $user->switchTeam($personalTeam);
-            } else {
-                // Fallback: find another team the user belongs to
-                $otherTeam = $user->allTeams()->where('id', '!=', $this->id)->first();
-                if ($otherTeam) {
-                    $user->switchTeam($otherTeam);
-                }
-            }
-        }
-    }
-
-    protected function performDeveloperDelete(): void
-    {
-        DB::transaction(function (): void {
-            // Load relationships once to avoid N+1 queries
-            $this->load(['couples', 'users']);
-
-            // Delete all couples
-            $this->couples->each(function ($couple): void {
-                $couple->delete();
-            });
-
-            $this->persons->each(function ($person): void {
-                $person->forceDelete();
-            });
-
-            // Disconnect all users from this team
-            $this->users()->detach();
-        });
     }
 }

@@ -9,7 +9,6 @@ return [
     'change_password'           => 'Cambiar la contraseña',
     'change_password_success'   => 'Tu contraseña ha cambiado',
     'change_password_error'     => 'Uh-oh, falló el cambio de contraseña',
-    'developer'                 => 'Revelador',
     'email'                     => 'Correo electrónico',
     'forgot_password'           => '¿Has olvidado tu contraseña?',
     'forgot_password_message'   => '¿Olvidaste tu contraseña? Ningún problema. Simplemente háganos saber su dirección de correo electrónico y le enviaremos un enlace para restablecer su contraseña que le permitirá elegir una nueva.',

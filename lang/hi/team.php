@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 return [
-    'all_teams'     => 'सभी टीमें',
     'cancel'        => 'रद्द करना',
     'couples'       => 'युगल',
     'create'        => 'टीम बनाएँ',

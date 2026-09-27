@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 return [
     'about'            => 'के बारे में',
-    'dependencies'     => 'निर्भरता',
     'help'             => 'मदद',
     'home'             => 'घर',
     'menu'             => 'मेनू',
     'privacy_policy'   => 'गोपनीयता नीति',
-    'session'          => 'सत्र',
     'terms_of_service' => 'सेवा की शर्तें',
     'useful_links'     => 'उपयोगी कड़ियां',
     'impressum'        => 'इम्प्रैसेम',
-    'log_viewer'       => 'लॉग देखने वाला',
 
     'all'               => 'सभी',
     'filter'            => 'फ़िल्टर',
@@ -118,7 +115,6 @@ return [
     'event_invited'       => 'आमंत्रित',
     'event_removed'       => 'निकाला गया',
     'event_transferred'   => 'हस्तांतरित',
-    'settings'            => 'सेटिंग',
     'people_logbook'      => 'लोग लॉगबुक',
     'team_logbook'        => 'टीम लॉगबुक',
     'under_construction'  => 'निर्माणाधीन',

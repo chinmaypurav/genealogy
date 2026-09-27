@@ -18,7 +18,6 @@ return [
     'confirm_new_password'           => 'Confirme a nova senha',
     'language'                       => 'Linguagem',
     'timezone'                       => 'Fuso horário',
-    'developer'                      => 'Desenvolvedor',
     'team'                           => 'Equipe',
     'current_team'                   => 'Equipe atual',
     'email_verified'                 => 'E-mail verificado',

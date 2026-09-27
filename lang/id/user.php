@@ -23,7 +23,6 @@ return [
     'confirm_new_password'    => 'Konfirmasi kata sandi baru',
     'language'                => 'Bahasa',
     'timezone'                => 'Zona Waktu',
-    'developer'               => 'Pengembang',
     'team'                    => 'Tim',
     'current_team'            => 'Tim saat ini',
     'email_verified'          => 'Email terverifikasi',

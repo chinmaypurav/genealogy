@@ -5,16 +5,13 @@ declare(strict_types=1);
 return [
     // Menus
     'about'            => 'About',
-    'dependencies'     => 'Dependencies',
     'help'             => 'Help',
     'home'             => 'Home',
     'menu'             => 'Menu',
     'privacy_policy'   => 'Privacy policy',
-    'session'          => 'Session',
     'terms_of_service' => 'Terms of service',
     'useful_links'     => 'Useful links',
     'impressum'        => 'Impressum',
-    'log_viewer'       => 'Log Viewer',
 
     // Labels
     'all'               => 'All',
@@ -141,8 +138,6 @@ return [
     'event_invited'     => 'invited',
     'event_removed'     => 'removed',
     'event_transferred' => 'transferred',
-
-    'settings' => 'Settings',
 
     'people_logbook' => 'People logbook',
     'team_logbook'   => 'Team logbook',

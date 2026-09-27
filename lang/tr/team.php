@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 return [
-    'all_teams'     => 'Tüm takımlar',
     'cancel'        => 'İptal',
     'couples'       => 'Çiftler',
     'create'        => 'Takım oluştur',

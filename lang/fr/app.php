@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 return [
     'about'            => 'À propos',
-    'dependencies'     => 'Dépendances',
     'help'             => 'Aide',
     'home'             => 'Maison',
     'menu'             => 'Menu',
     'privacy_policy'   => 'Politique de confidentialité',
-    'session'          => 'Session',
     'terms_of_service' => 'Conditions d\'utilisation',
     'useful_links'     => 'Liens utiles',
     'impressum'        => 'Mentions légales',
-    'log_viewer'       => 'Visionneuse de journaux',
 
     'all'               => 'Tous',
     'filter'            => 'Filtrer',
@@ -119,8 +116,6 @@ return [
     'event_invited'     => 'invité(e)',
     'event_removed'     => 'supprimé',
     'event_transferred' => 'transféré',
-
-    'settings' => 'Paramètres',
 
     'people_logbook' => 'Journal de bord des personnes',
     'team_logbook'   => 'Journal de bord de l\'équipe',

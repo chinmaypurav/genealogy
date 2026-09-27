@@ -37,10 +37,6 @@ Deze demo heeft 2 stambomen geïmplementeerd: **BRITISH ROYALS** en **KENNEDY**.
             <td><b>member_4@genealogy.test</b><br/>password</td>
             <td>om het team <b>KENNEDY</b> te bekijken als normaal <b>lid</b></td>
         </tr>
-        <tr>
-            <td><b>developer@genealogy.test</b><br/>password</td>
-            <td>om de opties te bekijken die zijn gereserveerd voor de <b>ontwikkelaar</b>, zoals <b>gebruikersbeheer</b> en toegang tot <b>personen in alle teams</b></td>
-        </tr>
     </tbody>
 </table>
 

@@ -37,10 +37,6 @@ Demo ini memiliki 2 silsilah keluarga yang diimplementasikan, **BRITISH ROYALS**
             <td><b>member_4@genealogy.test</b><br/>password</td>
             <td>untuk melihat tim <b>KENNEDY</b> sebagai <b>anggota</b> biasa</td>
         </tr>
-        <tr>
-            <td><b>developer@genealogy.test</b><br/>password</td>
-            <td>untuk melihat opsi yang disediakan untuk <b>pengembang</b>, seperti <b>manajemen pengguna</b> dan akses ke <b>orang di semua tim</b></td>
-        </tr>
     </tbody>
 </table>
 

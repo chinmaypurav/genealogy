@@ -23,7 +23,6 @@ return [
     'confirm_new_password'    => 'Xác nhận mật khẩu mới',
     'language'                => 'Ngôn ngữ',
     'timezone'                => 'Múi giờ',
-    'developer'               => 'Nhà phát triển',
     'team'                    => 'Đội',
     'current_team'            => 'Đội hiện tại',
     'email_verified'          => 'Email đã xác minh',

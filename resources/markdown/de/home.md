@@ -37,10 +37,6 @@ Diese Demo enthält 2 implementierte Familienstammbäume: **BRITISCH ROYALS** un
             <td><b>member_4@genealogy.test</b><br/>password</td>
             <td>um das Team <b>KENNEDY</b> als normales <b>Mitglied</b> anzusehen</td>
         </tr>
-        <tr>
-            <td><b>developer@genealogy.test</b><br/>password</td>
-            <td>um Optionen zu sehen, die für den <b>Entwickler</b> reserviert sind, wie <b>Benutzermanagement</b> und Zugang zu <b>Personen in allen Teams</b></td>
-        </tr>
     </tbody>
 </table>
 

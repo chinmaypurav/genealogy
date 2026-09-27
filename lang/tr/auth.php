@@ -24,8 +24,6 @@ return [
     'change_password_success' => 'Şifreniz değiştirildi',
     'change_password_error'   => 'Hata, şifre değiştirilemedi',
 
-    'developer' => 'Geliştirici',
-
     'email' => 'E-posta',
 
     'forgot_password'           => 'Şifrenizi mi unuttunuz?',
