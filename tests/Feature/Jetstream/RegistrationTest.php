@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Laravel\Fortify\Features;
-use Laravel\Jetstream\Jetstream;
 
 uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
 
@@ -39,7 +38,7 @@ test('new users can register', function (): void {
         'password_confirmation' => 'password',
         'language'              => 'en',
         'timezone'              => 'UTC',
-        'terms'                 => Jetstream::hasTermsAndPrivacyPolicyFeature(),
+        'terms'                 => true,
     ]);
 
     $this->assertAuthenticated();

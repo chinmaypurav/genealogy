@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
-use Laravel\Jetstream\Jetstream;
 use RuntimeException;
 
 final class CreateNewUser implements CreatesNewUsers
@@ -31,7 +30,7 @@ final class CreateNewUser implements CreatesNewUsers
             'language'  => ['required', Rule::in(config('app.available_locales'))],
             'timezone'  => ['required', Rule::in(timezone_identifiers_list())],
             'password'  => $this->passwordRules(),
-            'terms'     => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
+            'terms'     => ['accepted', 'required'],
         ])->validate();
 
         return DB::transaction(fn () => tap(User::create([

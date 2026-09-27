@@ -51,30 +51,14 @@
                 <div class="relative min-w-max">
                     <x-dropdown align="left" width="48">
                         <x-slot name="trigger">
-                            @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                                <button class="flex rounded-full border-2 border-transparent text-sm transition focus:border-gray-300 focus:outline-hidden">
-                                    <img
-                                        class="h-8 w-8 rounded-full object-cover"
-                                        src="{{ $user->profile_photo_url }}"
-                                        alt="{{ $user->name }}"
-                                        title="{{ $user->name }}"
-                                    />
-                                </button>
-                            @else
-                                <span class="inline-flex rounded-sm">
-                                    <button
-                                        type="button"
-                                        title="{{ $user->name }}"
-                                        class="inline-flex items-center rounded-sm border border-transparent bg-white px-3 py-2 text-sm leading-4 font-medium text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:bg-gray-50 focus:outline-hidden active:bg-gray-50"
-                                    >
-                                        {{ $user->name }}
-
-                                        <svg class="-mr-0.5 ml-2 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                        </svg>
-                                    </button>
-                                </span>
-                            @endif
+                            <button class="flex rounded-full border-2 border-transparent text-sm transition focus:border-gray-300 focus:outline-hidden">
+                                <img
+                                    class="h-8 w-8 rounded-full object-cover"
+                                    src="{{ $user->profile_photo_url }}"
+                                    alt="{{ $user->name }}"
+                                    title="{{ $user->name }}"
+                                />
+                            </button>
                         </x-slot>
 
                         <x-slot name="content">
@@ -102,71 +86,69 @@
                 </div>
 
                 {{-- teams dropdown --}}
-                @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
-                    <div class="relative min-w-max">
-                        <x-dropdown align="right" width="60px">
-                            <x-slot name="trigger">
-                                <span class="inline-flex rounded-sm">
-                                    <button
-                                        type="button"
-                                        class="inline-flex items-center rounded-sm border border-transparent bg-white px-3 py-2 text-sm leading-4 font-medium text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:bg-gray-50 focus:outline-hidden active:bg-gray-50"
-                                    >
-                                        {{ $user->currentTeam->name }}
+                <div class="relative min-w-max">
+                    <x-dropdown align="right" width="60px">
+                        <x-slot name="trigger">
+                            <span class="inline-flex rounded-sm">
+                                <button
+                                    type="button"
+                                    class="inline-flex items-center rounded-sm border border-transparent bg-white px-3 py-2 text-sm leading-4 font-medium text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:bg-gray-50 focus:outline-hidden active:bg-gray-50"
+                                >
+                                    {{ $user->currentTeam->name }}
 
-                                        <svg class="-mr-0.5 ml-2 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
-                                        </svg>
-                                    </button>
-                                </span>
-                            </x-slot>
+                                    <svg class="-mr-0.5 ml-2 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                                    </svg>
+                                </button>
+                            </span>
+                        </x-slot>
 
-                            <x-slot name="content">
-                                <div class="w-xs">
-                                    {{-- teams switcher --}}
-                                    @if ($user->allTeams()->count() > 1)
-                                        <div class="block px-4 py-2 text-xs text-gray-400">{{ __('team.switch') }}</div>
+                        <x-slot name="content">
+                            <div class="w-xs">
+                                {{-- teams switcher --}}
+                                @if ($user->allTeams()->count() > 1)
+                                    <div class="block px-4 py-2 text-xs text-gray-400">{{ __('team.switch') }}</div>
 
-                                        @foreach ($user->allTeams() as $team)
-                                            <x-switchable-team :team="$team" />
-                                        @endforeach
+                                    @foreach ($user->allTeams() as $team)
+                                        <x-switchable-team :team="$team" />
+                                    @endforeach
 
-                                        <hr />
-                                    @endif
+                                    <hr />
+                                @endif
 
-                                    {{-- teams management --}}
-                                    <div class="block px-4 py-2 text-xs text-gray-400">{{ __('team.manage') }}</div>
+                                {{-- teams management --}}
+                                <div class="block px-4 py-2 text-xs text-gray-400">{{ __('team.manage') }}</div>
 
-                                    {{-- teams settings --}}
-                                    <x-dropdown-link href="{{ route('teams.show', $user->currentTeam->id) }}">
-                                        <x-ts-icon icon="tabler.droplet-cog" class="mr-1 inline-block size-5" />
-                                        {{ __('team.settings') }}
+                                {{-- teams settings --}}
+                                <x-dropdown-link href="{{ route('teams.show', $user->currentTeam->id) }}">
+                                    <x-ts-icon icon="tabler.droplet-cog" class="mr-1 inline-block size-5" />
+                                    {{ __('team.settings') }}
+                                </x-dropdown-link>
+
+                                {{-- create / import / export team --}}
+                                @can('create', App\Models\Team::class)
+                                    <x-dropdown-link href="{{ route('teams.create') }}">
+                                        <x-ts-icon icon="tabler.droplet-plus" class="mr-1 inline-block size-5" />
+                                        {{ __('team.create') }}
                                     </x-dropdown-link>
 
-                                    {{-- create / import / export team --}}
-                                    @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
-                                        <x-dropdown-link href="{{ route('teams.create') }}">
-                                            <x-ts-icon icon="tabler.droplet-plus" class="mr-1 inline-block size-5" />
-                                            {{ __('team.create') }}
-                                        </x-dropdown-link>
+                                    <hr />
 
-                                        <hr />
+                                    {{-- gedcom --}}
+                                    <x-dropdown-link href="{{ route('gedcom.importteam') }}">
+                                        <x-ts-icon icon="tabler.droplet-up" class="mr-1 inline-block size-5" />
+                                        {{ __('gedcom.gedcom_import') }}
+                                    </x-dropdown-link>
 
-                                        {{-- gedcom --}}
-                                        <x-dropdown-link href="{{ route('gedcom.importteam') }}">
-                                            <x-ts-icon icon="tabler.droplet-up" class="mr-1 inline-block size-5" />
-                                            {{ __('gedcom.gedcom_import') }}
-                                        </x-dropdown-link>
-
-                                        <x-dropdown-link href="{{ route('gedcom.exportteam') }}">
-                                            <x-ts-icon icon="tabler.droplet-down" class="mr-1 inline-block size-5" />
-                                            {{ __('gedcom.gedcom_export') }}
-                                        </x-dropdown-link>
-                                    @endcan
-                                </div>
-                            </x-slot>
-                        </x-dropdown>
-                    </div>
-                @endif
+                                    <x-dropdown-link href="{{ route('gedcom.exportteam') }}">
+                                        <x-ts-icon icon="tabler.droplet-down" class="mr-1 inline-block size-5" />
+                                        {{ __('gedcom.gedcom_export') }}
+                                    </x-dropdown-link>
+                                @endcan
+                            </div>
+                        </x-slot>
+                    </x-dropdown>
+                </div>
             @else
                 <x-nav-link href="{{ route('login') }}" :active="request()->routeIs('login')">
                     <x-ts-icon icon="tabler.login-2" class="mr-1 inline-block size-5" />
@@ -285,15 +267,13 @@
         @auth
             <div class="border-t border-gray-200 pt-2 pb-2">
                 <div class="flex items-center px-4">
-                    @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                        <div class="mr-3 shrink-0">
-                            <img
-                                class="h-10 w-10 rounded-full object-cover"
-                                src="{{ $user->profile_photo_url }}"
-                                alt="{{ $user->name }}"
-                            />
-                        </div>
-                    @endif
+                    <div class="mr-3 shrink-0">
+                        <img
+                            class="h-10 w-10 rounded-full object-cover"
+                            src="{{ $user->profile_photo_url }}"
+                            alt="{{ $user->name }}"
+                        />
+                    </div>
 
                     <div>
                         <div class="text-base font-medium text-gray-800 dark:text-gray-400">{{ $user->name }}</div>
@@ -333,47 +313,45 @@
                     @endif
 
                     {{-- team management --}}
-                    @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
-                        <div class="border-t border-gray-200"></div>
+                    <div class="border-t border-gray-200"></div>
 
-                        <div class="block px-4 py-2 text-xs text-gray-400">{{ __('team.manage') }}</div>
+                    <div class="block px-4 py-2 text-xs text-gray-400">{{ __('team.manage') }}</div>
 
-                        {{-- team settings --}}
+                    {{-- team settings --}}
+                    <x-nav-link-responsive
+                        href="{{ route('teams.show', $user->currentTeam->id) }}"
+                        :active="request()->routeIs('teams.show')"
+                    >
+                        <x-ts-icon icon="tabler.droplet-cog" class="mr-1 inline-block size-5" />
+                        {{ __('team.settings') }}
+                    </x-nav-link-responsive>
+
+                    @can('create', App\Models\Team::class)
                         <x-nav-link-responsive
-                            href="{{ route('teams.show', $user->currentTeam->id) }}"
-                            :active="request()->routeIs('teams.show')"
+                            href="{{ route('teams.create') }}"
+                            :active="request()->routeIs('teams.create')"
                         >
-                            <x-ts-icon icon="tabler.droplet-cog" class="mr-1 inline-block size-5" />
-                            {{ __('team.settings') }}
+                            <x-ts-icon icon="tabler.droplet-plus" class="mr-1 inline-block size-5" />
+                            {{ __('team.create') }}
                         </x-nav-link-responsive>
 
-                        @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
-                            <x-nav-link-responsive
-                                href="{{ route('teams.create') }}"
-                                :active="request()->routeIs('teams.create')"
-                            >
-                                <x-ts-icon icon="tabler.droplet-plus" class="mr-1 inline-block size-5" />
-                                {{ __('team.create') }}
-                            </x-nav-link-responsive>
+                        {{-- gedcom --}}
+                        <x-nav-link-responsive
+                            href="{{ route('gedcom.importteam') }}"
+                            :active="request()->routeIs('gedcom.importteam')"
+                        >
+                            <x-ts-icon icon="tabler.droplet-up" class="mr-1 inline-block size-5" />
+                            {{ __('gedcom.gedcom_import') }}
+                        </x-nav-link-responsive>
 
-                            {{-- gedcom --}}
-                            <x-nav-link-responsive
-                                href="{{ route('gedcom.importteam') }}"
-                                :active="request()->routeIs('gedcom.importteam')"
-                            >
-                                <x-ts-icon icon="tabler.droplet-up" class="mr-1 inline-block size-5" />
-                                {{ __('gedcom.gedcom_import') }}
-                            </x-nav-link-responsive>
-
-                            <x-nav-link-responsive
-                                href="{{ route('gedcom.exportteam') }}"
-                                :active="request()->routeIs('gedcom.exportteam')"
-                            >
-                                <x-ts-icon icon="tabler.droplet-down" class="mr-1 inline-block size-5" />
-                                {{ __('gedcom.gedcom_export') }}
-                            </x-nav-link-responsive>
-                        @endcan
-                    @endif
+                        <x-nav-link-responsive
+                            href="{{ route('gedcom.exportteam') }}"
+                            :active="request()->routeIs('gedcom.exportteam')"
+                        >
+                            <x-ts-icon icon="tabler.droplet-down" class="mr-1 inline-block size-5" />
+                            {{ __('gedcom.gedcom_export') }}
+                        </x-nav-link-responsive>
+                    @endcan
                 </div>
             </div>
 

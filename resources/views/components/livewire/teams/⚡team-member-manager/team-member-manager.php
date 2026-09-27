@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Actions\Teams\AddTeamMember;
 use App\Actions\Teams\InviteTeamMember;
 use App\Actions\Teams\RemoveTeamMember;
 use App\Actions\Teams\UpdateTeamMemberRole;
@@ -11,7 +10,6 @@ use App\Models\User;
 use App\Support\TeamRole;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Laravel\Jetstream\Features;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
@@ -38,19 +36,13 @@ new class extends Component
     ];
 
     /**
-     * Invites by email when invitations are enabled; otherwise adds an existing user directly.
+     * New members join by invitation, so they can accept (or register first) before getting access.
      */
     public function addTeamMember(): void
     {
         $this->resetErrorBag();
 
-        ['email' => $email, 'role' => $role] = $this->addTeamMemberForm;
-
-        if (Features::sendsTeamInvitations()) {
-            app(InviteTeamMember::class)->invite($this->user, $this->team, $email, $role);
-        } else {
-            app(AddTeamMember::class)->add($this->user, $this->team, $email, $role);
-        }
+        app(InviteTeamMember::class)->invite($this->user, $this->team, $this->addTeamMemberForm['email'], $this->addTeamMemberForm['role']);
 
         $this->reset('addTeamMemberForm');
 

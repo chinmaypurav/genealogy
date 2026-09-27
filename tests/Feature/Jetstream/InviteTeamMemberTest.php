@@ -5,16 +5,11 @@ declare(strict_types=1);
 use App\Mail\TeamInvitation;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
-use Laravel\Jetstream\Features;
 use Livewire\Livewire;
 
 uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 test('team members can be invited to team', function (): void {
-    if (! Features::sendsTeamInvitations()) {
-        $this->markTestSkipped('Team invitations not enabled.');
-    }
-
     Mail::fake();
 
     $this->actingAs($user = User::factory()->withPersonalTeam()->create());
@@ -31,10 +26,6 @@ test('team members can be invited to team', function (): void {
 });
 
 test('team member invitations can be cancelled', function (): void {
-    if (! Features::sendsTeamInvitations()) {
-        $this->markTestSkipped('Team invitations not enabled.');
-    }
-
     Mail::fake();
 
     $this->actingAs($user = User::factory()->withPersonalTeam()->create());

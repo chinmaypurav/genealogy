@@ -12,8 +12,8 @@ abstract class TestCase extends BaseTestCase
     /**
      * Create a user attached to a (non-owned) team with the given role.
      *
-     * Team owners are granted every permission automatically by Jetstream's
-     * hasTeamPermission(), so authorization tests must use a non-owner member
+     * Team owners are granted every permission automatically by
+     * User::hasTeamPermission(), so authorization tests must use a non-owner member
      * with a specific role instead of the team owner.
      *
      * Used by the Livewire component permission-guard tests

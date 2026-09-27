@@ -60,7 +60,7 @@ Authenticated users can manage their account and user profile by using the dropd
 
 ### c. Teams
 
-This application uses <a href="https://jetstream.laravel.com/" target="_blank">Laravel Jetstream</a> with the <a href="https://jetstream.laravel.com/features/teams.html" target="_blank">Teams</a> option to implement and enforce <a href="https://en.wikipedia.org/wiki/Multitenancy" target="_blank">multi-tenancy</a>.
+This application uses teams to implement and enforce <a href="https://en.wikipedia.org/wiki/Multitenancy" target="_blank">multi-tenancy</a>.
 
 Authenticated users can manage their teams and teams settings by using the dropdown menu in the top right-hand corner of the menu bar.
 

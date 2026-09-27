@@ -11,16 +11,14 @@ Route::controller(App\Http\Controllers\Front\PageController::class)->group(funct
     Route::get('/', 'home')->name('home');
     Route::get('about', 'about')->name('about');
     Route::get('help', 'help')->name('help');
+    Route::get('terms-of-service', 'terms')->name('terms.show');
+    Route::get('privacy-policy', 'policy')->name('policy.show');
 });
-
-// Still served by Jetstream until #21 step 4 replaces these screens.
-Route::get('terms-of-service', [Laravel\Jetstream\Http\Controllers\Livewire\TermsOfServiceController::class, 'show'])->name('terms.show');
-Route::get('privacy-policy', [Laravel\Jetstream\Http\Controllers\Livewire\PrivacyPolicyController::class, 'show'])->name('policy.show');
 
 // profile: reachable before email verification, so the verify-email page can link to it
 Route::middleware([
     'auth:sanctum',
-    config('jetstream.auth_session'),
+    App\Http\Middleware\AuthenticateSession::class,
 ])->group(function (): void {
     Route::view('user/profile', 'profile.show')->name('profile.show');
 });
@@ -28,7 +26,7 @@ Route::middleware([
 // backend routes
 Route::middleware([
     'auth:sanctum',
-    config('jetstream.auth_session'),
+    App\Http\Middleware\AuthenticateSession::class,
     'verified',
 ])->group(function (): void {
     // teams

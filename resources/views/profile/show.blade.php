@@ -31,13 +31,11 @@
                 <livewire:profile::logout-other-browser-sessions-form />
             </div>
 
-            @if (Laravel\Jetstream\Jetstream::hasAccountDeletionFeatures())
-                <x-section-border />
+            <x-section-border />
 
-                <div class="mt-10 sm:mt-0">
-                    <livewire:profile::delete-user-form />
-                </div>
-            @endif
+            <div class="mt-10 sm:mt-0">
+                <livewire:profile::delete-user-form />
+            </div>
         </div>
     </div>
 </x-app-layout>

@@ -9,57 +9,55 @@
 
     <x-slot name="form">
         {{-- profile photo --}}
-        @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-            <div x-data="{ photoName: null, photoPreview: null }" class="col-span-6 sm:col-span-4">
-                {{-- profile photo file input --}}
-                <input
-                    type="file"
-                    id="photo"
-                    class="hidden"
-                    wire:model.live="photo"
-                    x-ref="photo"
-                    x-on:change="
-                        photoName = $refs.photo.files[0].name;
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            photoPreview = e.target.result;
-                        };
-                        reader.readAsDataURL($refs.photo.files[0]);
-                    "
+        <div x-data="{ photoName: null, photoPreview: null }" class="col-span-6 sm:col-span-4">
+            {{-- profile photo file input --}}
+            <input
+                type="file"
+                id="photo"
+                class="hidden"
+                wire:model.live="photo"
+                x-ref="photo"
+                x-on:change="
+                    photoName = $refs.photo.files[0].name;
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        photoPreview = e.target.result;
+                    };
+                    reader.readAsDataURL($refs.photo.files[0]);
+                "
+            />
+
+            <x-label for="photo" value="{{ __('user.photo') }} :" />
+
+            {{-- current profile photo --}}
+            <div class="mt-2" x-show="! photoPreview">
+                <img
+                    src="{{ $this->user->profile_photo_url }}"
+                    alt="{{ $this->user->name }}"
+                    class="h-20 w-20 rounded-full object-cover"
                 />
-
-                <x-label for="photo" value="{{ __('user.photo') }} :" />
-
-                {{-- current profile photo --}}
-                <div class="mt-2" x-show="! photoPreview">
-                    <img
-                        src="{{ $this->user->profile_photo_url }}"
-                        alt="{{ $this->user->name }}"
-                        class="h-20 w-20 rounded-full object-cover"
-                    />
-                </div>
-
-                {{-- new profile photo preview --}}
-                <div class="mt-2" x-show="photoPreview" style="display: none">
-                    <span
-                        class="block h-20 w-20 rounded-full bg-cover bg-center bg-no-repeat"
-                        x-bind:style="'background-image: url(\'' + photoPreview + '\');'"
-                    ></span>
-                </div>
-
-                <x-ts-button color="secondary" class="mt-2" type="button" x-on:click.prevent="$refs.photo.click()">
-                    {{ __('user.select_photo') }}
-                </x-ts-button>
-
-                @if ($this->user->profile_photo_path)
-                    <x-ts-button color="secondary" type="button" class="mt-2" wire:click="deleteProfilePhoto">
-                        {{ __('user.remove_photo') }}
-                    </x-ts-button>
-                @endif
-
-                <x-input-error for="photo" class="mt-2" />
             </div>
-        @endif
+
+            {{-- new profile photo preview --}}
+            <div class="mt-2" x-show="photoPreview" style="display: none">
+                <span
+                    class="block h-20 w-20 rounded-full bg-cover bg-center bg-no-repeat"
+                    x-bind:style="'background-image: url(\'' + photoPreview + '\');'"
+                ></span>
+            </div>
+
+            <x-ts-button color="secondary" class="mt-2" type="button" x-on:click.prevent="$refs.photo.click()">
+                {{ __('user.select_photo') }}
+            </x-ts-button>
+
+            @if ($this->user->profile_photo_path)
+                <x-ts-button color="secondary" type="button" class="mt-2" wire:click="deleteProfilePhoto">
+                    {{ __('user.remove_photo') }}
+                </x-ts-button>
+            @endif
+
+            <x-input-error for="photo" class="mt-2" />
+        </div>
 
         {{-- firstname --}}
         <div class="col-span-6 md:col-span-4">
