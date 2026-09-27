@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Jetstream;
+namespace App\Actions\Teams;
 
 use App\Models\Team;
 use App\Models\User;
@@ -10,13 +10,15 @@ use Closure;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Jetstream\Contracts\AddsTeamMembers;
-use Laravel\Jetstream\Events\AddingTeamMember;
-use Laravel\Jetstream\Events\TeamMemberAdded;
-use Laravel\Jetstream\Jetstream;
-use Laravel\Jetstream\Rules\Role;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-final class AddTeamMember implements AddsTeamMembers
+/**
+ * Adds an existing user to a team with a role, from the team settings or an accepted invitation.
+ *
+ * Kept as an action because both entry points share its authorization, validation and activity log.
+ */
+class AddTeamMember implements AddsTeamMembers
 {
     /**
      * Add a new team member to the given team.
@@ -27,15 +29,11 @@ final class AddTeamMember implements AddsTeamMembers
 
         $this->validate($team, $email, $role);
 
-        $newTeamMember = Jetstream::findUserByEmailOrFail($email);
-
-        AddingTeamMember::dispatch($team, $newTeamMember);
+        $newTeamMember = User::where('email', $email)->firstOrFail();
 
         $team->users()->attach(
             $newTeamMember, ['role' => $role]
         );
-
-        TeamMemberAdded::dispatch($team, $newTeamMember);
 
         // Log activity: Added Team Member
         defer(function () use ($user, $team, $newTeamMember, $role): void {
@@ -52,13 +50,13 @@ final class AddTeamMember implements AddsTeamMembers
                 ->log(__('team.member') . ' ' . __('app.event_added'));
         });
 
-        return redirect('/teams/' . $team->id);
+        return redirect()->route('teams.show', $team);
     }
 
     /**
      * Validate the add member operation.
      */
-    private function validate(Team $team, string $email, ?string $role): void
+    protected function validate(Team $team, string $email, ?string $role): void
     {
         Validator::make([
             'email' => $email,
@@ -71,20 +69,20 @@ final class AddTeamMember implements AddsTeamMembers
     }
 
     /**
-     * @return array<string, list<string|Role>>
+     * @return array<string, list<mixed>>
      */
-    private function rules(): array
+    protected function rules(): array
     {
-        return array_filter([
+        return [
             'email' => ['required', 'email', 'exists:users'],
-            'role'  => Jetstream::hasRoles() ? ['required', 'string', new Role] : null,
-        ]);
+            'role'  => ['required', 'string', Rule::in(array_keys(config('teams.roles')))],
+        ];
     }
 
     /**
      * Ensure that the user is not already on the team.
      */
-    private function ensureUserIsNotAlreadyOnTeam(Team $team, string $email): Closure
+    protected function ensureUserIsNotAlreadyOnTeam(Team $team, string $email): Closure
     {
         return function ($validator) use ($team, $email): void {
             $validator->errors()->addIf(

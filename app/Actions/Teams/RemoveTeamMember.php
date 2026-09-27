@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Jetstream;
+namespace App\Actions\Teams;
 
 use App\Models\Team;
 use App\Models\User;
@@ -10,9 +10,13 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
 use Laravel\Jetstream\Contracts\RemovesTeamMembers;
-use Laravel\Jetstream\Events\TeamMemberRemoved;
 
-final class RemoveTeamMember implements RemovesTeamMembers
+/**
+ * Removes a member from a team, or lets a member leave, and moves them back to their personal team.
+ *
+ * Team owners can't be removed; they must transfer ownership or delete the team.
+ */
+class RemoveTeamMember implements RemovesTeamMembers
 {
     /**
      * Remove the team member from the given team.
@@ -31,8 +35,6 @@ final class RemoveTeamMember implements RemovesTeamMembers
         $teamMember->forceFill([
             'current_team_id' => $teamMember->personalTeam()?->id,
         ])->save();
-
-        TeamMemberRemoved::dispatch($team, $teamMember);
 
         // Log activity: Remove Team Member
         defer(function () use ($user, $team, $teamMember, $role): void {
@@ -53,7 +55,7 @@ final class RemoveTeamMember implements RemovesTeamMembers
     /**
      * Authorize that the user can remove the team member.
      */
-    private function authorize(User $user, Team $team, User $teamMember): void
+    protected function authorize(User $user, Team $team, User $teamMember): void
     {
         if (! Gate::forUser($user)->check('removeTeamMember', $team) &&
             $user->id !== $teamMember->id) {
@@ -64,7 +66,7 @@ final class RemoveTeamMember implements RemovesTeamMembers
     /**
      * Ensure that the currently authenticated user does not own the team.
      */
-    private function ensureUserDoesNotOwnTeam(User $teamMember, Team $team): void
+    protected function ensureUserDoesNotOwnTeam(User $teamMember, Team $team): void
     {
         if ($teamMember->id === $team->owner->id) {
             throw ValidationException::withMessages([

@@ -9,14 +9,12 @@ use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Laravel\Jetstream\Contracts\CreatesTeams;
-use Laravel\Jetstream\Events\AddingTeam;
 
 /**
  * Main GEDCOM Import orchestrator class
  * Supports both .ged files and .zip files with media
  */
-final class Import implements CreatesTeams
+final class Import
 {
     public User $user;
 
@@ -260,8 +258,6 @@ final class Import implements CreatesTeams
      */
     private function createTeam(string $name, ?string $description): Team
     {
-        AddingTeam::dispatch($this->user);
-
         /** @var Team $team */
         $team = $this->user->ownedTeams()->create([
             'name'          => $name,
