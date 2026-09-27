@@ -99,4 +99,16 @@ return [
     'personal_team_avoid'   => 'Avoid using your personal team for creating family trees, as ownership of personal teams cannot be transferred to another member.',
     'personal_team_instead' => 'Instead, select a team you’re already part of or create a new one specifically for managing and sharing family trees with others.',
     'personal_team_action'  => 'To create a new team or switch to an existing one, use the dropdown menu in the top-right corner.',
+
+    'role_administrator_name'        => 'Administrator',
+    'role_administrator_description' => 'Administrators can perform any action and manage the application.',
+
+    'role_manager_name'        => 'Manager',
+    'role_manager_description' => 'Managers can perform any action on people.',
+
+    'role_editor_name'        => 'Editor',
+    'role_editor_description' => 'Editors have the ability to create, read and update people.',
+
+    'role_member_name'        => 'Member',
+    'role_member_description' => 'Members have the ability to read people.',
 ];

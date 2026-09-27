@@ -99,4 +99,16 @@ return [
     'personal_team_avoid'   => 'Kişisel takımınızı aile ağaçları oluşturmak için kullanmaktan kaçının, çünkü kişisel takımların sahipliği başka bir üyeye devredilemez.',
     'personal_team_instead' => 'Bunun yerine, zaten bir parçası olduğunuz bir takımı seçin veya başkalarıyla aile ağaçlarını yönetmek ve paylaşmak için özel olarak yeni bir takım oluşturun.',
     'personal_team_action'  => 'Yeni bir takım oluşturmak veya mevcut bir takıma geçmek için sağ üst köşedeki açılır menüyü kullanın.',
+
+    'role_administrator_name'        => 'Administrator',
+    'role_administrator_description' => 'Yöneticiler her türlü işlemi gerçekleştirebilir ve uygulamayı yönetebilir.',
+
+    'role_manager_name'        => 'Yönetici',
+    'role_manager_description' => 'Yöneticiler insanlar üzerinde her türlü işlemi gerçekleştirebilir.',
+
+    'role_editor_name'        => 'Editör',
+    'role_editor_description' => 'Editörler insanları oluşturma, okuma ve güncelleme yeteneğine sahiptir.',
+
+    'role_member_name'        => 'Üye',
+    'role_member_description' => 'Üyeler insanları okuma yeteneğine sahiptir.',
 ];

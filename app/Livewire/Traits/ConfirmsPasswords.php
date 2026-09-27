@@ -12,7 +12,7 @@ use Laravel\Fortify\Actions\ConfirmPassword;
 /**
  * Backs the <x-confirms-password> Blade component: asks for the password before a sensitive action.
  *
- * Copied from Jetstream. The component calls startConfirmingPassword() and then runs its
+ * Shared by every component with a sensitive action. The component calls startConfirmingPassword() and then runs its
  * wire:then action once "password-confirmed" is dispatched with the matching id. Actions must still
  * call ensurePasswordIsConfirmed(), because Livewire methods can be called directly.
  */

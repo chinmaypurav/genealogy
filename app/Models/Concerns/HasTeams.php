@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
 /**
  * Team ownership, membership and permission checks for the User model.
  *
- * Copied from Jetstream's HasTeams so the app owns its teams layer. Callers rely on
+ * Kept in a trait so User stays readable; it only makes sense on the User model. Callers rely on
  * team owners always having every permission, and on API tokens narrowing a member's permissions.
  */
 trait HasTeams

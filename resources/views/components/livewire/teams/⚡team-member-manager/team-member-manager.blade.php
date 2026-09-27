@@ -53,7 +53,7 @@
                                             {{-- role name --}}
                                             <div class="flex items-center">
                                                 <div class="text-sm text-gray-600 {{ $addTeamMemberForm['role'] === $role->key ? 'font-semibold' : '' }}">
-                                                    <b>{{ __('jetstream.role_' . strtolower($role->key) . '_name') }}</b>
+                                                    <b>{{ __('team.role_' . strtolower($role->key) . '_name') }}</b>
                                                 </div>
 
                                                 @if ($addTeamMemberForm['role'] === $role->key)
@@ -66,7 +66,7 @@
 
                                             {{-- role description --}}
                                             <div class="mt-2 text-start text-xs text-gray-600">
-                                                {{ __('jetstream.role_' . strtolower($role->key) . '_description') }}
+                                                {{ __('team.role_' . strtolower($role->key) . '_description') }}
                                             </div>
                                         </div>
                                     </button>
@@ -166,11 +166,11 @@
                                             wire:click="manageRole('{{ $user->id }}')"
                                             title="{{ __('team.change_role') }}"
                                         >
-                                            {{ __('jetstream.role_' . $user->membership->role . '_name') }}
+                                            {{ __('team.role_' . $user->membership->role . '_name') }}
                                         </x-ts-button>
                                     @else
                                         <div class="ms-3 min-w-28 text-sm">
-                                            {{ __('jetstream.role_' . $user->membership->role . '_name') }}
+                                            {{ __('team.role_' . $user->membership->role . '_name') }}
                                         </div>
                                     @endif
 
@@ -222,7 +222,7 @@
                             {{-- role name --}}
                             <div class="flex items-center">
                                 <div class="text-sm text-gray-600 {{ $currentRole === $role->key ? 'font-semibold' : '' }}">
-                                    {{ __('jetstream.role_' . strtolower($role->key) . '_name') }}
+                                    {{ __('team.role_' . strtolower($role->key) . '_name') }}
                                 </div>
 
                                 @if ($currentRole === $role->key)
@@ -235,7 +235,7 @@
 
                             {{-- role description --}}
                             <div class="mt-2 text-xs text-gray-600">
-                                {{ __('jetstream.role_' . strtolower($role->key) . '_description') }}
+                                {{ __('team.role_' . strtolower($role->key) . '_description') }}
                             </div>
                         </div>
                     </button>

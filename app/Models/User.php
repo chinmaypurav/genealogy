@@ -49,7 +49,7 @@ use Spatie\Activitylog\Support\LogOptions;
 final class User extends Authenticatable
     // class User extends Authenticatable implements MustVerifyEmail
     //
-    // Ref : https://jetstream.laravel.com/features/registration.html#email-verification
+    // Ref : https://laravel.com/docs/verification
 {
     use HasApiTokens;
 

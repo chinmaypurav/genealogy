@@ -15,7 +15,7 @@ use Spatie\Activitylog\Support\LogOptions;
 /**
  * A family tree workspace: people, couples and the users collaborating on them.
  *
- * Owns the team membership logic that used to live in Jetstream's base Team model.
+ * Owns team membership: its owner, members with their roles, and pending invitations.
  *
  * @property int $id
  * @property int $user_id

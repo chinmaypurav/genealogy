@@ -99,4 +99,16 @@ return [
     'personal_team_avoid'   => '避免使用您的个人团队来创建家谱，因为个人团队的所有权不能转让给其他成员。',
     'personal_team_instead' => '相反，选择一个您已经加入的团队或创建一个专门用于管理和与他人共享家谱的新团队。',
     'personal_team_action'  => '要创建新团队或切换到现有团队，请使用右上角的下拉菜单。',
+
+    'role_administrator_name'        => '超级管理',
+    'role_administrator_description' => '超级管理员可以执行任何操作并管理应用程序。',
+
+    'role_manager_name'        => '管理',
+    'role_manager_description' => '管理权限可以对人物执行任何操作。',
+
+    'role_editor_name'        => '编辑',
+    'role_editor_description' => '编辑权限可以创建、读取和更新人物。',
+
+    'role_member_name'        => '只读',
+    'role_member_description' => '只读权限可以读取其它人物信息。',
 ];

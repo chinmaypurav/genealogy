@@ -7,8 +7,8 @@ namespace App\Support;
 /**
  * Finds a markdown page in resources/markdown, preferring the current locale's translation.
  *
- * For "terms.md" it tries "terms.{locale}.md" first, then "terms.md". Copied from Jetstream's
- * localizedMarkdownPath() so the static pages keep their existing file layout.
+ * For "terms.md" it tries "terms.{locale}.md" first, then "terms.md". Shared by all static pages
+ * so they resolve translations the same way.
  */
 class LocalizedMarkdown
 {

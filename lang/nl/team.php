@@ -99,4 +99,16 @@ return [
     'personal_team_avoid'   => 'Vermijd het gebruik van uw persoonlijke team voor het maken van stambomen, aangezien het eigendom van persoonlijke teams niet kan worden overgedragen aan een ander lid.',
     'personal_team_instead' => 'Selecteer in plaats daarvan een team waar u al deel van uitmaakt of maak een nieuw team speciaal voor het beheren en delen van stambomen met anderen.',
     'personal_team_action'  => 'Gebruik het keuzemenu in de rechterbovenhoek om een ​​nieuw team aan te maken of naar een bestaand team over te schakelen.',
+
+    'role_administrator_name'        => 'Administrator',
+    'role_administrator_description' => 'Beheerders kunnen elke actie uitvoeren en de applicatie beheren.',
+
+    'role_manager_name'        => 'Manager',
+    'role_manager_description' => 'Managers kunnen elke actie op personen uitvoeren',
+
+    'role_editor_name'        => 'Redacteur',
+    'role_editor_description' => 'Redacteuren hebben de mogelijkheid om personen aan te maken, te lezen en bij te werken.',
+
+    'role_member_name'        => 'Lid',
+    'role_member_description' => 'Leden hebben het vermogen om personen te lezen.',
 ];

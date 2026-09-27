@@ -2,6 +2,6 @@
 
 declare(strict_types=1);
 
-test('terms of service and privacy policy pages render', function (string $route): void {
+test('public pages render', function (string $route): void {
     $this->get(route($route))->assertOk();
-})->with(['terms.show', 'policy.show']);
+})->with(['home', 'about', 'help', 'terms.show', 'policy.show']);
