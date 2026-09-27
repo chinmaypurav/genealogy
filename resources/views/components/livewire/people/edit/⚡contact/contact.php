@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Support\Countries;
 use App\Livewire\Traits\AuthorizesPersonActions;
 use App\Livewire\Traits\TrimStringsAndConvertEmptyStringsToNull;
 use App\Models\Person;
+use App\Support\Countries;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
