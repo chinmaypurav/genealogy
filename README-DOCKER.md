@@ -74,8 +74,8 @@ docker compose exec app php artisan storage:link
 # Run database migrations and seeders
 docker compose exec app php artisan migrate --seed
 
-# Run Composer's post-install scripts after the database tables exist
-docker compose exec app composer dump-autoload
+# Publish framework and Filament assets
+docker compose exec app composer run publish-assets
 ```
 
 The Vite service will automatically install npm packages and start the development server when you run `docker compose up -d --build`.

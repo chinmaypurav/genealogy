@@ -7,6 +7,7 @@ namespace App\Listeners;
 use App\Models\Userlog;
 use Illuminate\Auth\Events\Login;
 use Stevebauman\Location\Facades\Location;
+use Stevebauman\Location\Position;
 
 final class UserLogin
 {
@@ -67,11 +68,11 @@ final class UserLogin
         // -----------------------------------------------------------------------
         // Log visitor's location
         // -----------------------------------------------------------------------
-        if ($position = Location::get()) {
+        if (($position = Location::get()) instanceof Position) {
             Userlog::create([
                 'user_id'      => $userId,
-                'country_name' => $position->countryName ?? null,
-                'country_code' => mb_strtoupper($position->countryCode) ?? null,
+                'country_name' => $position->countryName,
+                'country_code' => $position->countryCode !== null ? mb_strtoupper($position->countryCode) : null,
             ]);
         }
     }

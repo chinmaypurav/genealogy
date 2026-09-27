@@ -212,7 +212,7 @@ final class Person extends Model implements HasMedia
                             $inner->whereNull('dob')->where('yob', '>', $dobYear);
                         });
                 });
-            } elseif (! empty($yob)) {
+            } else {
                 // Case: only yob is given
                 $q->where(function ($sub) use ($yob): void {
                     $sub->whereNull('dob')->whereNull('yob') // no data, assume younger
@@ -245,7 +245,7 @@ final class Person extends Model implements HasMedia
                             $inner->whereNull('dob')->where('yob', '<', $dobYear);
                         });
                 });
-            } elseif (! empty($yob)) {
+            } else {
                 // Case: Only yob is given
                 $q->where(function ($sub) use ($yob): void {
                     $sub->whereNull('dob')->whereNull('yob') // no data, assume older
@@ -282,7 +282,7 @@ final class Person extends Model implements HasMedia
                             $inner->whereNull('dob')->whereBetween('yob', [$minYear, $maxYear]);
                         });
                 });
-            } elseif (! empty($yob)) {
+            } else {
                 $minYear = $yob - $offset;
                 $maxYear = $yob + $offset;
                 $minDate = "{$minYear}-01-01";

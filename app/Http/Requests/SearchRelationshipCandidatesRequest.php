@@ -34,7 +34,7 @@ class SearchRelationshipCandidatesRequest extends FormRequest
     /** @return list<int> */
     public function selectedPersonIds(): array
     {
-        return array_map('intval', $this->validated('selected', []));
+        return array_values(array_map('intval', $this->validated('selected', [])));
     }
 
     protected function prepareForValidation(): void
