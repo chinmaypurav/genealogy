@@ -32,6 +32,9 @@ final class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Fortify's screens (login, register, 2FA challenge, ...) live in resources/views/auth.
+        Fortify::viewPrefix('auth.');
+
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);

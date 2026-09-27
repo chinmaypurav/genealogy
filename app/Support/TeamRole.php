@@ -7,7 +7,7 @@ namespace App\Support;
 /**
  * A team member's role: its key, display name and the permissions it grants.
  *
- * Replaces Jetstream's Role and OwnerRole so the teams layer no longer depends on the package.
+ * A small value object so views and permission checks read roles the same way.
  * Roles are defined in config/teams.php; the owner role is implicit and grants every permission.
  */
 class TeamRole

@@ -99,4 +99,16 @@ return [
     'personal_team_avoid'   => 'Hindari menggunakan tim pribadi Anda untuk membuat silsilah keluarga, karena kepemilikan tim pribadi tidak dapat ditransfer ke anggota lain.',
     'personal_team_instead' => 'Sebaliknya, pilih tim yang sudah menjadi bagian Anda atau buat yang baru khusus untuk mengelola dan berbagi silsilah keluarga dengan orang lain.',
     'personal_team_action'  => 'Untuk membuat tim baru atau beralih ke tim yang sudah ada, gunakan menu dropdown di sudut kanan atas.',
+
+    'role_administrator_name'        => 'Administrator',
+    'role_administrator_description' => 'Administrator dapat melakukan tindakan apa pun dan mengelola aplikasi.',
+
+    'role_manager_name'        => 'Manajer',
+    'role_manager_description' => 'Manajer dapat melakukan tindakan apa pun terhadap orang.',
+
+    'role_editor_name'        => 'Editor',
+    'role_editor_description' => 'Editor memiliki kemampuan untuk membuat, membaca, dan memperbarui data orang.',
+
+    'role_member_name'        => 'Anggota',
+    'role_member_description' => 'Anggota memiliki kemampuan untuk membaca data orang.',
 ];

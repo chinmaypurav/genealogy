@@ -92,4 +92,13 @@ return [
     'personal_team_avoid'   => 'Evite usar sua equipe pessoal para criar árvores genealógicas, pois a propriedade de equipes pessoais não pode ser transferida para outro membro.',
     'personal_team_instead' => 'Em vez disso, selecione uma equipe da qual você já faz parte ou crie uma nova especificamente para gerenciar e compartilhar árvores genealógicas com outras pessoas.',
     'personal_team_action'  => 'Para criar uma nova equipe ou mudar para uma já existente, use o menu suspenso no canto superior direito.',
+
+    'role_administrator_name'        => 'Administrador',
+    'role_administrator_description' => 'Os administradores podem executar qualquer ação e gerenciar o aplicativo.',
+    'role_manager_name'              => 'Gerente',
+    'role_manager_description'       => 'Os gerentes podem realizar qualquer ação nas pessoas.',
+    'role_editor_name'               => 'Editor',
+    'role_editor_description'        => 'Os editores têm a capacidade de criar, ler e atualizar pessoas.',
+    'role_member_name'               => 'Membro',
+    'role_member_description'        => 'Os membros têm a capacidade de ler as pessoas.',
 ];

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 /**
  * Stores a user's profile photo on the public disk and exposes its URL, with an initials avatar as fallback.
  *
- * Copied from Jetstream so existing users.profile_photo_path values and files keep working unchanged.
+ * Kept compatible with the existing users.profile_photo_path values and files on the public disk.
  */
 trait HasProfilePhoto
 {

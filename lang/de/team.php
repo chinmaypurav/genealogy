@@ -99,4 +99,16 @@ return [
     'personal_team_avoid'   => 'Vermeiden Sie es, Ihr persönliches Team zum Erstellen von Stammbäumen zu verwenden, da der Besitz persönlicher Teams nicht auf ein anderes Mitglied übertragen werden kann.',
     'personal_team_instead' => 'Wählen Sie stattdessen ein Team aus, dem Sie bereits angehören, oder erstellen Sie ein neues, speziell zum Verwalten und Teilen von Stammbäumen mit anderen.',
     'personal_team_action'  => 'Um ein neues Team zu erstellen oder zu einem bestehenden zu wechseln, verwenden Sie das Dropdown-Menü in der oberen rechten Ecke.',
+
+    'role_administrator_name'        => 'Administrator',
+    'role_administrator_description' => 'Administratoren können beliebige Aktionen ausführen und die Anwendung verwalten.',
+
+    'role_manager_name'        => 'Manager',
+    'role_manager_description' => 'Manager können jede beliebige Aktion an Personen durchführen.',
+
+    'role_editor_name'        => 'Redakteur',
+    'role_editor_description' => 'Redakteure haben die Möglichkeit, Personen zu erstellen, zu lesen und zu aktualisieren.',
+
+    'role_member_name'        => 'Mitglied',
+    'role_member_description' => 'Mitglieder haben die Fähigkeit, Personen zu lesen.',
 ];

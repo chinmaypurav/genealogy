@@ -19,7 +19,6 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source "../**/*.blade.php";
 @source "../**/*.js";
-@source '../../vendor/laravel/jetstream/**/*.blade.php';
 
 @variant dark (&:where(.dark, .dark *));
 

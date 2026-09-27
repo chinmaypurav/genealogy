@@ -23,7 +23,7 @@ This <b>TallStack</b> application is built using:
 
 <ul>
     <li><a href="https://laravel.com/" target="_blank">Laravel</a> 13</li>
-    <li><a href="https://jetstream.laravel.com/" target="_blank">Laravel Jetstream</a> 5 (featuring <a href="https://jetstream.laravel.com/features/teams.html" target="_blank">Teams</a>)</li>
+    <li><a href="https://laravel.com/docs/fortify" target="_blank">Laravel Fortify</a> (authentication, including 2FA)</li>
     <li><a href="https://livewire.laravel.com/" target="_blank">Livewire</a> 4</li>
     <li><a href="https://alpinejs.dev/" target="_blank">Alpine.js</a> 3</li>
     <li><a href="https://tailwindcss.com/" target="_blank">Tailwind CSS</a> 4</li>
@@ -222,8 +222,8 @@ This project is open-sourced software licensed under the [MIT license](LICENSE).
     <li>Fully responsive</li>
     <li>Multi-language, language setting saved in authenticated users profile</li>
     <li>Multi-timezone, timezone setting saved in authenticated users profile</li>
-    <li>Multi-tenancy by Laravel Jetstream Teams, including Transfer Team Ownership</li>
-    <li>Security through Laravel Jetstream Teams Roles & Permissions, 2FA & API can be enabled</li>
+    <li>Multi-tenancy by teams, including Transfer Team Ownership</li>
+    <li>Security through team roles & permissions and optional 2FA</li>
     <li>Offcanvas menu</li>
     <li>Multiple image upload with possibility of watermarking, photo carousel with navigation</li>
     <li>Multiple documents upload</li>

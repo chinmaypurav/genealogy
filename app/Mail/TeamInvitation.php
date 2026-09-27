@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\URL;
 /**
  * Invites an email address to join a team, with a signed link to accept.
  *
- * Replaces Jetstream's mailable, which only accepts Jetstream's own invitation model.
+ * A mailable keeps the signed accept link and markdown template in one place for InviteTeamMember.
  */
 class TeamInvitation extends Mailable
 {

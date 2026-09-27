@@ -9,7 +9,7 @@ use Detection\MobileDetect;
 /**
  * Reads the platform, browser and device type from a user agent string, for the browser sessions list.
  *
- * Copied from Jetstream (originally jenssegers/agent) so the profile page no longer needs the package.
+ * Based on jenssegers/agent; kept as a small MobileDetect subclass instead of adding another dependency.
  * MobileDetect only knows mobile platforms and browsers; the extra rules below cover desktop ones.
  */
 class Agent extends MobileDetect
