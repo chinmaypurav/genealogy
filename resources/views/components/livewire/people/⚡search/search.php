@@ -12,7 +12,6 @@ new class extends Component
 {
     use WithPagination;
 
-    // ------------------------------------------------------------------------------
     #[Session]
     public ?string $search = null;
 
@@ -32,14 +31,12 @@ new class extends Component
 
     public int $people_db = 0;
 
-    // ------------------------------------------------------------------------------
     public function mount(): void
     {
         // Count the number of people in the database
         $this->people_db = Person::count();
     }
 
-    // ------------------------------------------------------------------------------
     public function updatedSearch(): void
     {
         // Sanitize input to prevent XSS
@@ -64,7 +61,6 @@ new class extends Component
         $this->resetPage();
     }
 
-    // ------------------------------------------------------------------------------
     public function render(): View
     {
         // Begin query builder
@@ -85,7 +81,6 @@ new class extends Component
         return $this->view(['people' => $people]);
     }
 
-    // --------------------------------------------------------------------------
     private function sanitizeSearch(?string $value): ?string
     {
         if ($value === null) {

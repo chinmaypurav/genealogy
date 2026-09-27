@@ -17,9 +17,7 @@ use TallStackUi\Support\Breadcrumbs\BreadcrumbTrail;
 */
 
 TallStackUi::breadcrumbs()
-    // -----------------------------------------------------------------------------------
     // frontend routes
-    // -----------------------------------------------------------------------------------
     ->for('home', fn (BreadcrumbTrail $trail) => $trail
         ->add(label: __('app.home'), link: '/', icon: 'home')
     )
@@ -43,9 +41,7 @@ TallStackUi::breadcrumbs()
         ->parent('home')
         ->add(label: __('app.terms_of_service'), link: route('terms.show'))
     )
-    // -----------------------------------------------------------------------------------
     // teams
-    // -----------------------------------------------------------------------------------
     ->for('team', fn (BreadcrumbTrail $trail) => $trail
         ->parent('home')
         ->add(label: __('team.team'), link: route('team'))
@@ -58,9 +54,7 @@ TallStackUi::breadcrumbs()
         ->parent('home')
         ->add(label: __('app.people_logbook'), link: route('peoplelog'))
     )
-    // -----------------------------------------------------------------------------------
     // people
-    // -----------------------------------------------------------------------------------
     ->for('people.search', fn (BreadcrumbTrail $trail) => $trail
         ->parent('home')
         ->add(label: __('app.search'), link: route('people.search'), icon: 'tabler.search')
@@ -149,9 +143,7 @@ TallStackUi::breadcrumbs()
         ->parent('people.show')
         ->add(label: __('person.edit_relationship'), link: route('people.edit-partner', [$person, $couple]), icon: 'tabler.user-edit')
     )
-    // -----------------------------------------------------------------------------------
     // gedcom
-    // -----------------------------------------------------------------------------------
     ->for('gedcom.exportteam', fn (BreadcrumbTrail $trail) => $trail
         ->parent('home')
         ->add(label: __('gedcom.gedcom_export'), link: route('gedcom.exportteam'), icon: 'tabler.droplet-down')
@@ -160,9 +152,7 @@ TallStackUi::breadcrumbs()
         ->parent('home')
         ->add(label: __('gedcom.gedcom_import'), link: route('gedcom.importteam'), icon: 'tabler.droplet-up')
     )
-    // -----------------------------------------------------------------------------------
     // auth
-    // -----------------------------------------------------------------------------------
     ->for('login', fn (BreadcrumbTrail $trail) => $trail
         ->parent('home')
         ->add(label: __('auth.login'), link: route('login'))
@@ -193,9 +183,7 @@ TallStackUi::breadcrumbs()
         ->add(label: __('user.2fa'), link: route('two-factor.login'))
     )
 
-    // -----------------------------------------------------------------------------------
     // team management
-    // -----------------------------------------------------------------------------------
     ->for('teams.create', fn (BreadcrumbTrail $trail) => $trail
         ->parent('home')
         ->add(label: __('team.create'), link: route('teams.create'), icon: 'tabler.droplet-plus')
@@ -204,9 +192,7 @@ TallStackUi::breadcrumbs()
         ->parent('home')
         ->add(label: __('team.settings'), link: route('teams.show', $team), icon: 'tabler.droplet-cog')
     )
-    // -----------------------------------------------------------------------------------
     // user
-    // -----------------------------------------------------------------------------------
     ->for('api-tokens.index', fn (BreadcrumbTrail $trail) => $trail
         ->parent('home')
         ->add(label: __('api.api_tokens'), link: route('api-tokens.index'), icon: 'tabler.key')

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Enums\PersonPhotoConversion;
 use App\Models\Person;
-use App\PersonPhotos;
+use App\Support\PersonPhotos;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -18,7 +18,6 @@ new class extends Component
 
     public ?int $selected = null;
 
-    // ------------------------------------------------------------------------------
     #[On('photos_updated')]
     public function mount(): void
     {

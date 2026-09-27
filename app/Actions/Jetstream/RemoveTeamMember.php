@@ -34,9 +34,7 @@ final class RemoveTeamMember implements RemovesTeamMembers
 
         TeamMemberRemoved::dispatch($team, $teamMember);
 
-        /* -------------------------------------------------------------------------------------------- */
         // Log activity: Remove Team Member
-        /* -------------------------------------------------------------------------------------------- */
         defer(function () use ($user, $team, $teamMember, $role): void {
             activity()
                 ->useLog('user_team')
@@ -50,7 +48,6 @@ final class RemoveTeamMember implements RemovesTeamMembers
                 ])
                 ->log(__('team.member') . ' ' . __('app.event_removed'));
         });
-        /* -------------------------------------------------------------------------------------------- */
     }
 
     /**

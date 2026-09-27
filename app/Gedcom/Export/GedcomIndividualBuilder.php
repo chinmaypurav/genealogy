@@ -32,10 +32,6 @@ class GedcomIndividualBuilder
      */
     public function __construct(private GedcomFormatter $formatter) {}
 
-    // --------------------------------------------------------------------------------------
-    // MAIN BUILDING METHODS
-    // --------------------------------------------------------------------------------------
-
     /**
      * Build all individual records.
      *
@@ -102,10 +98,6 @@ class GedcomIndividualBuilder
         return implode($this->formatter->eol(), $lines) . $this->formatter->eol();
     }
 
-    // --------------------------------------------------------------------------------------
-    // NAME FIELD BUILDING
-    // --------------------------------------------------------------------------------------
-
     /**
      * Build name fields for an individual.
      *
@@ -153,10 +145,6 @@ class GedcomIndividualBuilder
         return $lines;
     }
 
-    // --------------------------------------------------------------------------------------
-    // BASIC INFORMATION FIELDS
-    // --------------------------------------------------------------------------------------
-
     /**
      * Build sex field for an individual.
      *
@@ -173,10 +161,6 @@ class GedcomIndividualBuilder
 
         return $lines;
     }
-
-    // --------------------------------------------------------------------------------------
-    // VITAL EVENT FIELDS
-    // --------------------------------------------------------------------------------------
 
     /**
      * Build birth-related fields for an individual.
@@ -303,10 +287,6 @@ class GedcomIndividualBuilder
 
         return $lines;
     }
-
-    // --------------------------------------------------------------------------------------
-    // NOTE AND RELATIONSHIP FIELDS
-    // --------------------------------------------------------------------------------------
 
     /**
      * Build note-related fields for an individual.

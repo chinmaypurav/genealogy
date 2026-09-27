@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Contracts\AncestorsQueryInterface;
 use App\Enums\PersonPhotoConversion;
 use App\Models\Person;
-use App\PersonPhotos;
+use App\Support\PersonPhotos;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 

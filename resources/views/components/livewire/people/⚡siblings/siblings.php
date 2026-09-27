@@ -9,14 +9,11 @@ use Livewire\Component;
 
 new class extends Component
 {
-    // ------------------------------------------------------------------------------
     public Person $person;
 
-    // ------------------------------------------------------------------------------
     /** @var Collection<int, Person> */
     public Collection $siblings;
 
-    // ------------------------------------------------------------------------------
     #[On('family_updated')]
     #[On('father_added')]
     #[On('mother_added')]

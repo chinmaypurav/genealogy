@@ -104,9 +104,6 @@ final class PersonEvent extends Model
         'type_label',
     ];
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Log activities
-    /* -------------------------------------------------------------------------------------------- */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -129,9 +126,6 @@ final class PersonEvent extends Model
         // $activity->team_id = auth()->user()?->currentTeam?->id ?? null;
     }
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Relations
-    /* -------------------------------------------------------------------------------------------- */
     /**
      * @return BelongsTo<Person, covariant PersonEvent>
      */
@@ -140,9 +134,6 @@ final class PersonEvent extends Model
         return $this->belongsTo(Person::class);
     }
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Accessors & Mutators
-    /* -------------------------------------------------------------------------------------------- */
     /**
      * @return Attribute<string, never>
      */

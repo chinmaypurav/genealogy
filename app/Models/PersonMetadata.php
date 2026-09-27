@@ -38,9 +38,6 @@ final class PersonMetadata extends Model
         'value',
     ];
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Log activities
-    /* -------------------------------------------------------------------------------------------- */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -60,9 +57,6 @@ final class PersonMetadata extends Model
         $activity->team_id = auth()->user()?->currentTeam->id ?? null;
     }
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Relations
-    /* -------------------------------------------------------------------------------------------- */
     /* returns PERSON (1 Person) */
     /**
      * @return BelongsTo<Person, covariant PersonMetadata>
@@ -72,9 +66,6 @@ final class PersonMetadata extends Model
         return $this->belongsTo(Person::class);
     }
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Accessors & Mutators
-    /* -------------------------------------------------------------------------------------------- */
     /**
      * @return Attribute<string, string>
      */

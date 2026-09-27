@@ -15,7 +15,6 @@ new class extends Component
 
     public string $subjectTypeFilter = 'all';
 
-    // -----------------------------------------------------------------------
     #[Computed]
     public function activities()
     {
@@ -72,7 +71,6 @@ new class extends Component
             ->toArray();
     }
 
-    // -----------------------------------------------------------------------
     public function mount(): void
     {
         $this->currentTeam();
@@ -90,7 +88,6 @@ new class extends Component
         $this->resetPage();
     }
 
-    // -----------------------------------------------------------------------
     private function sortProperties(array $properties): array
     {
         $keyOrder = [

@@ -6,7 +6,7 @@ namespace App\Gedcom\Import;
 
 use App\Enums\PersonMediaCollection;
 use App\Models\Person;
-use App\PersonPhotos;
+use App\Support\PersonPhotos;
 use Exception;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;

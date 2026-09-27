@@ -22,10 +22,8 @@ new class extends Component
     use Interactions;
     use TrimStringsAndConvertEmptyStringsToNull;
 
-    // -----------------------------------------------------------------------
     public Person $person;
 
-    // -----------------------------------------------------------------------
     public ?string $firstname = null;
 
     public ?string $surname = null;
@@ -48,7 +46,6 @@ new class extends Component
 
     public ?string $summary = null;
 
-    // -----------------------------------------------------------------------
     /**
      * @return Collection<int, Gender>
      */
@@ -58,7 +55,6 @@ new class extends Component
         return Gender::select(['id', 'name'])->orderBy('name')->get();
     }
 
-    // -----------------------------------------------------------------------
     public function mount(): void
     {
         $this->loadData();
@@ -77,7 +73,6 @@ new class extends Component
         $this->dispatch('person_updated');
     }
 
-    // -----------------------------------------------------------------------
     /**
      * @return array<string, array<int, mixed>>
      */
@@ -141,7 +136,6 @@ new class extends Component
         ];
     }
 
-    // ------------------------------------------------------------------------------
     private function loadData(): void
     {
         $this->firstname = $this->person->firstname;

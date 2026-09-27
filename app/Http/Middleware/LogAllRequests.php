@@ -19,9 +19,6 @@ final class LogAllRequests
     {
         $response = $next($request);
 
-        // -----------------------------------------------------------------------
-        // Log request details
-        // -----------------------------------------------------------------------
         $timestamp = Carbon::now()->toDateTimeString();
 
         // Collect response content if available

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire\Traits;
 
 use App\Models\Person;
-use App\PersonPhotos;
+use App\Support\PersonPhotos;
 use Exception;
 use Illuminate\Support\Facades\Log;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Countries;
+use App\Support\Countries;
 use App\Livewire\Traits\AuthorizesPersonActions;
 use App\Livewire\Traits\TrimStringsAndConvertEmptyStringsToNull;
 use App\Models\Person;
@@ -17,10 +17,8 @@ new class extends Component
     use Interactions;
     use TrimStringsAndConvertEmptyStringsToNull;
 
-    // -----------------------------------------------------------------------
     public Person $person;
 
-    // -----------------------------------------------------------------------
     public ?string $street = null;
 
     public ?string $number = null;
@@ -37,7 +35,6 @@ new class extends Component
 
     public ?string $phone = null;
 
-    // -----------------------------------------------------------------------
     /** @return Collection<int, array{id: string, name: string}> */
     #[Computed(persist: true, seconds: 3600, cache: true)]
     public function countries(): Collection
@@ -45,7 +42,6 @@ new class extends Component
         return (new Countries(app()->getLocale()))->getAllCountries();
     }
 
-    // -----------------------------------------------------------------------
     public function mount(): void
     {
         $this->loadData();
@@ -64,7 +60,6 @@ new class extends Component
         $this->toast()->success(__('app.save'), __('app.saved'))->send();
     }
 
-    // -----------------------------------------------------------------------
     /** @return array<string, array<int, string|int>> */
     protected function rules(): array
     {
@@ -101,7 +96,6 @@ new class extends Component
         ];
     }
 
-    // ------------------------------------------------------------------------------
     private function loadData(): void
     {
         $this->street      = $this->person->street;

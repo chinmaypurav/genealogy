@@ -13,9 +13,7 @@ final class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // -----------------------------------------------------------------------------------
         // create administrator user
-        // -----------------------------------------------------------------------------------
         $administrator = User::factory([
             'firstname' => '_',
             'surname'   => 'Administrator',
@@ -28,9 +26,7 @@ final class UserSeeder extends Seeder
 
         Activity::defaultCauser($administrator);
 
-        // -----------------------------------------------------------------------------------
         // create manager user
-        // -----------------------------------------------------------------------------------
         $manager = User::factory([
             'firstname' => '_',
             'surname'   => 'Manager',
@@ -41,9 +37,7 @@ final class UserSeeder extends Seeder
             $this->createUserlogs($manager);
         }
 
-        // -----------------------------------------------------------------------------------
         // create editor user
-        // -----------------------------------------------------------------------------------
         $editor = User::factory([
             'firstname' => '_',
             'surname'   => 'Editor',
@@ -54,9 +48,7 @@ final class UserSeeder extends Seeder
             $this->createUserlogs($editor);
         }
 
-        // -----------------------------------------------------------------------------------
         // create normal users (members)
-        // -----------------------------------------------------------------------------------
         for ($i = 1; $i <= 3; $i++) {
             $user = User::factory([
                 'firstname' => '__',
@@ -94,7 +86,6 @@ final class UserSeeder extends Seeder
         }
     }
 
-    // -----------------------------------------------------------------------------------
     protected function createUserlogs(User $user): void
     {
         $count = random_int(10, 100);

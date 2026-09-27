@@ -37,9 +37,7 @@ final class AddTeamMember implements AddsTeamMembers
 
         TeamMemberAdded::dispatch($team, $newTeamMember);
 
-        /* -------------------------------------------------------------------------------------------- */
         // Log activity: Added Team Member
-        /* -------------------------------------------------------------------------------------------- */
         defer(function () use ($user, $team, $newTeamMember, $role): void {
             activity()
                 ->useLog('user_team')
@@ -53,7 +51,6 @@ final class AddTeamMember implements AddsTeamMembers
                 ])
                 ->log(__('team.member') . ' ' . __('app.event_added'));
         });
-        /* -------------------------------------------------------------------------------------------- */
 
         return redirect('/teams/' . $team->id);
     }

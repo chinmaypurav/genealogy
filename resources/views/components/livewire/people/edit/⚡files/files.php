@@ -21,7 +21,6 @@ new class extends Component
     use Interactions;
     use WithFileUploads;
 
-    // -----------------------------------------------------------------------
     public Person $person;
 
     public ?string $source = null;
@@ -47,7 +46,6 @@ new class extends Component
     /** @var Collection<int, Media>|null */
     public ?Collection $files = null;
 
-    // ------------------------------------------------------------------------------
     public function mount(): void
     {
         // Cache config values once during mount
@@ -260,7 +258,6 @@ new class extends Component
         $this->dispatch('files_updated');
     }
 
-    // ------------------------------------------------------------------------------
     /**
      * @return array<string, array<int, string|int>>
      */
@@ -297,7 +294,6 @@ new class extends Component
         ];
     }
 
-    // -----------------------------------------------------------------------
     /**
      * Validate that uploaded file is genuine and safe.
      * Performs multiple security checks to prevent malicious uploads.

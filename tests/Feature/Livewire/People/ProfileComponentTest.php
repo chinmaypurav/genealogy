@@ -9,9 +9,7 @@ uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 // memberWithRole() is a helper method on Tests\TestCase (tests/TestCase.php)
 
-// ---------------------------------------------------------------------------
 // Guard: profile::confirm() / profile::delete() require person:delete
-// ---------------------------------------------------------------------------
 
 test('deleting a person is forbidden without the person:delete permission', function (): void {
     // 'editor' role has person:update but NOT person:delete (see JetstreamServiceProvider)

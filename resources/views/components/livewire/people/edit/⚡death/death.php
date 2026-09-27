@@ -19,10 +19,8 @@ new class extends Component
     use Interactions;
     use TrimStringsAndConvertEmptyStringsToNull;
 
-    // -----------------------------------------------------------------------
     public Person $person;
 
-    // -----------------------------------------------------------------------
     #[Validate]
     public ?int $yod = null;
 
@@ -39,7 +37,6 @@ new class extends Component
 
     public ?string $cemetery_location_longitude = null;
 
-    // -----------------------------------------------------------------------
     public function mount(): void
     {
         $this->loadData();
@@ -57,23 +54,18 @@ new class extends Component
             'pod' => $this->pod ?? null,
         ]);
 
-        // ------------------------------------------------------
-        // update or create metadata
-        // ------------------------------------------------------
         /** @var array<string, mixed> $validated */
         $this->person->updateMetadata(
             collect($validated)
                 ->forget(['yod', 'dod', 'pod'])
                 ->filter(fn ($value, $key): bool => $value !== $this->person->getMetadataValue($key))
         );
-        // ------------------------------------------------------
 
         $this->dispatch('person_updated');
 
         $this->toast()->success(__('app.save'), __('app.saved'))->send();
     }
 
-    // ------------------------------------------------------------------------------
     /**
      * @return array<string, mixed>
      */
@@ -114,7 +106,6 @@ new class extends Component
         ];
     }
 
-    // ------------------------------------------------------------------------------
     private function loadData(): void
     {
         $this->yod                         = $this->person->yod;

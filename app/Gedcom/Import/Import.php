@@ -150,84 +150,78 @@ final class Import implements CreatesTeams
         ini_set('memory_limit', '512M');
 
         try {
-            DB::beginTransaction();
+            return DB::transaction(function () use ($gedcomContent, $mediaFiles): array {
+                $this->initializeImport();
 
-            $this->initializeImport();
+                // Initialize media handler if we have media files
+                if (! empty($mediaFiles)) {
+                    $this->mediaHandler = new MediaImportHandler($mediaFiles);
 
-            // Initialize media handler if we have media files
-            if (! empty($mediaFiles)) {
-                $this->mediaHandler = new MediaImportHandler($mediaFiles);
+                    // Parse media objects from GEDCOM content BEFORE parsing individuals
+                    $this->mediaHandler->parseMediaObjects($gedcomContent);
 
-                // Parse media objects from GEDCOM content BEFORE parsing individuals
-                $this->mediaHandler->parseMediaObjects($gedcomContent);
+                    Log::debug('Media handler initialized', [
+                        'files_count'         => count($mediaFiles),
+                        'media_objects_count' => count($this->mediaHandler->getMediaObjects()),
+                    ]);
+                }
 
-                Log::debug('Media handler initialized', [
-                    'files_count'         => count($mediaFiles),
-                    'media_objects_count' => count($this->mediaHandler->getMediaObjects()),
+                // Parse GEDCOM content
+                $parsedData = $this->parser->parse($gedcomContent);
+
+                Log::debug('GEDCOM parsed', [
+                    'individuals' => count($parsedData->getIndividuals()),
+                    'families'    => count($parsedData->getFamilies()),
                 ]);
-            }
 
-            // Parse GEDCOM content
-            $parsedData = $this->parser->parse($gedcomContent);
+                // Import individuals first
+                $personMap = $this->individualImporter->import(
+                    $parsedData->getIndividuals(),
+                    $this->mediaHandler
+                );
 
-            Log::debug('GEDCOM parsed', [
-                'individuals' => count($parsedData->getIndividuals()),
-                'families'    => count($parsedData->getFamilies()),
-            ]);
+                Log::debug('Individuals imported', [
+                    'count' => count($personMap),
+                ]);
 
-            // Import individuals first
-            $personMap = $this->individualImporter->import(
-                $parsedData->getIndividuals(),
-                $this->mediaHandler
-            );
+                // Import families and relationships
+                $familyMap = $this->familyImporter->import(
+                    $parsedData->getFamilies(),
+                    $personMap
+                );
 
-            Log::debug('Individuals imported', [
-                'count' => count($personMap),
-            ]);
+                Log::debug('Families imported', [
+                    'count' => count($familyMap),
+                ]);
 
-            // Import families and relationships
-            $familyMap = $this->familyImporter->import(
-                $parsedData->getFamilies(),
-                $personMap
-            );
+                // Create couples from families
+                $this->coupleCreator->create($familyMap, $personMap);
 
-            Log::debug('Families imported', [
-                'count' => count($familyMap),
-            ]);
+                Log::debug('Couples created');
 
-            // Create couples from families
-            $this->coupleCreator->create($familyMap, $personMap);
+                // Import media files if available
+                $mediaStats = null;
+                if ($this->mediaHandler) {
+                    Log::debug('Starting media import');
+                    $mediaStats = $this->mediaHandler->importMediaToPersons($personMap);
+                    Log::debug('Media import complete', $mediaStats);
+                }
 
-            Log::debug('Couples created');
+                $result = [
+                    'success'              => true,
+                    'team'                 => $this->team->name,
+                    'individuals_imported' => count($personMap),
+                    'families_imported'    => count($familyMap),
+                    'message'              => 'GEDCOM file imported successfully',
+                ];
 
-            // Import media files if available
-            $mediaStats = null;
-            if ($this->mediaHandler) {
-                Log::debug('Starting media import');
-                $mediaStats = $this->mediaHandler->importMediaToPersons($personMap);
-                Log::debug('Media import complete', $mediaStats);
-            }
+                if ($mediaStats) {
+                    $result['media_stats'] = $mediaStats;
+                }
 
-            DB::commit();
-
-            $result = [
-                'success'              => true,
-                'team'                 => $this->team->name,
-                'individuals_imported' => count($personMap),
-                'families_imported'    => count($familyMap),
-                'message'              => 'GEDCOM file imported successfully',
-            ];
-
-            if ($mediaStats) {
-                $result['media_stats'] = $mediaStats;
-            }
-
-            return $result;
+                return $result;
+            });
         } catch (Exception $e) {
-            if (DB::transactionLevel() > 0) {
-                DB::rollBack();
-            }
-
             $this->deleteFailedImportFiles();
 
             Log::error('GEDCOM Import Error: ' . $e->getMessage(), [

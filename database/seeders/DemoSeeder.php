@@ -10,7 +10,7 @@ use App\Models\PersonEvent;
 use App\Models\PersonMetadata;
 use App\Models\Team;
 use App\Models\User;
-use App\PersonPhotos;
+use App\Support\PersonPhotos;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -99,9 +99,7 @@ final class DemoSeeder extends Seeder
             ]);
         }
 
-        // -----------------------------------------------------
         // Metadata
-        // -----------------------------------------------------
         $buried_at_king_george_chapel = [1, 2, 31, 32, 33, 37];
 
         foreach ($buried_at_king_george_chapel as $person) {
@@ -126,7 +124,6 @@ final class DemoSeeder extends Seeder
                 'value'     => '-0.606639',
             ]);
         }
-        // -----------------------------------------------------
         PersonMetadata::create([
             'person_id' => 7,
             'key'       => 'cemetery_location_name',
@@ -180,9 +177,7 @@ final class DemoSeeder extends Seeder
 
     protected function generateBritishRoyalsTestData(): void
     {
-        // -----------------------------------------------------------------------
         // half-siblings
-        // -----------------------------------------------------------------------
         Person::create([
             'id'        => 101,
             'firstname' => 'Child',
@@ -221,9 +216,7 @@ final class DemoSeeder extends Seeder
             'team_id' => $this->british_royals_team,
         ]);
 
-        // -----------------------------------------------------------------------
         // gay relations
-        // -----------------------------------------------------------------------
         Person::create([
             'id'        => 201,
             'firstname' => 'Parent 1',
@@ -335,9 +328,7 @@ final class DemoSeeder extends Seeder
             'team_id' => $this->british_royals_team,
         ]);
 
-        // -----------------------------------------------------------------------
         // re-married previous partner
-        // -----------------------------------------------------------------------
         Couple::create([
             'id'         => 201,
             'person1_id' => 5,
@@ -348,9 +339,7 @@ final class DemoSeeder extends Seeder
             'team_id' => $this->british_royals_team,
         ]);
 
-        // -----------------------------------------------------------------------
         // address
-        // -----------------------------------------------------------------------
         $person = Person::findOrFail(5);
 
         $person->update([
@@ -360,9 +349,7 @@ final class DemoSeeder extends Seeder
             'country'     => 'gb',
         ]);
 
-        // -----------------------------------------------------------------------
         // events
-        // -----------------------------------------------------------------------
         PersonEvent::create([
             'person_id'   => $person->id,
             'type'        => PersonEvent::TYPE_BAPTISM,

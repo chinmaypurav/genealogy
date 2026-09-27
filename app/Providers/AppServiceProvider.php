@@ -37,9 +37,7 @@ final class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // ------------------------------------------------------------------------------
         // Configure application settings and services
-        // ------------------------------------------------------------------------------
         $this->configureUrl();
         $this->configureStrictMode();
         $this->configureDates();
@@ -51,22 +49,13 @@ final class AppServiceProvider extends ServiceProvider
             RequestException::dontTruncate();
         }
 
-        // ------------------------------------------------------------------------------
         // Automatically eager load relations when needed for all models
-        // ------------------------------------------------------------------------------
         Model::automaticallyEagerLoadRelationships();
 
-        // ------------------------------------------------------------------------------
-        // This will prevent any destructive commands from being executed
-        // in production environments, such as dropping tables or truncating data.
-        // This is a safety measure to prevent accidental data loss.
-        // Uncomment the line below to enable this feature.
-        // ------------------------------------------------------------------------------
-        // DB::prohibitDestructiveCommands(app()->isProduction());
+        // Block migrate:fresh, db:wipe and friends in production to prevent accidental data loss.
+        DB::prohibitDestructiveCommands(app()->isProduction());
 
-        // ------------------------------------------------------------------------------
         // Enable or disable logging based on application settings
-        // ------------------------------------------------------------------------------
         if ($this->isDatabaseOnline() && Schema::hasTable('settings')) {
             // Cache the applications settings
             $this->app->singleton('settings', fn () => Cache::rememberForever('settings', fn () => Setting::pluck('value', 'key')));
@@ -75,7 +64,6 @@ final class AppServiceProvider extends ServiceProvider
             $this->LogAllQueriesSlow();
             $this->logAllQueriesNplusone();
         }
-        // ------------------------------------------------------------------------------
     }
 
     /**

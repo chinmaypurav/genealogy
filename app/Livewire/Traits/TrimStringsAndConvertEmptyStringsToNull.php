@@ -6,9 +6,7 @@ namespace App\Livewire\Traits;
 
 trait TrimStringsAndConvertEmptyStringsToNull
 {
-    // -----------------------------------------------------------------------
     // ONLY needed in Livewire forms, NOT in blade forms
-    // -----------------------------------------------------------------------
     public function updatedTrimStringsAndConvertEmptyStringsToNull(string $name, mixed $value): void
     {
         if (is_string($value)) {

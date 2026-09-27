@@ -116,7 +116,6 @@ new class extends Component
         $this->filename = $this->sanitizeFilename($this->filename);
     }
 
-    // ------------------------------------------------------------------------------
     /**
      * @return array<string, array<int, string>>
      */
@@ -160,7 +159,6 @@ new class extends Component
         ];
     }
 
-    // ----------------------------------------------------------------------
     /**
      * Generate a clean, timezone-aware, UTC-safe filename.
      * Always keeps the timestamp + UTC offset intact,

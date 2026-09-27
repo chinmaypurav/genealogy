@@ -46,11 +46,9 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property-read Team|null $currentTeam
  */
 final class User extends Authenticatable
-    // ---------------------------------------------------------------------------------------
     // class User extends Authenticatable implements MustVerifyEmail
     //
     // Ref : https://jetstream.laravel.com/features/registration.html#email-verification
-    // ---------------------------------------------------------------------------------------
 {
     use HasApiTokens;
 
@@ -109,9 +107,6 @@ final class User extends Authenticatable
      */
     private ?bool $isDeletableCache = null;
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Log activities
-    /* -------------------------------------------------------------------------------------------- */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -133,7 +128,6 @@ final class User extends Authenticatable
         $activity->team_id = auth()->user()?->currentTeam?->id;
     }
 
-    /* -------------------------------------------------------------------------------------------- */
     public function hasPermission(string $permission): bool
     {
         return $this->hasTeamPermission($this->currentTeam, $permission);
@@ -169,9 +163,6 @@ final class User extends Authenticatable
         return $this->isDeletableCache = ($totalAssociations === 0);
     }
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Relations
-    /* -------------------------------------------------------------------------------------------- */
     /**
      * Returns ALL USERLOGS (n Userlog)
      *
@@ -196,9 +187,6 @@ final class User extends Authenticatable
         });
     }
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Accessors & Mutators
-    /* -------------------------------------------------------------------------------------------- */
     /** @return Attribute<string, never> */
     protected function name(): Attribute
     {

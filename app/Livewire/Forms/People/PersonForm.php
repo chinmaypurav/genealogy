@@ -15,9 +15,6 @@ use Livewire\Form;
 
 final class PersonForm extends Form
 {
-    // -----------------------------------------------------------------------
-    // New person fields
-    // -----------------------------------------------------------------------
     public ?string $firstname = null;
 
     public ?string $surname = null;
@@ -38,21 +35,15 @@ final class PersonForm extends Form
 
     public ?string $pob = null;
 
-    // -----------------------------------------------------------------------
     // Photo uploads (handled by HandlesPhotoUploads trait in components)
-    // -----------------------------------------------------------------------
     /** @var array<int, mixed> */
     public array $uploads = [];
 
     /** @var array<int, mixed> */
     public array $backup = [];
 
-    // -----------------------------------------------------------------------
-    // Existing person fields
-    // -----------------------------------------------------------------------
     public ?int $person_id = null;
 
-    // -----------------------------------------------------------------------
     /**
      * @return Collection<int, Gender>
      */
@@ -62,9 +53,7 @@ final class PersonForm extends Form
         return Gender::select(['id', 'name'])->orderBy('name')->get();
     }
 
-    // -----------------------------------------------------------------------
     // Validation rules without photo uploads (handled in trait)
-    // -----------------------------------------------------------------------
     /**
      * @return array<string, mixed>
      */
