@@ -11,6 +11,7 @@ use App\Models\Person as PersonModel;
 use App\Rules\DobValid;
 use App\Rules\YobValid;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Date;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -123,7 +124,7 @@ new class extends Component
             'form.nickname'  => ['nullable', 'string', 'max:255'],
             'form.sex'       => ['required', 'string', 'max:1', 'in:m,f'],
             'form.gender_id' => ['nullable', 'integer'],
-            'form.yob'       => ['nullable', 'integer', 'min:1', 'max:' . date('Y'), new YobValid],
+            'form.yob'       => ['nullable', 'integer', 'min:1', 'max:' . Date::now()->year, new YobValid],
             'form.dob'       => ['nullable', 'date_format:Y-m-d', 'before_or_equal:today', new DobValid],
             'form.pob'       => ['nullable', 'string', 'max:255'],
         ], $this->getPhotoUploadRules());

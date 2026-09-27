@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Livewire\Forms\People\PersonForm;
 use App\Models\Person;
+use Illuminate\Support\Facades\Date;
 use Livewire\Component;
 
 new class extends Component
@@ -97,7 +98,7 @@ new class extends Component
             'form.nickname'  => ['nullable', 'string', 'max:255'],
             'form.sex'       => ['nullable', 'string', 'max:1', 'in:m,f', 'required_without:form.person_id'],
             'form.gender_id' => ['nullable', 'integer'],
-            'form.yob'       => ['nullable', 'integer', 'min:1', 'max:' . date('Y')],
+            'form.yob'       => ['nullable', 'integer', 'min:1', 'max:' . Date::now()->year],
             'form.dob'       => ['nullable', 'date_format:Y-m-d', 'before_or_equal:today'],
             'form.pob'       => ['nullable', 'string', 'max:255'],
 

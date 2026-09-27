@@ -10,6 +10,7 @@ use App\Livewire\Traits\TrimStringsAndConvertEmptyStringsToNull;
 use App\Models\Person;
 use App\Rules\DobValid;
 use App\Rules\YobValid;
+use Illuminate\Support\Facades\Date;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use TallStackUi\Traits\Interactions;
@@ -105,7 +106,7 @@ new class extends Component
             'form.birthname' => ['nullable', 'string', 'max:255'],
             'form.nickname'  => ['nullable', 'string', 'max:255'],
             'form.gender_id' => ['nullable', 'integer'],
-            'form.yob'       => ['nullable', 'integer', 'min:1', 'max:' . date('Y'), new YobValid],
+            'form.yob'       => ['nullable', 'integer', 'min:1', 'max:' . Date::now()->year, new YobValid],
             'form.dob'       => ['nullable', 'date_format:Y-m-d', 'before_or_equal:today', new DobValid],
             'form.pob'       => ['nullable', 'string', 'max:255'],
 

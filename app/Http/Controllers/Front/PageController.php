@@ -45,7 +45,7 @@ final class PageController extends Controller
             abort(404, 'About page content not found');
         }
 
-        // First render as Blade (to process {{ date('Y') }}, etc.)
+        // First render as Blade (to process {{ Date::now()->year }}, etc.)
         $compiledBlade = Blade::render($markdown);
 
         // Then parse the rendered Blade output as Markdown

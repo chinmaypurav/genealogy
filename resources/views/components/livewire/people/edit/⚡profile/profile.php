@@ -10,6 +10,7 @@ use App\Rules\DobValid;
 use App\Rules\YobValid;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Date;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -95,7 +96,7 @@ new class extends Component
                 'nullable',
                 'integer',
                 'min:1',
-                'max:' . date('Y'),
+                'max:' . Date::now()->year,
                 new YobValid,
             ],
             'dob' => [

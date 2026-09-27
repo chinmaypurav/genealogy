@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Models\User;
-use DateTimeImmutable;
-use DateTimeZone;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Date;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Userlog>
@@ -34,22 +34,22 @@ final class UserlogFactory extends Factory
         ];
     }
 
-    private function randomUtcDateTime(string $start, string $end): DateTimeImmutable
+    private function randomUtcDateTime(string $start, string $end): CarbonInterface
     {
-        return new DateTimeImmutable(
+        return Date::parse(
             $this->faker->dateTimeBetween($start, $end, 'UTC')->format('Y-m-d H:i:s'),
-            new DateTimeZone('UTC')
+            'UTC'
         );
     }
 
-    private function randomUtcDateTimeAfter(DateTimeImmutable $after): DateTimeImmutable
+    private function randomUtcDateTimeAfter(CarbonInterface $after): CarbonInterface
     {
         // Convert to string so Faker can handle it
         $start = $after->format('Y-m-d H:i:s');
 
-        return new DateTimeImmutable(
+        return Date::parse(
             $this->faker->dateTimeBetween($start, 'now', 'UTC')->format('Y-m-d H:i:s'),
-            new DateTimeZone('UTC')
+            'UTC'
         );
     }
 }

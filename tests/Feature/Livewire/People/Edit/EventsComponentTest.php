@@ -6,6 +6,7 @@ use App\Models\Person;
 use App\Models\PersonEvent;
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Support\Facades\Date;
 use Livewire\Livewire;
 
 uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
@@ -206,7 +207,7 @@ test('validation enforces year maximum', function (): void {
     Livewire::test('people::edit.events', ['person' => $this->person])
         ->call('openModal')
         ->set('type', PersonEvent::TYPE_BAPTISM)
-        ->set('year', date('Y') + 1)
+        ->set('year', Date::now()->year + 1)
         ->call('save')
         ->assertHasErrors(['year' => 'max']);
 });

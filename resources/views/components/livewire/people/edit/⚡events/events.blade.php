@@ -134,7 +134,7 @@
                         type="number"
                         wire:model="year"
                         id="year"
-                        :max="date('Y')"
+                        :max="Date::now()->year"
                         label="{{ __('app.year') }} {{ __('personevents.date_unknown') }} :"
                     />
                 </div>
