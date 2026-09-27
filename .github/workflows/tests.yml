@@ -28,6 +28,25 @@ jobs:
       - name: Run Pint (Code Style Check)
         run: ./vendor/bin/pint --test
 
+  larastan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          tools: composer:v2
+
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
+
+      - name: Run Larastan (Static Analysis)
+        run: ./vendor/bin/phpstan analyse --memory-limit=1G --no-progress
+
   pest:
     name: pest (${{ matrix.database }})
     runs-on: ubuntu-latest

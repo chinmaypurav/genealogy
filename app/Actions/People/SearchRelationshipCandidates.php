@@ -7,6 +7,7 @@ namespace App\Actions\People;
 use App\Models\Person;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 
 /**
  * Finds a small, team-scoped set of people suitable for a relationship picker.
@@ -73,6 +74,7 @@ class SearchRelationshipCandidates
                 ->youngerThan($person->dob, $person->yob)
                 ->olderThan($person->dod, $person->yod),
             'partner' => $query->partnerOffset($person->dob, $person->yob),
+            default   => throw new InvalidArgumentException("Unsupported relationship [{$relationship}]."),
         };
 
         return $query;
