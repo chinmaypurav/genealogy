@@ -7,6 +7,7 @@ namespace Database\Factories;
 use App\Models\Person;
 use App\Models\PersonEvent;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Date;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PersonEvent>
@@ -27,7 +28,7 @@ final class PersonEventFactory extends Factory
             'type'        => fake()->randomElement(PersonEvent::EVENT_TYPES),
             'description' => fake()->boolean(60) ? fake()->sentence() : null,
             'date'        => $useDate ? fake()->dateTimeBetween('-100 years', 'now')->format('Y-m-d') : null,
-            'year'        => $useDate ? null : fake()->numberBetween(1850, (int) date('Y')),
+            'year'        => $useDate ? null : fake()->numberBetween(1850, Date::now()->year),
             'place'       => fake()->boolean(50) ? fake()->words(3, true) : null,
             'street'      => fake()->boolean(40) ? fake()->streetName() : null,
             'number'      => fake()->boolean(40) ? fake()->buildingNumber() : null,
@@ -227,7 +228,7 @@ final class PersonEventFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'date' => null,
-            'year' => $year ?? fake()->numberBetween(1850, (int) date('Y')),
+            'year' => $year ?? fake()->numberBetween(1850, Date::now()->year),
         ]);
     }
 

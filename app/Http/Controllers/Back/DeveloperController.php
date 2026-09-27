@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Back;
 use App\Countries;
 use App\Http\Controllers\Controller;
 use App\Models\Userlog;
+use Illuminate\Support\Facades\Date;
 use Illuminate\View\View;
 
 final class DeveloperController extends Controller
@@ -98,14 +99,14 @@ final class DeveloperController extends Controller
 
         $statistics_month = Userlog::selectRaw('MONTH(created_at) AS period')
             ->selectRaw('COUNT(*) AS visitors')
-            ->whereYear('created_at', date('Y'))
+            ->whereYear('created_at', Date::now()->year)
             ->groupBy('period')
             ->orderBy('period')
             ->get();
 
         $statistics_month = Userlog::selectRaw('LPAD(MONTH(created_at), 2, 0) AS period')
             ->selectRaw('COUNT(*) AS visitors')
-            ->whereYear('created_at', date('Y'))
+            ->whereYear('created_at', Date::now()->year)
             ->groupBy('period')
             ->orderBy('period')
             ->get();
@@ -115,7 +116,7 @@ final class DeveloperController extends Controller
 
         $statistics_week = Userlog::selectRaw('LPAD(WEEK(created_at, 3), 2, 0) AS period')
             ->selectRaw('COUNT(*) AS visitors')
-            ->whereYear('created_at', date('Y'))
+            ->whereYear('created_at', Date::now()->year)
             ->groupBy('period')
             ->orderBy('period')
             ->get();

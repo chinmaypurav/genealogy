@@ -2,7 +2,7 @@
     <!-- Left Section: Copyright and Licensing -->
     <div class="text-left">
         <p>
-            Copyright © {{ date('Y') }} |
+            Copyright © {{ Date::now()->year }} |
             <x-link href="https://www.kreaweb.be/" target="_blank" aria-label="Visit Kreaweb website"> KREAWEB </x-link
             >.
         </p>

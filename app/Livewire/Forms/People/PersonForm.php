@@ -8,6 +8,7 @@ use App\Models\Gender;
 use App\Rules\DobValid;
 use App\Rules\YobValid;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Date;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
@@ -76,7 +77,7 @@ final class PersonForm extends Form
             'nickname'  => ['nullable', 'string', 'max:255'],
             'sex'       => ['nullable', 'string', 'max:1', 'in:m,f', 'required_without:person_id'],
             'gender_id' => ['nullable', 'integer'],
-            'yob'       => ['nullable', 'integer', 'min:1', 'max:' . date('Y'), new YobValid],
+            'yob'       => ['nullable', 'integer', 'min:1', 'max:' . Date::now()->year, new YobValid],
             'dob'       => ['nullable', 'date_format:Y-m-d', 'before_or_equal:today', new DobValid],
             'pob'       => ['nullable', 'string', 'max:255'],
 

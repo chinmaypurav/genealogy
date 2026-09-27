@@ -1,6 +1,6 @@
 ## Licencia MIT
 
-Derechos de autor &copy; : {{ date('Y') }} <a href="https://www.kreaweb.be" target="_blank">kreaweb.be</a>
+Derechos de autor &copy; : {{ Date::now()->year }} <a href="https://www.kreaweb.be" target="_blank">kreaweb.be</a>
 
 Por la presente se concede permiso, sin coste alguno, a cualquier persona que obtenga una copia
 de este software y archivos de documentación asociados (el "<b>Software</b>"), para tratar

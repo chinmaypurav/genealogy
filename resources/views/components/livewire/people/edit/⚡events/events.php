@@ -7,6 +7,7 @@ use App\Livewire\Traits\AuthorizesPersonActions;
 use App\Models\Person;
 use App\Models\PersonEvent;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Date;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
@@ -126,7 +127,7 @@ new class extends Component
             'type'        => 'required|in:' . implode(',', PersonEvent::EVENT_TYPES),
             'description' => 'nullable|string|max:1000',
             'date'        => 'nullable|date',
-            'year'        => 'nullable|integer|min:1|max:' . (date('Y')),
+            'year'        => 'nullable|integer|min:1|max:' . Date::now()->year,
             'place'       => 'nullable|string|max:255',
             'street'      => 'nullable|string|max:100',
             'number'      => 'nullable|string|max:20',

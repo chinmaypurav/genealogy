@@ -95,7 +95,7 @@
                         label="{{ __('person.yob') }} :"
                         autocomplete="yob"
                         type="number"
-                        max="{{ date('Y') }}"
+                        max="{{ Date::now()->year }}"
                     />
                 </div>
 

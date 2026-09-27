@@ -23,7 +23,7 @@
                         id="yod"
                         label="{{ __('person.yod') }} :"
                         type="number"
-                        max="{{ date('Y') }}"
+                        max="{{ Date::now()->year }}"
                         autofocus
                     />
                 </div>

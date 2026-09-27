@@ -1,6 +1,6 @@
 ## MIT Lisansı
 
-Telif Hakkı © : {{ date('Y') }} [kreaweb.be](https://www.kreaweb.be)
+Telif Hakkı © : {{ Date::now()->year }} [kreaweb.be](https://www.kreaweb.be)
 
 Bu yazılımın ve ilgili dokümantasyon dosyalarının ("**Yazılım**") bir kopyasını edinen herkese, hiçbir ücret ödemeksizin, aşağıdaki koşullar altında Yazılım üzerinde kısıtlama olmaksızın işlem yapma izni verilir. Bu işlemler arasında Yazılımı kullanma, kopyalama, değiştirme, birleştirme, yayımlama, dağıtma, alt lisans verme ve/veya satma hakları ile Yazılımın sağlandığı kişilere de aynı işlemleri yapma izni dahildir.
 

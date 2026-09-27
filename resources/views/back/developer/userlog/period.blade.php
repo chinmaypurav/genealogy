@@ -9,7 +9,7 @@
             <div class="flex h-14 min-h-min flex-col rounded-t border-b-2 border-neutral-100 p-2 text-lg font-medium dark:border-neutral-600 dark:text-neutral-50">
                 <div class="flex flex-wrap items-start justify-center gap-2">
                     <div class="max-w-full min-w-max flex-1 grow">
-                        {{ __('userlog.period') }} : {{ __('userlog.week') }} ({{ date('Y') }})
+                        {{ __('userlog.period') }} : {{ __('userlog.week') }} ({{ Date::now()->year }})
                     </div>
 
                     <div class="max-w-min min-w-max flex-1 grow text-end">
@@ -31,7 +31,7 @@
             <div class="flex h-14 min-h-min flex-col rounded-t border-b-2 border-neutral-100 p-2 text-lg font-medium dark:border-neutral-600 dark:text-neutral-50">
                 <div class="flex flex-wrap items-start justify-center gap-2">
                     <div class="max-w-full min-w-max flex-1 grow">
-                        {{ __('userlog.period') }} : {{ __('userlog.month') }} ({{ date('Y') }})
+                        {{ __('userlog.period') }} : {{ __('userlog.month') }} ({{ Date::now()->year }})
                     </div>
 
                     <div class="max-w-min min-w-max flex-1 grow text-end">

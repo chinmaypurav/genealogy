@@ -11,6 +11,7 @@ use App\Models\Couple;
 use App\Models\Person;
 use App\Rules\DobValid;
 use App\Rules\YobValid;
+use Illuminate\Support\Facades\Date;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use TallStackUi\Traits\Interactions;
@@ -151,7 +152,7 @@ new class extends Component
             'form.nickname'  => ['nullable', 'string', 'max:255'],
             'form.sex'       => ['nullable', 'string', 'max:1', 'in:m,f', 'required_without:form.person_id', 'required_with:form.surname'],
             'form.gender_id' => ['nullable', 'integer'],
-            'form.yob'       => ['nullable', 'integer', 'min:1', 'max:' . date('Y'), new YobValid],
+            'form.yob'       => ['nullable', 'integer', 'min:1', 'max:' . Date::now()->year, new YobValid],
             'form.dob'       => ['nullable', 'date_format:Y-m-d', 'before_or_equal:today', new DobValid],
             'form.pob'       => ['nullable', 'string', 'max:255'],
 

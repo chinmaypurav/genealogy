@@ -8,6 +8,7 @@ use App\Models\Person;
 use App\Rules\DodValid;
 use App\Rules\YodValid;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Date;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use TallStackUi\Traits\Interactions;
@@ -79,7 +80,7 @@ new class extends Component
     protected function rules(): array
     {
         return [
-            'yod'                         => ['nullable', 'integer', 'min:1', 'max:' . date('Y'), new YodValid],
+            'yod'                         => ['nullable', 'integer', 'min:1', 'max:' . Date::now()->year, new YodValid],
             'dod'                         => ['nullable', 'date_format:Y-m-d', 'before_or_equal:today', new DodValid],
             'pod'                         => ['nullable', 'string', 'max:255'],
             'cemetery_location_name'      => ['nullable', 'string', 'max:255'],
