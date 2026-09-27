@@ -16,7 +16,6 @@ return [
     // Etiketler
     'all'               => 'Tümü',
     'filter'            => 'Filtre',
-    'api_tokens'        => 'API belirteçleri',
     'attention'         => 'Dikkat',
     'circa'             => 'yaklaşık',
     'contact'           => 'İletişim',

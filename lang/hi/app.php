@@ -14,7 +14,6 @@ return [
 
     'all'               => 'सभी',
     'filter'            => 'फ़िल्टर',
-    'api_tokens'        => 'API टोकन',
     'attention'         => 'ध्यान दें',
     'circa'             => 'लगभग',
     'contact'           => 'संपर्क',

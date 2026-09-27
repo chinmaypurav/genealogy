@@ -27,15 +27,32 @@ class TeamRole
         return new self('owner', 'Owner', ['*']);
     }
 
+    /**
+     * Every assignable role, in the order defined in config/teams.php.
+     *
+     * @return list<self>
+     */
+    public static function all(): array
+    {
+        return array_values(array_filter(array_map(self::find(...), array_keys(self::definitions()))));
+    }
+
     public static function find(string $key): ?self
     {
-        /** @var array{name: string, description: string, permissions: list<string>}|null $role */
-        $role = config('teams.roles')[$key] ?? null;
+        $role = self::definitions()[$key] ?? null;
 
         if ($role === null) {
             return null;
         }
 
         return new self($key, $role['name'], $role['permissions'], $role['description']);
+    }
+
+    /**
+     * @return array<string, array{name: string, description: string, permissions: list<string>}>
+     */
+    protected static function definitions(): array
+    {
+        return config('teams.roles');
     }
 }

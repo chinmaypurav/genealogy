@@ -14,12 +14,11 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Laravel\Jetstream\Contracts\InvitesTeamMembers;
 
 /**
  * Invites an email address to join a team and emails them a signed accept link.
  */
-class InviteTeamMember implements InvitesTeamMembers
+class InviteTeamMember
 {
     /**
      * Invite a new team member to the given team.

@@ -7,7 +7,6 @@ namespace App\Actions\Teams;
 use App\Enums\PersonMediaCollection;
 use App\Models\Person;
 use App\Models\Team;
-use Laravel\Jetstream\Contracts\DeletesTeams;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
@@ -15,7 +14,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * Moves the acting user to another team first so they never end up on a deleted one.
  */
-class DeleteTeam implements DeletesTeams
+class DeleteTeam
 {
     /**
      * Delete the given team.

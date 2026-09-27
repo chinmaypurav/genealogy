@@ -9,14 +9,13 @@ use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
-use Laravel\Jetstream\Contracts\RemovesTeamMembers;
 
 /**
  * Removes a member from a team, or lets a member leave, and moves them back to their personal team.
  *
  * Team owners can't be removed; they must transfer ownership or delete the team.
  */
-class RemoveTeamMember implements RemovesTeamMembers
+class RemoveTeamMember
 {
     /**
      * Remove the team member from the given team.

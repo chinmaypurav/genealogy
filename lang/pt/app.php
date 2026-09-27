@@ -14,7 +14,6 @@ return [
 
     'all'               => 'Todos',
     'filter'            => 'Filtro',
-    'api_tokens'        => 'Tokens de API',
     'attention'         => 'Atenção',
     'circa'             => 'c.',
     'contact'           => 'Contato',

@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Support\PersonPhotos;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Laravel\Jetstream\Http\Livewire\DeleteTeamForm;
 use Livewire\Livewire;
 
 uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
@@ -24,7 +23,7 @@ test('teams can be deleted', function (): void {
         $otherUser = User::factory()->create(), ['role' => 'test-role']
     );
 
-    $component = Livewire::test(DeleteTeamForm::class, ['team' => $team->fresh()])
+    $component = Livewire::test('teams::delete-team-form', ['team' => $team->fresh()])
         ->call('deleteTeam');
 
     expect($team->fresh())->toBeNull();
@@ -34,7 +33,7 @@ test('teams can be deleted', function (): void {
 test('personal teams cant be deleted', function (): void {
     $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
-    $component = Livewire::test(DeleteTeamForm::class, ['team' => $user->currentTeam])
+    $component = Livewire::test('teams::delete-team-form', ['team' => $user->currentTeam])
         ->call('deleteTeam')
         ->assertHasErrors(['team']);
 
@@ -59,7 +58,7 @@ test('photos of the team are deleted with the team', function (): void {
     $teamPhotoDirectory  = dirname(new PersonPhotos(Person::withoutGlobalScopes()->find($person->id))->primary()->getPath());
     $otherPhotoDirectory = dirname(new PersonPhotos($other->fresh())->primary()->getPath());
 
-    Livewire::test(DeleteTeamForm::class, ['team' => $team->fresh()])
+    Livewire::test('teams::delete-team-form', ['team' => $team->fresh()])
         ->call('deleteTeam');
 
     expect(is_dir($teamPhotoDirectory))->toBeFalse()

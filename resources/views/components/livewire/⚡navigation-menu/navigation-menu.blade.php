@@ -86,13 +86,6 @@
                                 {{ __('app.my_profile') }}
                             </x-dropdown-link>
 
-                            @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                                <x-dropdown-link href="{{ route('api-tokens.index') }}">
-                                    <x-ts-icon icon="tabler.api" class="mr-1 inline-block size-5" />
-                                    {{ __('app.api_tokens') }}
-                                </x-dropdown-link>
-                            @endif
-
                             <div class="border-t border-gray-200"></div>
 
                             {{-- authentication --}}
@@ -317,16 +310,6 @@
                         <x-ts-icon icon="tabler.id" class="mr-1 inline-block size-5" />
                         {{ __('app.my_profile') }}
                     </x-nav-link-responsive>
-
-                    @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                        <x-nav-link-responsive
-                            href="{{ route('api-tokens.index') }}"
-                            :active="request()->routeIs('api-tokens.index')"
-                        >
-                            <x-ts-icon icon="tabler.api" class="mr-1 inline-block size-5" />
-                            {{ __('app.api_tokens') }}
-                        </x-nav-link-responsive>
-                    @endif
 
                     {{-- authentication --}}
                     <form method="POST" action="{{ route('logout') }}" x-data>

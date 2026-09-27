@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Models\User;
-use Laravel\Jetstream\Http\Livewire\TeamMemberManager;
 use Livewire\Livewire;
 
 uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
@@ -15,7 +14,7 @@ test('team members can be removed from teams', function (): void {
         $otherUser = User::factory()->withPersonalTeam()->create(), ['role' => 'administrator']
     );
 
-    $component = Livewire::test(TeamMemberManager::class, ['team' => $user->currentTeam])
+    $component = Livewire::test('teams::team-member-manager', ['team' => $user->currentTeam])
         ->set('teamMemberIdBeingRemoved', $otherUser->id)
         ->call('removeTeamMember');
 
@@ -31,7 +30,7 @@ test('only team owner can remove team members', function (): void {
 
     $this->actingAs($otherUser);
 
-    $component = Livewire::test(TeamMemberManager::class, ['team' => $user->currentTeam])
+    $component = Livewire::test('teams::team-member-manager', ['team' => $user->currentTeam])
         ->set('teamMemberIdBeingRemoved', $user->id)
         ->call('removeTeamMember')
         ->assertStatus(403);

@@ -160,17 +160,17 @@
 
                                 <div class="flex items-center">
                                     {{-- manage team member role --}}
-                                    @if (Gate::check('updateTeamMember', $team) and Laravel\Jetstream\Jetstream::hasRoles())
+                                    @if (Gate::check('updateTeamMember', $team))
                                         <x-ts-button
                                             class="ms-3 min-w-28"
                                             wire:click="manageRole('{{ $user->id }}')"
                                             title="{{ __('team.change_role') }}"
                                         >
-                                            {{ __('jetstream.role_' . strtolower(Laravel\Jetstream\Jetstream::findRole($user->membership->role)->key) . '_name') }}
+                                            {{ __('jetstream.role_' . $user->membership->role . '_name') }}
                                         </x-ts-button>
-                                    @elseif (Laravel\Jetstream\Jetstream::hasRoles())
+                                    @else
                                         <div class="ms-3 min-w-28 text-sm">
-                                            {{ __('jetstream.role_' . strtolower(Laravel\Jetstream\Jetstream::findRole($user->membership->role)->key) . '_name') }}
+                                            {{ __('jetstream.role_' . $user->membership->role . '_name') }}
                                         </div>
                                     @endif
 
