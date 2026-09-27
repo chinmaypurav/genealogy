@@ -7,8 +7,6 @@
 
 ## Demo
 
-<a href="https://genealogy.kreaweb.be/" target="_blank">https://genealogy.kreaweb.be/</a>
-
 Demo ini memiliki 2 silsilah keluarga yang diimplementasikan, **BRITISH ROYALS** dan **KENNEDY**.
 
 <table>
@@ -48,4 +46,4 @@ Demo ini memiliki 2 silsilah keluarga yang diimplementasikan, **BRITISH ROYALS**
 
 ## Repositori Github
 
-<a href="https://github.com/MGeurts/genealogy/" target="_blank">https://github.com/MGeurts/genealogy</a>
+<a href="https://github.com/chinmaypurav/genealogy/" target="_blank">https://github.com/chinmaypurav/genealogy</a>

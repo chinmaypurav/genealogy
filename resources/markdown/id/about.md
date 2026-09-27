@@ -1,6 +1,6 @@
 ## Lisensi MIT
 
-Hak Cipta &copy; : {{ Date::now()->year }} <a href="https://www.kreaweb.be" target="_blank">kreaweb.be</a>
+Hak Cipta &copy; : {{ Date::now()->year }} Genealogy contributors
 
 Dengan ini diberikan izin, tanpa biaya, kepada siapa pun yang memperoleh salinan
 perangkat lunak ini dan file dokumentasi terkait ("<b>Perangkat Lunak</b>"), untuk menggunakan

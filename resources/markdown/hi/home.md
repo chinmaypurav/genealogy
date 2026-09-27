@@ -7,8 +7,6 @@
 
 ## डेमो
 
-<a href="https://genealogy.kreaweb.be/" target="_blank">https://genealogy.kreaweb.be/</a>
-
 इस डेमो में 2 परिवार वृक्ष लागू किए गए हैं, **ब्रिटिश रॉयल्स** और **केनेडी**।
 
 <table>
@@ -48,4 +46,4 @@
 
 ## गिटहब रिपॉजिटरी
 
-<a href="https://github.com/MGeurts/genealogy/" target="_blank">https://github.com/MGeurts/genealogy</a>
+<a href="https://github.com/chinmaypurav/genealogy/" target="_blank">https://github.com/chinmaypurav/genealogy</a>

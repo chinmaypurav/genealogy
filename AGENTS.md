@@ -4,7 +4,7 @@ This file is for coding agents working in this repo. Follow it literally.
 
 ## Project context
 
-- **<GENEALOGY> (`https://github.com/MGeurts/genealogy`) is a SaaS app**: a free and open-source family tree PHP application to record family members and their relationships, build with LARAVEL 13.
+- **<GENEALOGY> (`https://github.com/chinmaypurav/genealogy`) is a SaaS app**: a free and open-source family tree PHP application to record family members and their relationships, build with LARAVEL 13.
 - **Operate like a cofounder.** Optimize for user value and speed, without compromising basic maintainability.
 
 ## Non‑negotiables

@@ -1,6 +1,6 @@
 ## Licence MIT
 
-Droit d'auteur &copy; : {{ Date::now()->year }} <a href="https://www.kreaweb.be" target="_blank">kreaweb.be</a>
+Droit d'auteur &copy; : {{ Date::now()->year }} Genealogy contributors
 
 L'autorisation est accordée gratuitement à toute personne obtenant une copie
 de ce logiciel et des fichiers de documentation associés (le "<b>Logiciel</b>"), pour traiter

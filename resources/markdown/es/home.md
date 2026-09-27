@@ -7,8 +7,6 @@
 
 ## Demo
 
-<a href="https://genealogy.kreaweb.be/" target="_blank">https://genealogy.kreaweb.be/</a>
-
 Esta demo tiene implementados 2 árboles genealógicos: **BRITISH ROYALS** y **KENNEDY**.
 
 <table>
@@ -48,4 +46,4 @@ Esta demo tiene implementados 2 árboles genealógicos: **BRITISH ROYALS** y **K
 
 ## Repositorio de Github
 
-<a href="https://github.com/MGeurts/genealogy/" target="_blank">https://github.com/MGeurts/genealogy</a>
+<a href="https://github.com/chinmaypurav/genealogy/" target="_blank">https://github.com/chinmaypurav/genealogy</a>

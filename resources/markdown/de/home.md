@@ -7,8 +7,6 @@
 
 ## Demo
 
-<a href="https://genealogy.kreaweb.be/" target="_blank">https://genealogy.kreaweb.be/</a>
-
 Diese Demo enthält 2 implementierte Familienstammbäume: **BRITISCH ROYALS** und **KENNEDY**.
 
 <table>
@@ -48,4 +46,4 @@ Diese Demo enthält 2 implementierte Familienstammbäume: **BRITISCH ROYALS** un
 
 ## Github-Repository
 
-<a href="https://github.com/MGeurts/genealogy/" target="_blank">https://github.com/MGeurts/genealogy</a>
+<a href="https://github.com/chinmaypurav/genealogy/" target="_blank">https://github.com/chinmaypurav/genealogy</a>

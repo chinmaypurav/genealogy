@@ -17,8 +17,7 @@ Please update to the most recent release to ensure you receive the latest securi
 If you discover a security vulnerability, please **do not** create a public GitHub issue.  
 Instead, report it privately via one of the following methods:
 
--   **GitHub Security Advisories** (preferred): [Open a new draft advisory](../../security/advisories/new)
--   **Email**: bin@kreaweb.be
+-   **GitHub Security Advisories**: [Open a new draft advisory](../../security/advisories/new)
 
 When reporting, please include:
 

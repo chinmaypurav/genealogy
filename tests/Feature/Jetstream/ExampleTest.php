@@ -7,3 +7,7 @@ test('the application returns a successful response', function (): void {
 
     $response->assertStatus(200);
 });
+
+test('public pages return a successful response', function (string $routeName): void {
+    $this->get(route($routeName))->assertOk();
+})->with(['home', 'about', 'help']);

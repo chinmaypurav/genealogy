@@ -229,8 +229,7 @@ final class AppServiceProvider extends ServiceProvider
     {
         AboutCommand::add('Application', [
             'Name'    => 'Genealogy',
-            'Author'  => 'kreaweb.be',
-            'GitHub'  => 'https://github.com/MGeurts/genealogy',
+            'GitHub'  => 'https://github.com/chinmaypurav/genealogy',
             'License' => 'MIT License',
         ]);
     }

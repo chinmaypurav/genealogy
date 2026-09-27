@@ -52,7 +52,7 @@ If you just downloaded a ZIP or copied the folder, do the following:
 4. **Empty the old folder and clone the latest version**:
 
     ```bash
-    git clone https://github.com/MGeurts/genealogy.git
+    git clone https://github.com/chinmaypurav/genealogy.git
     ```
 
 5. Replace your old `.env`, restore any backed-up data.
