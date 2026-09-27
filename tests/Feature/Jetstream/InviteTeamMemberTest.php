@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Mail\TeamInvitation;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Jetstream\Features;
 use Laravel\Jetstream\Http\Livewire\TeamMemberManager;
-use Laravel\Jetstream\Mail\TeamInvitation;
 use Livewire\Livewire;
 
 uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
@@ -53,4 +53,18 @@ test('team member invitations can be cancelled', function (): void {
     $component->call('cancelTeamInvitation', $invitationId);
 
     expect($user->currentTeam->fresh()->teamInvitations)->toHaveCount(0);
+});
+
+test('invited users can accept the invitation from the email link', function (): void {
+    $owner   = User::factory()->withPersonalTeam()->create();
+    $invitee = User::factory()->withPersonalTeam()->create();
+
+    $invitation = $owner->currentTeam->teamInvitations()->create(['email' => $invitee->email, 'role' => 'editor']);
+
+    $acceptUrl = new TeamInvitation($invitation)->content()->with['acceptUrl'];
+
+    $this->actingAs($invitee)->get($acceptUrl)->assertRedirect();
+
+    expect($invitee->fresh()->hasTeamRole($owner->currentTeam, 'editor'))->toBeTrue()
+        ->and($owner->currentTeam->teamInvitations()->count())->toBe(0);
 });

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Concerns\HasTeams;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -17,7 +18,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
-use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 use Override;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
@@ -44,6 +44,7 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property-read string|null $name
  * @property-read string $profile_photo_url
  * @property-read Team|null $currentTeam
+ * @property-read Membership $membership Only set when loaded through a team's users relation.
  */
 final class User extends Authenticatable
     // class User extends Authenticatable implements MustVerifyEmail
