@@ -6,10 +6,9 @@ use App\Models\Couple;
 use App\Models\Person;
 
 test('members without couple permissions cannot add or edit partners', function (): void {
-    $member  = $this->memberWithRole('member');
-    $person  = Person::factory()->create(['team_id' => $member->current_team_id]);
-    $partner = Person::factory()->create(['team_id' => $member->current_team_id]);
-    $couple  = Couple::factory()->create(['team_id' => $member->current_team_id, 'person1_id' => $person->id, 'person2_id' => $partner->id]);
+    $member = $this->memberWithRole('member');
+    $person = Person::factory()->create(['team_id' => $member->current_team_id]);
+    $couple = Couple::factory()->create(['person1_id' => $person->id]);
 
     $this->actingAs($member);
 
@@ -18,10 +17,9 @@ test('members without couple permissions cannot add or edit partners', function 
 });
 
 test('editors can add and edit partners', function (): void {
-    $editor  = $this->memberWithRole('editor');
-    $person  = Person::factory()->create(['team_id' => $editor->current_team_id]);
-    $partner = Person::factory()->create(['team_id' => $editor->current_team_id]);
-    $couple  = Couple::factory()->create(['team_id' => $editor->current_team_id, 'person1_id' => $person->id, 'person2_id' => $partner->id]);
+    $editor = $this->memberWithRole('editor');
+    $person = Person::factory()->create(['team_id' => $editor->current_team_id]);
+    $couple = Couple::factory()->create(['person1_id' => $person->id]);
 
     $this->actingAs($editor);
 

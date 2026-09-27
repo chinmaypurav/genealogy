@@ -11,23 +11,21 @@ class CoupleFactory extends Factory
 {
     public function definition(): array
     {
-        // Get two different people
-        $person1 = Person::inRandomOrder()->first() ?? Person::factory()->create();
-        do {
-            $person2 = Person::inRandomOrder()->first() ?? Person::factory()->create();
-        } while ($person1->id === $person2->id);
-
         $dateStart = $this->faker->optional()->date();
         $dateEnd   = $this->faker->optional()->dateTimeBetween($dateStart, '+20 years');
 
+        /*
+         * Partners default to fresh people so the factory never depends on existing rows.
+         * Keys are resolved in order: the team follows person1, and a generated person2 joins that team.
+         */
         return [
-            'person1_id' => $person1->id,
-            'person2_id' => $person2->id,
+            'person1_id' => Person::factory(),
+            'team_id'    => fn (array $attributes): ?int => Person::withoutGlobalScopes()->find($attributes['person1_id'])?->team_id,
+            'person2_id' => fn (array $attributes): int => Person::factory()->create(['team_id' => $attributes['team_id']])->id,
             'date_start' => $dateStart,
             'date_end'   => $dateEnd,
             'is_married' => $this->faker->boolean(70),
             'has_ended'  => $dateEnd !== null,
-            'team_id'    => null, // or provide a Team::factory() if teams are used
         ];
     }
 }
