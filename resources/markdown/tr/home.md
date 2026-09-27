@@ -7,8 +7,6 @@
 
 ## Demo
 
-<a href="https://genealogy.kreaweb.be/" target="_blank">https://genealogy.kreaweb.be/</a>
-
 Bu demoda 2 adet soyağacı bulunmaktadır: **BRITANYA KRALİYET AİLESİ** ve **KENNEDY**.
 
 <table>
@@ -48,4 +46,4 @@ Bu demoda 2 adet soyağacı bulunmaktadır: **BRITANYA KRALİYET AİLESİ** ve *
 
 ## Github Deposu
 
-<a href="https://github.com/MGeurts/genealogy/" target="_blank">https://github.com/MGeurts/genealogy</a>
+<a href="https://github.com/chinmaypurav/genealogy/" target="_blank">https://github.com/chinmaypurav/genealogy</a>

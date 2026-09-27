@@ -8,52 +8,7 @@
 
         <!-- Social Media Icons -->
         <div class="flex justify-center">
-            <a
-                href="https://www.facebook.com/"
-                class="mr-6"
-                target="_blank"
-                aria-label="Visit Facebook"
-                title="Facebook"
-            >
-                <x-ts-icon icon="tabler.brand-facebook" class="text-neutral-900 dark:text-neutral-200" />
-            </a>
-            <a
-                href="https://twitter.com/Kreaweb_be"
-                class="mr-6"
-                target="_blank"
-                aria-label="Visit X (formerly Twitter)"
-                title="X"
-            >
-                <x-ts-icon icon="tabler.brand-x" class="text-neutral-900 dark:text-neutral-200" />
-            </a>
-            <a
-                href="https://www.instagram.com/"
-                class="mr-6"
-                target="_blank"
-                aria-label="Visit Instagram"
-                title="Instagram"
-            >
-                <x-ts-icon icon="tabler.brand-instagram" class="text-neutral-900 dark:text-neutral-200" />
-            </a>
-            <a
-                href="https://www.linkedin.com/"
-                class="mr-6"
-                target="_blank"
-                aria-label="Visit LinkedIn"
-                title="LinkedIn"
-            >
-                <x-ts-icon icon="tabler.brand-linkedin" class="text-neutral-900 dark:text-neutral-200" />
-            </a>
-            <a
-                href="https://www.youtube.com/channel/UClUVszEUeb-nY7qM00ERCHg"
-                class="mr-6"
-                target="_blank"
-                aria-label="Visit YouTube"
-                title="YouTube"
-            >
-                <x-ts-icon icon="tabler.brand-youtube" class="text-neutral-900 dark:text-neutral-200" />
-            </a>
-            <a href="https://github.com/MGeurts" class="" target="_blank" aria-label="Visit GitHub" title="GitHub">
+            <a href="https://github.com/chinmaypurav/genealogy" class="" target="_blank" aria-label="Visit GitHub" title="GitHub">
                 <x-ts-icon icon="tabler.brand-github" class="text-neutral-900 dark:text-neutral-200" />
             </a>
         </div>

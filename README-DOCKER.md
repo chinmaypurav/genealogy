@@ -20,7 +20,7 @@ The Docker setup consists of:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/MGeurts/genealogy.git
+git clone https://github.com/chinmaypurav/genealogy.git
 cd genealogy
 ```
 
@@ -394,5 +394,5 @@ docker compose down --rmi all
 For issues related to:
 
 -   Application functionality: See main [README.md](README.md)
--   Docker setup: Submit an issue on [GitHub](https://github.com/MGeurts/genealogy/issues)
+-   Docker setup: Submit an issue on [GitHub](https://github.com/chinmaypurav/genealogy/issues)
 -   Server Side Up images: Visit [Server Side Up Documentation](https://serversideup.net/open-source/docker-php/docs)

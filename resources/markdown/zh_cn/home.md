@@ -7,8 +7,6 @@
 
 ## 演示
 
-<a href="https://genealogy.kreaweb.be/" target="_blank">https://genealogy.kreaweb.be/</a>
-
 这个演示了 2 个家族，**BRITISH ROYALS** 和 **KENNEDY**。
 
 <table>
@@ -48,4 +46,4 @@
 
 ## Github 仓库
 
-<a href="https://github.com/MGeurts/genealogy/" target="_blank">https://github.com/MGeurts/genealogy</a>
+<a href="https://github.com/chinmaypurav/genealogy/" target="_blank">https://github.com/chinmaypurav/genealogy</a>

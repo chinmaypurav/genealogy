@@ -1,6 +1,6 @@
 ## Licença MIT
 
-Direitos autorais &copy; : {{ Date::now()->year }} <a href="https://www.kreaweb.be" target="_blank">kreaweb.be</a>
+Direitos autorais &copy; : {{ Date::now()->year }} Genealogy contributors
 
 É concedida permissão, gratuitamente, a qualquer pessoa que obtenha uma cópia
 deste software e ficheiros de documentação associados (o "<b>Software</b>"), para lidar

@@ -1,5 +1,5 @@
 {
-    "name": "mgeurts/genealogy",
+    "name": "chinmaypurav/genealogy",
     "type": "project",
     "description": "A free and open-source family tree application to record family members and their relationships.",
     "keywords": [
@@ -18,17 +18,15 @@
       "family-history",
       "laravel-application"
     ],
-    "homepage": "https://github.com/MGeurts/genealogy",
+    "homepage": "https://github.com/chinmaypurav/genealogy",
     "support": {
-      "source": "https://github.com/MGeurts/genealogy",
-      "demo": "https://genealogy.kreaweb.be",
-      "docs": "https://genealogy.kreaweb.be/help"
+      "source": "https://github.com/chinmaypurav/genealogy"
     },
     "license": "MIT",
     "authors": [
         {
-            "name": "Marc Geurts",
-            "email": "info@kreaweb.be",
+            "name": "Chinmay Purav",
+            "email": "chinmaydpurav@gmail.com",
             "role": "Developer"
         }
     ],

@@ -7,8 +7,6 @@
 
 ## Demo
 
-<a href="https://genealogy.kreaweb.be/" target="_blank">https://genealogy.kreaweb.be/</a>
-
 Demo này có 2 cây gia đình được triển khai: **BRITISH ROYALS** và **KENNEDY**.
 
 <table>
@@ -48,4 +46,4 @@ Demo này có 2 cây gia đình được triển khai: **BRITISH ROYALS** và **
 
 ## Kho lưu trữ Github
 
-<a href="https://github.com/MGeurts/genealogy/" target="_blank">https://github.com/MGeurts/genealogy</a>
+<a href="https://github.com/chinmaypurav/genealogy/" target="_blank">https://github.com/chinmaypurav/genealogy</a>

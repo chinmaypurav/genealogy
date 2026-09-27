@@ -1,6 +1,6 @@
 ## MIT-licentie
 
-Copyright &copy; : {{ Date::now()->year }} <a href="https://www.kreaweb.be" target="_blank">kreaweb.be</a>
+Copyright &copy; : {{ Date::now()->year }} Genealogy contributors
 
 Hierbij wordt kosteloos toestemming verleend aan iedereen die een kopie verkrijgt
 van deze software en bijbehorende documentatiebestanden (de "<b>Software</b>"), om te handelen
