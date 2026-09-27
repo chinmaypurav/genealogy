@@ -16,7 +16,6 @@ return [
     // 标签
     'all'               => '全部',
     'filter'            => '筛选',
-    'api_tokens'        => 'API 令牌',
     'attention'         => '注意',
     'circa'             => '约',
     'contact'           => '联系',

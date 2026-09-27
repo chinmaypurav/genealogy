@@ -8,12 +8,11 @@ use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
-use Laravel\Jetstream\Contracts\UpdatesTeamNames;
 
 /**
  * Updates a team's name and description.
  */
-class UpdateTeamName implements UpdatesTeamNames
+class UpdateTeamName
 {
     /**
      * Validate and update the given team's name.

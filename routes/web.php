@@ -13,7 +13,7 @@ Route::controller(App\Http\Controllers\Front\PageController::class)->group(funct
     Route::get('help', 'help')->name('help');
 });
 
-// Still served by Jetstream until #21 steps 3b and 4 replace these screens.
+// Still served by Jetstream until #21 step 4 replaces these screens.
 Route::get('terms-of-service', [Laravel\Jetstream\Http\Controllers\Livewire\TermsOfServiceController::class, 'show'])->name('terms.show');
 Route::get('privacy-policy', [Laravel\Jetstream\Http\Controllers\Livewire\PrivacyPolicyController::class, 'show'])->name('policy.show');
 
@@ -31,11 +31,11 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function (): void {
-    // teams: still served by Jetstream until #21 step 3b
-    Route::get('teams/create', [Laravel\Jetstream\Http\Controllers\Livewire\TeamController::class, 'create'])->name('teams.create');
-    Route::get('teams/{team}', [Laravel\Jetstream\Http\Controllers\Livewire\TeamController::class, 'show'])->name('teams.show');
-    Route::put('current-team', [Laravel\Jetstream\Http\Controllers\CurrentTeamController::class, 'update'])->name('current-team.update');
-    Route::get('team-invitations/{invitation}', [Laravel\Jetstream\Http\Controllers\TeamInvitationController::class, 'accept'])
+    // teams
+    Route::view('teams/create', 'teams.create')->name('teams.create')->can('create', App\Models\Team::class);
+    Route::get('teams/{team}', App\Http\Controllers\Back\ShowTeamController::class)->name('teams.show')->can('view', 'team');
+    Route::put('current-team', App\Http\Controllers\Back\SwitchCurrentTeamController::class)->name('current-team.update');
+    Route::get('team-invitations/{invitation}', App\Http\Controllers\Back\AcceptTeamInvitationController::class)
         ->middleware('signed')
         ->name('team-invitations.accept');
 

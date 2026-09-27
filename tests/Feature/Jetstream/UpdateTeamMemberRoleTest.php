@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Models\User;
-use Laravel\Jetstream\Http\Livewire\TeamMemberManager;
 use Livewire\Livewire;
 
 uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
@@ -15,7 +14,7 @@ test('team member roles can be updated', function (): void {
         $otherUser = User::factory()->create(), ['role' => 'administrator']
     );
 
-    $component = Livewire::test(TeamMemberManager::class, ['team' => $user->currentTeam])
+    $component = Livewire::test('teams::team-member-manager', ['team' => $user->currentTeam])
         ->set('managingRoleFor', $otherUser)
         ->set('currentRole', 'editor')
         ->call('updateRole');
@@ -36,7 +35,7 @@ test('only team owner can update team member roles', function (): void {
 
     $this->actingAs($otherUser);
 
-    $component = Livewire::test(TeamMemberManager::class, ['team' => $user->currentTeam])
+    $component = Livewire::test('teams::team-member-manager', ['team' => $user->currentTeam])
         ->set('managingRoleFor', $otherUser)
         ->set('currentRole', 'editor')
         ->call('updateRole')

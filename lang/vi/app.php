@@ -16,7 +16,6 @@ return [
     // Labels
     'all'               => 'Tất cả',
     'filter'            => 'Bộ lọc',
-    'api_tokens'        => 'Mã API',
     'attention'         => 'Chú ý',
     'circa'             => 'khoảng',
     'contact'           => 'Liên hệ',

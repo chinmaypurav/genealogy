@@ -10,7 +10,6 @@ use Closure;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Laravel\Jetstream\Contracts\AddsTeamMembers;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -18,7 +17,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  *
  * Kept as an action because both entry points share its authorization, validation and activity log.
  */
-class AddTeamMember implements AddsTeamMembers
+class AddTeamMember
 {
     /**
      * Add a new team member to the given team.

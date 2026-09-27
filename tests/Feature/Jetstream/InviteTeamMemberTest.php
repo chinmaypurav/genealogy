@@ -6,7 +6,6 @@ use App\Mail\TeamInvitation;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Jetstream\Features;
-use Laravel\Jetstream\Http\Livewire\TeamMemberManager;
 use Livewire\Livewire;
 
 uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
@@ -20,7 +19,7 @@ test('team members can be invited to team', function (): void {
 
     $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
-    $component = Livewire::test(TeamMemberManager::class, ['team' => $user->currentTeam])
+    $component = Livewire::test('teams::team-member-manager', ['team' => $user->currentTeam])
         ->set('addTeamMemberForm', [
             'email' => 'test@example.com',
             'role'  => 'administrator',
@@ -41,7 +40,7 @@ test('team member invitations can be cancelled', function (): void {
     $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
     // Add the team member...
-    $component = Livewire::test(TeamMemberManager::class, ['team' => $user->currentTeam])
+    $component = Livewire::test('teams::team-member-manager', ['team' => $user->currentTeam])
         ->set('addTeamMemberForm', [
             'email' => 'test@example.com',
             'role'  => 'administrator',
@@ -67,4 +66,17 @@ test('invited users can accept the invitation from the email link', function ():
 
     expect($invitee->fresh()->hasTeamRole($owner->currentTeam, 'editor'))->toBeTrue()
         ->and($owner->currentTeam->teamInvitations()->count())->toBe(0);
+});
+
+test('members who cannot remove team members cannot cancel invitations', function (): void {
+    $member     = $this->memberWithRole('editor');
+    $invitation = $member->currentTeam->teamInvitations()->create(['email' => 'someone@example.com', 'role' => 'member']);
+
+    $this->actingAs($member);
+
+    Livewire::test('teams::team-member-manager', ['team' => $member->currentTeam])
+        ->call('cancelTeamInvitation', $invitation->id)
+        ->assertForbidden();
+
+    expect($invitation->fresh())->not->toBeNull();
 });

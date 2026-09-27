@@ -16,7 +16,6 @@ return [
     // Labels
     'all'               => 'All',
     'filter'            => 'Filter',
-    'api_tokens'        => 'API tokens',
     'attention'         => 'Attention',
     'circa'             => 'circa',
     'contact'           => 'Contact',

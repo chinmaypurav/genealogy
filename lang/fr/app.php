@@ -14,7 +14,6 @@ return [
 
     'all'               => 'Tous',
     'filter'            => 'Filtrer',
-    'api_tokens'        => 'Jetons API',
     'attention'         => 'Attention',
     'circa'             => 'vers',
     'contact'           => 'Contact',

@@ -191,9 +191,4 @@ TallStackUi::breadcrumbs()
     ->for('teams.show', fn (BreadcrumbTrail $trail, $team) => $trail
         ->parent('home')
         ->add(label: __('team.settings'), link: route('teams.show', $team), icon: 'tabler.droplet-cog')
-    )
-    // user
-    ->for('api-tokens.index', fn (BreadcrumbTrail $trail) => $trail
-        ->parent('home')
-        ->add(label: __('api.api_tokens'), link: route('api-tokens.index'), icon: 'tabler.key')
     );
