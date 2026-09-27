@@ -16,7 +16,7 @@
 
     <!-- Middle Section: Main Content -->
     <div class="bg-neutral-100 p-2 text-center md:text-left dark:bg-neutral-600">
-        <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
             <!-- Logo Section -->
             <div class="flex justify-center md:justify-start">
                 <a href="{{ route('home') }}" aria-label="Go to Home" title="Home">
@@ -68,26 +68,6 @@
                     <x-nav-link-footer href="{{ url('privacy-policy') }}" :active="request()->is('privacy-policy')">
                         {{ __('app.privacy_policy') }}
                     </x-nav-link-footer>
-                </p>
-            </div>
-
-            <!-- Contact Section -->
-            <div>
-                <h6 class="mb-4 flex justify-center font-semibold uppercase md:justify-start">
-                    {{ __('app.contact') }}
-                </h6>
-                <x-hr.narrow class="my-4 h-1 w-48 rounded-sm border-0 bg-gray-100 max-md:mx-auto dark:bg-gray-700" />
-                <p class="mb-4 flex items-center justify-center md:justify-start">
-                    <x-ts-icon icon="home" class="mr-3 inline-block size-5" />
-                    New York, NY 10012, US
-                </p>
-                <p class="mb-4 flex items-center justify-center md:justify-start">
-                    <x-ts-icon icon="tabler.mail" class="mr-3 inline-block size-5" />
-                    info@example.com
-                </p>
-                <p class="mb-4 flex items-center justify-center md:justify-start">
-                    <x-ts-icon icon="tabler.phone" class="mr-3 inline-block size-5" />
-                    + 01 234 567 88
                 </p>
             </div>
         </div>
