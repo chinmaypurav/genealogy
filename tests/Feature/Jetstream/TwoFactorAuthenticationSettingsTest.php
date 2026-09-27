@@ -5,7 +5,6 @@ declare(strict_types=1);
 use App\Models\User;
 use Illuminate\Support\Facades\Date;
 use Laravel\Fortify\Features;
-use Laravel\Jetstream\Http\Livewire\TwoFactorAuthenticationForm;
 use Livewire\Livewire;
 
 uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
@@ -19,7 +18,7 @@ test('two factor authentication can be enabled', function (): void {
 
     $this->withSession(['auth.password_confirmed_at' => Date::now()->getTimestamp()]);
 
-    Livewire::test(TwoFactorAuthenticationForm::class)
+    Livewire::test('profile::two-factor-authentication-form')
         ->call('enableTwoFactorAuthentication');
 
     $user = $user->fresh();
@@ -37,7 +36,7 @@ test('recovery codes can be regenerated', function (): void {
 
     $this->withSession(['auth.password_confirmed_at' => Date::now()->getTimestamp()]);
 
-    $component = Livewire::test(TwoFactorAuthenticationForm::class)
+    $component = Livewire::test('profile::two-factor-authentication-form')
         ->call('enableTwoFactorAuthentication')
         ->call('regenerateRecoveryCodes');
 
@@ -58,7 +57,7 @@ test('two factor authentication can be disabled', function (): void {
 
     $this->withSession(['auth.password_confirmed_at' => Date::now()->getTimestamp()]);
 
-    $component = Livewire::test(TwoFactorAuthenticationForm::class)
+    $component = Livewire::test('profile::two-factor-authentication-form')
         ->call('enableTwoFactorAuthentication');
 
     expect($user->fresh()->two_factor_secret)->not->toBeNull();

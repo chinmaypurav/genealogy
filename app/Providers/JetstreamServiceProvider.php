@@ -10,7 +10,6 @@ use App\Actions\Teams\DeleteTeam;
 use App\Actions\Teams\InviteTeamMember;
 use App\Actions\Teams\RemoveTeamMember;
 use App\Actions\Teams\UpdateTeamName;
-use App\Actions\Users\DeleteUser;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Jetstream\Jetstream;
 use Override;
@@ -23,7 +22,8 @@ final class JetstreamServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
-        //
+        // Routes are declared in routes/web.php so they can move off Jetstream one screen at a time.
+        Jetstream::ignoreRoutes();
     }
 
     /**
@@ -39,7 +39,6 @@ final class JetstreamServiceProvider extends ServiceProvider
         Jetstream::inviteTeamMembersUsing(InviteTeamMember::class);
         Jetstream::removeTeamMembersUsing(RemoveTeamMember::class);
         Jetstream::deleteTeamsUsing(DeleteTeam::class);
-        Jetstream::deleteUsersUsing(DeleteUser::class);
     }
 
     /**

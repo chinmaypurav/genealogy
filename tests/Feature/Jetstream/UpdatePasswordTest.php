@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Laravel\Jetstream\Http\Livewire\UpdatePasswordForm;
 use Livewire\Livewire;
 
 uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
@@ -12,7 +11,7 @@ uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
 test('password can be updated', function (): void {
     $this->actingAs($user = User::factory()->create());
 
-    Livewire::test(UpdatePasswordForm::class)
+    Livewire::test('profile::update-password-form')
         ->set('state', [
             'current_password'      => 'password',
             'password'              => 'new-password',
@@ -26,7 +25,7 @@ test('password can be updated', function (): void {
 test('current password must be correct', function (): void {
     $this->actingAs($user = User::factory()->create());
 
-    Livewire::test(UpdatePasswordForm::class)
+    Livewire::test('profile::update-password-form')
         ->set('state', [
             'current_password'      => 'wrong-password',
             'password'              => 'new-password',
@@ -41,7 +40,7 @@ test('current password must be correct', function (): void {
 test('new passwords must match', function (): void {
     $this->actingAs($user = User::factory()->create());
 
-    Livewire::test(UpdatePasswordForm::class)
+    Livewire::test('profile::update-password-form')
         ->set('state', [
             'current_password'      => 'password',
             'password'              => 'new-password',
