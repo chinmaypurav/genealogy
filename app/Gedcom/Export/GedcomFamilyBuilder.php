@@ -37,10 +37,6 @@ class GedcomFamilyBuilder
      */
     public function __construct(private GedcomFormatter $formatter) {}
 
-    // --------------------------------------------------------------------------------------
-    // FAMILY STRUCTURE BUILDING
-    // --------------------------------------------------------------------------------------
-
     /**
      * Build GEDCOM family structures from individuals and couples.
      *
@@ -205,10 +201,6 @@ class GedcomFamilyBuilder
 
         return null;
     }
-
-    // --------------------------------------------------------------------------------------
-    // FAMILY RECORD BUILDING
-    // --------------------------------------------------------------------------------------
 
     /**
      * Build all family records.

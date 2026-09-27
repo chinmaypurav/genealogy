@@ -16,9 +16,6 @@ beforeEach(function (): void {
     $this->actingAs($this->user);
 });
 
-// ------------------------------------------------------------------------------
-// Component Mounting Tests
-// ------------------------------------------------------------------------------
 test('component can be mounted', function (): void {
     Livewire::test('people::search')
         ->assertStatus(200);
@@ -41,9 +38,6 @@ test('mount sets search to null by default', function (): void {
         ->assertSet('search', null);
 });
 
-// ------------------------------------------------------------------------------
-// Search Functionality Tests
-// ------------------------------------------------------------------------------
 test('search by firstname returns matching results', function (): void {
     Person::factory()->create([
         'firstname' => 'John',
@@ -235,9 +229,6 @@ test('search with only percent sign returns all people', function (): void {
         });
 });
 
-// ------------------------------------------------------------------------------
-// Input Sanitization Tests
-// ------------------------------------------------------------------------------
 test('search sanitizes HTML tags', function (): void {
     Person::factory()->create([
         'firstname' => 'John',
@@ -312,9 +303,6 @@ test('wildcard search still escapes special characters in the search term', func
         });
 });
 
-// ------------------------------------------------------------------------------
-// Pagination Tests
-// ------------------------------------------------------------------------------
 test('perpage changes pagination size', function (): void {
     Person::factory()->count(30)->create(['team_id' => $this->team->id]);
 
@@ -362,9 +350,6 @@ test('changing perpage resets pagination to first page', function (): void {
         ->assertSet('paginators.page', 1);
 });
 
-// ------------------------------------------------------------------------------
-// Ordering Tests
-// ------------------------------------------------------------------------------
 test('results are ordered by firstname then surname', function (): void {
     Person::factory()->create([
         'firstname' => 'Bob',
@@ -392,9 +377,6 @@ test('results are ordered by firstname then surname', function (): void {
         });
 });
 
-// ------------------------------------------------------------------------------
-// Relationship Loading Tests
-// ------------------------------------------------------------------------------
 test('component loads father and mother relationships', function (): void {
     $father = Person::factory()->create([
         'firstname' => 'Father',
@@ -426,9 +408,6 @@ test('component loads father and mother relationships', function (): void {
         });
 });
 
-// ------------------------------------------------------------------------------
-// Session Persistence Tests
-// ------------------------------------------------------------------------------
 test('search value persists in session', function (): void {
     $component = Livewire::test('people::search')
         ->set('search', 'John');
@@ -439,9 +418,6 @@ test('search value persists in session', function (): void {
     expect($newComponent->get('search'))->toBe('John');
 });
 
-// ------------------------------------------------------------------------------
-// Team Scope Tests
-// ------------------------------------------------------------------------------
 test('search only returns people from current team', function (): void {
     $otherTeam = Team::factory()->create();
 
@@ -463,9 +439,6 @@ test('search only returns people from current team', function (): void {
         });
 });
 
-// ------------------------------------------------------------------------------
-// Edge Cases Tests
-// ------------------------------------------------------------------------------
 test('search with special characters is handled correctly', function (): void {
     Person::factory()->create([
         'firstname' => "O'Brien",

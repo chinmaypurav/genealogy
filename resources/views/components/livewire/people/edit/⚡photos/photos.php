@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Livewire\Traits\AuthorizesPersonActions;
 use App\Models\Person;
-use App\PersonPhotos;
+use App\Support\PersonPhotos;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
@@ -286,10 +286,6 @@ new class extends Component
             'uploads.*.dimensions' => __('validation.dimensions', ['attribute' => __('person.photos')]),
         ];
     }
-
-    // -----------------------------------------------------------------------
-    // Protected and Private Methods
-    // -----------------------------------------------------------------------
 
     /**
      * Delete a temporary file from storage.

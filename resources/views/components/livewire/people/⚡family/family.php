@@ -8,10 +8,8 @@ use Livewire\Component;
 
 new class extends Component
 {
-    // ------------------------------------------------------------------------------
     public Person $person;
 
-    // ------------------------------------------------------------------------------
     #[On('couple_added')]
     #[On('couple_deleted')]
     #[On('family_updated')]

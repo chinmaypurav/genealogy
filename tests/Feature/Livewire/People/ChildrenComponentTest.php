@@ -9,9 +9,7 @@ uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 // memberWithRole() is a helper method on Tests\TestCase (tests/TestCase.php)
 
-// ---------------------------------------------------------------------------
 // Guard: children::confirm() / children::disconnect() require person:update
-// ---------------------------------------------------------------------------
 
 test('disconnecting a child is forbidden without the person:update permission', function (): void {
     // 'member' role only has person:read (see JetstreamServiceProvider)

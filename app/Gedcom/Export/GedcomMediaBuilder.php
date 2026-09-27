@@ -45,10 +45,6 @@ class GedcomMediaBuilder
         private GedcomFormatter $formatter
     ) {}
 
-    // --------------------------------------------------------------------------------------
-    // MEDIA COLLECTION METHODS
-    // --------------------------------------------------------------------------------------
-
     /**
      * Collect all media objects for the individuals being exported.
      *
@@ -88,10 +84,6 @@ class GedcomMediaBuilder
     {
         return $this->mediaFiles;
     }
-
-    // --------------------------------------------------------------------------------------
-    // GEDCOM RECORD BUILDING
-    // --------------------------------------------------------------------------------------
 
     /**
      * Build media object references for an individual.

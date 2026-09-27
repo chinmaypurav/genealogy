@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Gedcom\Export\GedcomFormatter;
 use App\Gedcom\Export\GedcomMediaBuilder;
 use App\Models\Person;
-use App\PersonPhotos;
+use App\Support\PersonPhotos;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 

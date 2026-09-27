@@ -21,9 +21,7 @@ final class TeamController extends Controller
 
     public function transferOwnership(Request $request, Team $team): RedirectResponse
     {
-        // -----------------------------------------------------------------------
         // Authorization — three independent guards, all must pass.
-        // -----------------------------------------------------------------------
 
         // 1. Only the current team owner may initiate a transfer.
         Gate::authorize('update', $team);
@@ -75,9 +73,7 @@ final class TeamController extends Controller
                 $team->user_id = $newOwner->id;
                 $team->save();
 
-                /* -------------------------------------------------------------------------------------------- */
                 // Log activity: Transfer Team Membership
-                /* -------------------------------------------------------------------------------------------- */
                 defer(function () use ($team, $currentOwner, $newOwner): void {
                     activity()
                         ->useLog('user_team')
@@ -90,7 +86,6 @@ final class TeamController extends Controller
                         ])
                         ->log(__('team.membership') . ' ' . __('app.event_transferred'));
                 });
-                /* -------------------------------------------------------------------------------------------- */
 
                 // Notify the new owner synchronously
                 $newOwner->notify(new OwnershipTransferred($team));

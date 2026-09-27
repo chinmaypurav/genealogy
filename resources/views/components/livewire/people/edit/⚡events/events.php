@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Countries;
 use App\Livewire\Traits\AuthorizesPersonActions;
 use App\Models\Person;
 use App\Models\PersonEvent;
+use App\Support\Countries;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Date;
 use Livewire\Attributes\Computed;
@@ -52,7 +52,6 @@ new class extends Component
 
     public ?Collection $events = null;
 
-    // -----------------------------------------------------------------------
     /**
      * @return Collection<int, array{id: string, name: string}>
      */

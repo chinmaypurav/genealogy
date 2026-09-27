@@ -17,10 +17,8 @@ new class extends Component
     use Interactions;
     use TrimStringsAndConvertEmptyStringsToNull;
 
-    // -----------------------------------------------------------------------
     public Person $person;
 
-    // -----------------------------------------------------------------------
     public ?int $father_id = null;
 
     public ?int $mother_id = null;
@@ -36,7 +34,6 @@ new class extends Component
     /** @var Collection<int, array{id: int, couple: string}> */
     public Collection $parents;
 
-    // -----------------------------------------------------------------------
     public function mount(): void
     {
         $this->loadData();
@@ -87,7 +84,6 @@ new class extends Component
         $this->dispatch('family_updated');
     }
 
-    // -----------------------------------------------------------------------
     /**
      * @return array<string, array<int, mixed>>
      */
@@ -124,7 +120,6 @@ new class extends Component
         ];
     }
 
-    // ------------------------------------------------------------------------------
     private function loadData(): void
     {
         $this->father_id  = $this->person->father_id;

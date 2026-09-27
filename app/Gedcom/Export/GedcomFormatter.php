@@ -18,10 +18,6 @@ use Carbon\CarbonInterface;
  */
 class GedcomFormatter
 {
-    // --------------------------------------------------------------------------------------
-    // TEXT FORMATTING UTILITIES
-    // --------------------------------------------------------------------------------------
-
     /**
      * Get appropriate line ending for GEDCOM format.
      *
@@ -71,10 +67,6 @@ class GedcomFormatter
         return mb_trim($replaced);
     }
 
-    // --------------------------------------------------------------------------------------
-    // DATE AND COORDINATE FORMATTING
-    // --------------------------------------------------------------------------------------
-
     /**
      * Format a date for GEDCOM output.
      *
@@ -110,10 +102,6 @@ class GedcomFormatter
         // GEDCOM 7 prefers up to 5 decimal places for precision
         return sprintf('%s%.5f', $direction, $degrees);
     }
-
-    // --------------------------------------------------------------------------------------
-    // MULTI-LINE TEXT HANDLING
-    // --------------------------------------------------------------------------------------
 
     /**
      * Export a multi-line text field with CONC/CONT support.

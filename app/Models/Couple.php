@@ -60,9 +60,6 @@ final class Couple extends Model
         'name',
     ];
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Log activities
-    /* -------------------------------------------------------------------------------------------- */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -86,40 +83,6 @@ final class Couple extends Model
         $activity->team_id = auth()->user()?->currentTeam->id ?? null;
     }
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Local Scopes
-    /* -------------------------------------------------------------------------------------------- */
-    /**
-     * @param  Builder<self>  $query
-     */
-    #[Scope]
-    public function scopeYoungerThan(Builder $query, ?string $year = null): void
-    {
-        if ($year) {
-            $query->where(function ($q) use ($year): void {
-                $q->whereNull('date_start')
-                    ->orWhereYear('date_start', '>=', $year);
-            });
-        }
-    }
-
-    /**
-     * @param  Builder<self>  $query
-     */
-    #[Scope]
-    public function scopeOlderThan(Builder $query, ?string $year = null): void
-    {
-        if ($year) {
-            $query->where(function ($q) use ($year): void {
-                $q->whereNull('date_start')
-                    ->orWhereYear('date_start', '<=', $year);
-            });
-        }
-    }
-
-    /* -------------------------------------------------------------------------------------------- */
-    // Relations
-    /* -------------------------------------------------------------------------------------------- */
     /* returns PARTNER 1 (1 Person) based on person1_id in Couple model */
     /** @return BelongsTo<Person, covariant self> */
     public function person1(): BelongsTo
@@ -148,9 +111,6 @@ final class Couple extends Model
         return $this->belongsTo(Team::class);
     }
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Global Scopes
-    /* -------------------------------------------------------------------------------------------- */
     #[Override]
     protected static function booted(): void
     {
@@ -171,9 +131,34 @@ final class Couple extends Model
         });
     }
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Accessors & Mutators
-    /* -------------------------------------------------------------------------------------------- */
+    /**
+     * @param  Builder<self>  $query
+     */
+    #[Scope]
+    protected function youngerThan(Builder $query, ?string $year = null): void
+    {
+        if ($year) {
+            $query->where(function ($q) use ($year): void {
+                $q->whereNull('date_start')
+                    ->orWhereYear('date_start', '>=', $year);
+            });
+        }
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     */
+    #[Scope]
+    protected function olderThan(Builder $query, ?string $year = null): void
+    {
+        if ($year) {
+            $query->where(function ($q) use ($year): void {
+                $q->whereNull('date_start')
+                    ->orWhereYear('date_start', '<=', $year);
+            });
+        }
+    }
+
     /** @return Attribute<string|null, never> */
     protected function name(): Attribute
     {

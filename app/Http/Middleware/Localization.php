@@ -17,9 +17,7 @@ final class Localization
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // ---------------------------------------------------------------------------------
         // Check and apply the locale from session if it differs from the current app locale
-        // ---------------------------------------------------------------------------------
         $locale = session('locale');
 
         if ($locale && $locale !== app()->getLocale()) {

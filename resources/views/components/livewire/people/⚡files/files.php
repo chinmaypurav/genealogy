@@ -10,16 +10,13 @@ use Livewire\Component;
 
 new class extends Component
 {
-    // ------------------------------------------------------------------------------
     public Person $person;
 
-    // ------------------------------------------------------------------------------
     /**
      * @var Collection<int, Spatie\MediaLibrary\MediaCollections\Models\Media>
      */
     public Collection $files;
 
-    // ------------------------------------------------------------------------------
     #[On('files_updated')]
     public function mount(): void
     {

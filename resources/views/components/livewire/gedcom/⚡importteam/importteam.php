@@ -16,7 +16,6 @@ new class extends Component
     use TrimStringsAndConvertEmptyStringsToNull;
     use WithFileUploads;
 
-    // -----------------------------------------------------------------------
     public User $user;
 
     public ?string $name = null;
@@ -28,7 +27,6 @@ new class extends Component
     /** @var array{success: bool, individuals_imported?: int, families_imported?: int, team?: string, error?: string}|null */
     public ?array $result = null;
 
-    // -----------------------------------------------------------------------
     public function mount(): void
     {
         $user = auth()->user();
@@ -110,7 +108,6 @@ new class extends Component
         }
     }
 
-    // -----------------------------------------------------------------------
     /**
      * @return array<string, array<int, string|int>>
      */

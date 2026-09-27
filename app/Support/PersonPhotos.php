@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Support;
 
 use App\Enums\PersonMediaCollection;
 use App\Enums\PersonPhotoConversion;

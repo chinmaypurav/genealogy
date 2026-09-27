@@ -13,7 +13,6 @@ new class extends Component
 
     public int $perPage = 50;
 
-    // -----------------------------------------------------------------------
     #[Computed]
     public function activities()
     {
@@ -49,7 +48,6 @@ new class extends Component
         return $paginator;
     }
 
-    // -----------------------------------------------------------------------
     public function updatedPerPage(): void
     {
         $this->resetPage();

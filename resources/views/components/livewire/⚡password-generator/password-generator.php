@@ -27,20 +27,16 @@ new class extends Component
 
     public string $passwordColor = 'red';
 
-    // ----------------------------------------------------------------------------------------------------------
     // In this livewire component, there is no password input. We always generate passwords in a random way.
     // Therefore the Estimated Entropy is always greater than the Shannon Entropy and the more accurate value.
     // We leave the Shannon Entropy calculation here for educational purposes.
     // In case we use a password input in the future, we can use this function to calculate the accurate entropy.
-    // ----------------------------------------------------------------------------------------------------------
     public function generate(): void
     {
         $this->validateOnly('length');
 
-        // ----------------------------------------------------------------------------------------
         // You could instead use str::password() if you want to use the built-in Laravel function,
         // but this function allows for more customization, such as specifiing the allowed symbols.
-        // ----------------------------------------------------------------------------------------
         $this->generatedPassword = $this->password(
             length: $this->length,
             letters: true,
@@ -65,7 +61,6 @@ new class extends Component
         };
     }
 
-    // -----------------------------------------------------------------------
     /**
      * @return array<string, string>
      */
@@ -76,7 +71,6 @@ new class extends Component
         ];
     }
 
-    // -----------------------------------------------------------------------
     private function password(int $length = 32, bool $letters = true, bool $numbers = true, bool $symbols = true, bool $spaces = false): string
     {
         $password = new Collection();

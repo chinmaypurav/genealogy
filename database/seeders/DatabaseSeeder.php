@@ -27,7 +27,6 @@ final class DatabaseSeeder extends Seeder
             // TreeSeeder::class,
         ]);
 
-        // -----------------------------------------------------------------------
         // if you want to use the application in production, please remove :
         //
         // - the DEMO DATA seeder call above
@@ -42,6 +41,5 @@ final class DatabaseSeeder extends Seeder
         // - the CONTENT of folder /storage/app/public/photos
         // - the CONTENT of folder /storage/app/public/profile-photos
         // - the CONTENT of folder /storage/app/backups/genealogy
-        // -----------------------------------------------------------------------
     }
 }

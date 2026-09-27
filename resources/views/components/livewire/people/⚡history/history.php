@@ -10,16 +10,13 @@ use Spatie\Activitylog\Models\Activity;
 
 new class extends Component
 {
-    // ------------------------------------------------------------------------------
     public Person $person;
 
-    // ------------------------------------------------------------------------------
     /**
      * @var Collection<int, mixed>
      */
     public Collection $activities;
 
-    // ------------------------------------------------------------------------------
     public function mount(): void
     {
         $this->activities = Activity::with('causer')

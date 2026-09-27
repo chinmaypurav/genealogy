@@ -13,10 +13,8 @@ new class extends Component
     use AuthorizesPersonActions;
     use Interactions;
 
-    // -----------------------------------------------------------------------
     public Person $person;
 
-    // ------------------------------------------------------------------------------
     #[On('person_updated')]
     #[On('couple_deleted')]
     #[On('person_added_as_child')]
@@ -27,7 +25,6 @@ new class extends Component
         // Livewire will re-render automatically
     }
 
-    // -----------------------------------------------------------------------
     public function confirm(): void
     {
         $this->authorizePermission('person:delete');

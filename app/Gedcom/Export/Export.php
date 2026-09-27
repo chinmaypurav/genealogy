@@ -26,16 +26,10 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class Export
 {
-    // --------------------------------------------------------------------------------------
     // CONSTANTS - Configuration and Standards
-    // --------------------------------------------------------------------------------------
 
     /** @var string Current GEDCOM version being used */
     private const GEDCOM_VERSION = '7.0.16';
-
-    // --------------------------------------------------------------------------------------
-    // PROPERTIES
-    // --------------------------------------------------------------------------------------
 
     /** @var string Final filename with extension */
     private readonly string $filename;
@@ -61,10 +55,6 @@ class Export
     /** @var GedcomFormatter Common formatting utilities */
     private GedcomFormatter $formatter;
 
-    // --------------------------------------------------------------------------------------
-    // CONSTRUCTOR & INITIALIZATION
-    // --------------------------------------------------------------------------------------
-
     /**
      * Create a new GEDCOM export instance.
      *
@@ -83,9 +73,7 @@ class Export
         $this->initializeBuilders();
     }
 
-    // --------------------------------------------------------------------------------------
     // PUBLIC API - Main Export Methods
-    // --------------------------------------------------------------------------------------
 
     /**
      * Export genealogical data to GEDCOM format.
@@ -142,9 +130,7 @@ class Export
         $this->fileHandler       = new GedcomFileHandler($this->basename, $this->format, $this->filename);
     }
 
-    // --------------------------------------------------------------------------------------
     // GEDCOM BUILDING - Core Structure Orchestration
-    // --------------------------------------------------------------------------------------
 
     /**
      * Build complete GEDCOM content using specialized builders.
@@ -213,10 +199,6 @@ class Export
     {
         return '0 TRLR' . $this->formatter->eol();
     }
-
-    // --------------------------------------------------------------------------------------
-    // CONFIGURATION METHODS
-    // --------------------------------------------------------------------------------------
 
     /**
      * Get file extension based on format.

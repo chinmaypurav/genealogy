@@ -19,24 +19,17 @@ final class UserLogin
         /** @var \App\Models\User $user */
         $user = $event->user;
 
-        // -----------------------------------------------------------------------
-        // Set language and timezone
-        // -----------------------------------------------------------------------
         session([
             'locale'   => $user->language ?? config('app.locale', 'en'),
             'timezone' => $user->timezone ?? config('app.timezone', 'UTC'),
         ]);
 
-        // -----------------------------------------------------------------------
         // Update user's last seen timestamp
-        // -----------------------------------------------------------------------
         $user->timestamps = false;
         $user->seen_at    = \Carbon\Carbon::now();
         $user->saveQuietly();
 
-        // -----------------------------------------------------------------------
         // Log user location (only in production)
-        // -----------------------------------------------------------------------
         if (app()->isProduction()) {
             $this->logUserLocation($user->id);
         }
@@ -47,9 +40,7 @@ final class UserLogin
      */
     private function logUserLocation(int $userId): void
     {
-        // -----------------------------------------------------------------------
         // Exclude your own IP without storing or exposing it
-        // -----------------------------------------------------------------------
         $requestIp = request()->ip();
 
         // Skip if IP is not available
@@ -65,9 +56,6 @@ final class UserLogin
             return;
         }
 
-        // -----------------------------------------------------------------------
-        // Log visitor's location
-        // -----------------------------------------------------------------------
         if (($position = Location::get()) instanceof Position) {
             Userlog::create([
                 'user_id'      => $userId,

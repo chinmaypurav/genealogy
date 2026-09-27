@@ -31,10 +31,6 @@ class GedcomHeaderBuilder
         private GedcomFormatter $formatter
     ) {}
 
-    // --------------------------------------------------------------------------------------
-    // HEADER BUILDING
-    // --------------------------------------------------------------------------------------
-
     /**
      * Build GEDCOM header record.
      *
@@ -86,10 +82,6 @@ class GedcomHeaderBuilder
         return "0 {$submitterId} SUBM" . $this->formatter->eol() .
                "1 NAME {$name}" . $this->formatter->eol();
     }
-
-    // --------------------------------------------------------------------------------------
-    // CONFIGURATION METHODS
-    // --------------------------------------------------------------------------------------
 
     /**
      * Get the source name for the GEDCOM header.

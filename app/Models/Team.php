@@ -51,9 +51,6 @@ final class Team extends JetstreamTeam
         'deleted' => TeamDeleted::class,
     ];
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Log activities
-    /* -------------------------------------------------------------------------------------------- */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -92,7 +89,6 @@ final class Team extends JetstreamTeam
         }
     }
 
-    /* -------------------------------------------------------------------------------------------- */
     public function isDeletable(): bool
     {
         // Prevent deletion of personal teams
@@ -117,9 +113,6 @@ final class Team extends JetstreamTeam
         return true;
     }
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Relations
-    /* -------------------------------------------------------------------------------------------- */
     /**
      * Returns ALL PERSONS (n Person)
      *

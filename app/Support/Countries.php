@@ -2,10 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Support;
 
 use Illuminate\Support\Collection;
 
+/**
+ * Localized country names read from the stefangabos/world_countries data files.
+ * Kept in one place so selects, person attributes and maps share the same locale fallback;
+ * unknown locales fall back to English.
+ */
 final class Countries
 {
     // Mapping of locales to country directory names

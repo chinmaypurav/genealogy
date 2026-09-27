@@ -45,10 +45,8 @@ final class UpdateUserProfileInformation implements UpdatesUserProfileInformatio
             ])->save();
         }
 
-        // -----------------------------------------------------------------------------------
         // store timezone and language in session
         // actual language switching wil be handled by App\Http\Middleware\Localization::class
-        // -----------------------------------------------------------------------------------
         if ($input['timezone'] !== session()->get('timezone')) {
             session()->put('timezone', $input['timezone']);
         }

@@ -7,9 +7,7 @@ use App\Models\User;
 
 uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-// ---------------------------------------------------------------------------
 // Helper: create a non-personal team owned by $owner
-// ---------------------------------------------------------------------------
 function makeNonPersonalTeam(User $owner): Team
 {
     /** @var Team $team */
@@ -23,10 +21,6 @@ function makeNonPersonalTeam(User $owner): Team
 
     return $team;
 }
-
-// ---------------------------------------------------------------------------
-// Happy path
-// ---------------------------------------------------------------------------
 
 test('owner can transfer ownership to an existing team member', function (): void {
     $owner  = User::factory()->withPersonalTeam()->create();
@@ -44,9 +38,7 @@ test('owner can transfer ownership to an existing team member', function (): voi
     expect($team->fresh()->user_id)->toBe($member->id);
 });
 
-// ---------------------------------------------------------------------------
 // Guard 1 — only the current owner may initiate a transfer
-// ---------------------------------------------------------------------------
 
 test('non-owner member cannot transfer ownership', function (): void {
     $owner  = User::factory()->withPersonalTeam()->create();
@@ -90,9 +82,7 @@ test('unrelated authenticated user cannot transfer ownership of another team', f
     expect($team->fresh()->user_id)->toBe($owner->id);
 });
 
-// ---------------------------------------------------------------------------
 // Guard 2 — personal teams cannot be transferred
-// ---------------------------------------------------------------------------
 
 test('personal team cannot be transferred', function (): void {
     $owner = User::factory()->withPersonalTeam()->create();
@@ -112,9 +102,7 @@ test('personal team cannot be transferred', function (): void {
     expect($personalTeam->fresh()->user_id)->toBe($owner->id);
 });
 
-// ---------------------------------------------------------------------------
 // Guard 3 — new owner must already be a team member
-// ---------------------------------------------------------------------------
 
 test('cannot transfer ownership to a user who is not a team member', function (): void {
     $owner    = User::factory()->withPersonalTeam()->create();
@@ -130,10 +118,6 @@ test('cannot transfer ownership to a user who is not a team member', function ()
 
     expect($team->fresh()->user_id)->toBe($owner->id);
 });
-
-// ---------------------------------------------------------------------------
-// Validation
-// ---------------------------------------------------------------------------
 
 test('new_owner_id must be present', function (): void {
     $owner = User::factory()->withPersonalTeam()->create();

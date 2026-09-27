@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Countries;
 use App\Enums\PersonMediaCollection;
 use App\Enums\PersonPhotoConversion;
+use App\Support\Countries;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -111,9 +111,6 @@ final class Person extends Model implements HasMedia
         'death_formatted',
     ];
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Log activities
-    /* -------------------------------------------------------------------------------------------- */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -148,191 +145,6 @@ final class Person extends Model implements HasMedia
         $activity->team_id = auth()->user()?->currentTeam->id ?? null;
     }
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Local Scopes
-    /* -------------------------------------------------------------------------------------------- */
-    /** @param Builder<self> $query */
-    #[Scope]
-    public function scopeSearch(Builder $query, string $searchString): void
-    {
-        /* -------------------------------------------------------------------------------------------- */
-        // The system will look up every word in the search value in the attributes surname, firstname, birthname and nickname
-        // Begin the search string with % if you want to search parts of names, for instance %Jr.
-        // Be aware that this kinds of searches are slower.
-        // If a name contains any spaces, enclose the name in double quotes, for instance "John Fitzgerald Jr." Kennedy.
-        /* -------------------------------------------------------------------------------------------- */
-        if (mb_trim($searchString) === '%' || empty(mb_trim($searchString))) {
-            return;
-        }
-
-        // Sanitize: strip HTML tags and trim spaces
-        $searchString = strip_tags(mb_trim($searchString));
-
-        // Escape SQL wildcard characters in search terms
-        $escapeLike = fn (string $value): string => str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $value);
-
-        collect(str_getcsv($searchString, ' ', '"'))
-            ->filter()
-            ->each(function (string $searchTerm) use ($query, $escapeLike): void {
-                // Check if term starts with % for wildcard search
-                $isWildcard = str_starts_with($searchTerm, '%');
-
-                if ($isWildcard) {
-                    // Remove the % prefix and escape the rest
-                    $term        = mb_ltrim($searchTerm, '%');
-                    $escapedTerm = $escapeLike($term);
-                    // Add % at both ends for LIKE %term% (search anywhere in field)
-                    $term = '%' . $escapedTerm . '%';
-                } else {
-                    // Normal prefix search - escape and add % at end
-                    $term = $escapeLike($searchTerm) . '%';
-                }
-
-                $query->whereAny(['firstname', 'surname', 'birthname', 'nickname'], 'like', $term);
-            });
-    }
-
-    /** @param Builder<self> $query */
-    #[Scope]
-    public function scopeYoungerThan(Builder $query, ?string $dob, ?int $yob): void
-    {
-        if (empty($dob) && empty($yob)) {
-            return; // No input → return all
-        }
-
-        $query->where(function ($q) use ($dob, $yob): void {
-            // Case: dob is given (most accurate)
-            if (! empty($dob)) {
-                $dobYear = (int) mb_substr($dob, 0, 4);
-
-                $q->where(function ($sub) use ($dob, $dobYear): void {
-                    $sub->whereNull('dob')->whereNull('yob') // no data, assume younger
-                        ->orWhere('dob', '>', $dob)
-                        ->orWhere(function ($inner) use ($dobYear): void {
-                            $inner->whereNull('dob')->where('yob', '>', $dobYear);
-                        });
-                });
-            } else {
-                // Case: only yob is given
-                $q->where(function ($sub) use ($yob): void {
-                    $sub->whereNull('dob')->whereNull('yob') // no data, assume younger
-                        ->orWhere('dob', '>', "{$yob}-12-31")
-                        ->orWhere(function ($inner) use ($yob): void {
-                            $inner->whereNull('dob')->where('yob', '>', $yob);
-                        });
-                });
-            }
-        });
-    }
-
-    /** @param Builder<self> $query */
-    #[Scope]
-    public function scopeOlderThan(Builder $query, ?string $dob, ?int $yob): void
-    {
-        if (empty($dob) && empty($yob)) {
-            return; // No input → return all
-        }
-
-        $query->where(function ($q) use ($dob, $yob): void {
-            // Case: Input dob is given (most accurate)
-            if (! empty($dob)) {
-                $dobYear = (int) mb_substr($dob, 0, 4);
-
-                $q->where(function ($sub) use ($dob, $dobYear): void {
-                    $sub->whereNull('dob')->whereNull('yob') // no data, assume older
-                        ->orWhere('dob', '<', $dob)
-                        ->orWhere(function ($inner) use ($dobYear): void {
-                            $inner->whereNull('dob')->where('yob', '<', $dobYear);
-                        });
-                });
-            } else {
-                // Case: Only yob is given
-                $q->where(function ($sub) use ($yob): void {
-                    $sub->whereNull('dob')->whereNull('yob') // no data, assume older
-                        ->orWhere('dob', '<', "{$yob}-01-01")
-                        ->orWhere(function ($inner) use ($yob): void {
-                            $inner->whereNull('dob')->where('yob', '<', $yob);
-                        });
-                });
-            }
-        });
-    }
-
-    /** @param Builder<self> $query */
-    #[Scope]
-    public function scopePartnerOffset(Builder $query, ?string $dob, ?int $yob, int $offset = 40): void
-    {
-        if (empty($dob) && empty($yob)) {
-            return; // No input → return all
-        }
-
-        $query->where(function ($q) use ($dob, $yob, $offset): void {
-            if (! empty($dob)) {
-                $refDate = Carbon::parse($dob);
-                $minDate = $refDate->copy()->subYears($offset)->toDateString();
-                $maxDate = $refDate->copy()->addYears($offset)->toDateString();
-                $refYear = (int) $refDate->format('Y');
-                $minYear = $refYear - $offset;
-                $maxYear = $refYear + $offset;
-
-                $q->where(function ($sub) use ($minDate, $maxDate, $minYear, $maxYear): void {
-                    $sub->whereNull('dob')->whereNull('yob') // no data, include by default
-                        ->orWhereBetween('dob', [$minDate, $maxDate])
-                        ->orWhere(function ($inner) use ($minYear, $maxYear): void {
-                            $inner->whereNull('dob')->whereBetween('yob', [$minYear, $maxYear]);
-                        });
-                });
-            } else {
-                $minYear = $yob - $offset;
-                $maxYear = $yob + $offset;
-                $minDate = "{$minYear}-01-01";
-                $maxDate = "{$maxYear}-12-31";
-
-                $q->where(function ($sub) use ($minDate, $maxDate, $minYear, $maxYear): void {
-                    $sub->whereNull('dob')->whereNull('yob') // no data, include by default
-                        ->orWhereBetween('dob', [$minDate, $maxDate])
-                        ->orWhere(function ($inner) use ($minYear, $maxYear): void {
-                            $inner->whereNull('dob')->whereBetween('yob', [$minYear, $maxYear]);
-                        });
-                });
-            }
-        });
-    }
-
-    /**
-     * Scope to find persons with similar names within a team.
-     *
-     * @param  Builder<Person>  $query
-     * @param  array<string|null>  $terms
-     * @return Builder<Person>
-     */
-    #[Scope]
-    public function scopeSimilarTo(Builder $query, int $teamId, array $terms): Builder
-    {
-        $terms = array_filter($terms);
-
-        if (empty($terms)) {
-            return $query->whereRaw('0 = 1');
-        }
-
-        return $query
-            ->where('team_id', $teamId)
-            ->where(function ($q) use ($terms): void {
-                foreach ($terms as $term) {
-                    $like = '%' . $term . '%';
-                    $q->orWhere('firstname', 'like', $like)
-                        ->orWhere('surname', 'like', $like)
-                        ->orWhere('birthname', 'like', $like)
-                        ->orWhere('nickname', 'like', $like);
-                }
-            })
-            ->orderBy('surname')
-            ->orderBy('firstname');
-    }
-
-    /* -------------------------------------------------------------------------------------------- */
-    // Checks
-    /* -------------------------------------------------------------------------------------------- */
     public function isDeceased(): bool
     {
         return ! is_null($this->dod) || ! is_null($this->yod);
@@ -353,9 +165,6 @@ final class Person extends Model implements HasMedia
         return $this->dod && Carbon::parse($this->dod)->isBirthday();
     }
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Relations
-    /* -------------------------------------------------------------------------------------------- */
     /* returns TEAM (1 Team) based on team_id */
     /** @return BelongsTo<Team, $this> */
     public function team(): BelongsTo
@@ -550,9 +359,6 @@ final class Person extends Model implements HasMedia
             ->sortBy(['birthYear', 'type']);
     }
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Relations for Person Events
-    /* -------------------------------------------------------------------------------------------- */
     /* returns ALL EVENTS (n PersonEvent) related to the person, ordered by date */
     /** @return HasMany<PersonEvent, $this> */
     public function events(): HasMany
@@ -683,9 +489,6 @@ final class Person extends Model implements HasMedia
             ->values();
     }
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Media
-    /* -------------------------------------------------------------------------------------------- */
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection(PersonMediaCollection::Photos->value)
@@ -721,9 +524,6 @@ final class Person extends Model implements HasMedia
         }
     }
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Scopes (global)
-    /* -------------------------------------------------------------------------------------------- */
     #[Override]
     protected static function booted(): void
     {
@@ -749,9 +549,183 @@ final class Person extends Model implements HasMedia
         });
     }
 
-    /* -------------------------------------------------------------------------------------------- */
-    // Accessors & Mutators
-    /* -------------------------------------------------------------------------------------------- */
+    /** @param Builder<self> $query */
+    #[Scope]
+    protected function search(Builder $query, string $searchString): void
+    {
+        // The system will look up every word in the search value in the attributes surname, firstname, birthname and nickname
+        // Begin the search string with % if you want to search parts of names, for instance %Jr.
+        // Be aware that this kinds of searches are slower.
+        // If a name contains any spaces, enclose the name in double quotes, for instance "John Fitzgerald Jr." Kennedy.
+        if (mb_trim($searchString) === '%' || empty(mb_trim($searchString))) {
+            return;
+        }
+
+        // Sanitize: strip HTML tags and trim spaces
+        $searchString = strip_tags(mb_trim($searchString));
+
+        // Escape SQL wildcard characters in search terms
+        $escapeLike = fn (string $value): string => str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $value);
+
+        collect(str_getcsv($searchString, ' ', '"'))
+            ->filter()
+            ->each(function (string $searchTerm) use ($query, $escapeLike): void {
+                // Check if term starts with % for wildcard search
+                $isWildcard = str_starts_with($searchTerm, '%');
+
+                if ($isWildcard) {
+                    // Remove the % prefix and escape the rest
+                    $term        = mb_ltrim($searchTerm, '%');
+                    $escapedTerm = $escapeLike($term);
+                    // Add % at both ends for LIKE %term% (search anywhere in field)
+                    $term = '%' . $escapedTerm . '%';
+                } else {
+                    // Normal prefix search - escape and add % at end
+                    $term = $escapeLike($searchTerm) . '%';
+                }
+
+                $query->whereAny(['firstname', 'surname', 'birthname', 'nickname'], 'like', $term);
+            });
+    }
+
+    /** @param Builder<self> $query */
+    #[Scope]
+    protected function youngerThan(Builder $query, ?string $dob, ?int $yob): void
+    {
+        if (empty($dob) && empty($yob)) {
+            return; // No input → return all
+        }
+
+        $query->where(function ($q) use ($dob, $yob): void {
+            // Case: dob is given (most accurate)
+            if (! empty($dob)) {
+                $dobYear = (int) mb_substr($dob, 0, 4);
+
+                $q->where(function ($sub) use ($dob, $dobYear): void {
+                    $sub->whereNull('dob')->whereNull('yob') // no data, assume younger
+                        ->orWhere('dob', '>', $dob)
+                        ->orWhere(function ($inner) use ($dobYear): void {
+                            $inner->whereNull('dob')->where('yob', '>', $dobYear);
+                        });
+                });
+            } else {
+                // Case: only yob is given
+                $q->where(function ($sub) use ($yob): void {
+                    $sub->whereNull('dob')->whereNull('yob') // no data, assume younger
+                        ->orWhere('dob', '>', "{$yob}-12-31")
+                        ->orWhere(function ($inner) use ($yob): void {
+                            $inner->whereNull('dob')->where('yob', '>', $yob);
+                        });
+                });
+            }
+        });
+    }
+
+    /** @param Builder<self> $query */
+    #[Scope]
+    protected function olderThan(Builder $query, ?string $dob, ?int $yob): void
+    {
+        if (empty($dob) && empty($yob)) {
+            return; // No input → return all
+        }
+
+        $query->where(function ($q) use ($dob, $yob): void {
+            // Case: Input dob is given (most accurate)
+            if (! empty($dob)) {
+                $dobYear = (int) mb_substr($dob, 0, 4);
+
+                $q->where(function ($sub) use ($dob, $dobYear): void {
+                    $sub->whereNull('dob')->whereNull('yob') // no data, assume older
+                        ->orWhere('dob', '<', $dob)
+                        ->orWhere(function ($inner) use ($dobYear): void {
+                            $inner->whereNull('dob')->where('yob', '<', $dobYear);
+                        });
+                });
+            } else {
+                // Case: Only yob is given
+                $q->where(function ($sub) use ($yob): void {
+                    $sub->whereNull('dob')->whereNull('yob') // no data, assume older
+                        ->orWhere('dob', '<', "{$yob}-01-01")
+                        ->orWhere(function ($inner) use ($yob): void {
+                            $inner->whereNull('dob')->where('yob', '<', $yob);
+                        });
+                });
+            }
+        });
+    }
+
+    /** @param Builder<self> $query */
+    #[Scope]
+    protected function partnerOffset(Builder $query, ?string $dob, ?int $yob, int $offset = 40): void
+    {
+        if (empty($dob) && empty($yob)) {
+            return; // No input → return all
+        }
+
+        $query->where(function ($q) use ($dob, $yob, $offset): void {
+            if (! empty($dob)) {
+                $refDate = Carbon::parse($dob);
+                $minDate = $refDate->copy()->subYears($offset)->toDateString();
+                $maxDate = $refDate->copy()->addYears($offset)->toDateString();
+                $refYear = (int) $refDate->format('Y');
+                $minYear = $refYear - $offset;
+                $maxYear = $refYear + $offset;
+
+                $q->where(function ($sub) use ($minDate, $maxDate, $minYear, $maxYear): void {
+                    $sub->whereNull('dob')->whereNull('yob') // no data, include by default
+                        ->orWhereBetween('dob', [$minDate, $maxDate])
+                        ->orWhere(function ($inner) use ($minYear, $maxYear): void {
+                            $inner->whereNull('dob')->whereBetween('yob', [$minYear, $maxYear]);
+                        });
+                });
+            } else {
+                $minYear = $yob - $offset;
+                $maxYear = $yob + $offset;
+                $minDate = "{$minYear}-01-01";
+                $maxDate = "{$maxYear}-12-31";
+
+                $q->where(function ($sub) use ($minDate, $maxDate, $minYear, $maxYear): void {
+                    $sub->whereNull('dob')->whereNull('yob') // no data, include by default
+                        ->orWhereBetween('dob', [$minDate, $maxDate])
+                        ->orWhere(function ($inner) use ($minYear, $maxYear): void {
+                            $inner->whereNull('dob')->whereBetween('yob', [$minYear, $maxYear]);
+                        });
+                });
+            }
+        });
+    }
+
+    /**
+     * Scope to find persons with similar names within a team.
+     *
+     * @param  Builder<Person>  $query
+     * @param  array<string|null>  $terms
+     * @return Builder<Person>
+     */
+    #[Scope]
+    protected function similarTo(Builder $query, int $teamId, array $terms): Builder
+    {
+        $terms = array_filter($terms);
+
+        if (empty($terms)) {
+            return $query->whereRaw('0 = 1');
+        }
+
+        return $query
+            ->where('team_id', $teamId)
+            ->where(function ($q) use ($terms): void {
+                foreach ($terms as $term) {
+                    $like = '%' . $term . '%';
+                    $q->orWhere('firstname', 'like', $like)
+                        ->orWhere('surname', 'like', $like)
+                        ->orWhere('birthname', 'like', $like)
+                        ->orWhere('nickname', 'like', $like);
+                }
+            })
+            ->orderBy('surname')
+            ->orderBy('firstname');
+    }
+
     /** @return Attribute<string, never> */
     protected function name(): Attribute
     {
@@ -1009,9 +983,7 @@ final class Person extends Model implements HasMedia
         ];
     }
 
-    /* -------------------------------------------------------------------------------------------- */
     // Optimized relationship methods for siblings
-    /* -------------------------------------------------------------------------------------------- */
     /** @return HasMany<Person, $this> */
     private function fullSiblings(): HasMany
     {

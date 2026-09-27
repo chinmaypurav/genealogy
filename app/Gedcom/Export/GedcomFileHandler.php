@@ -27,10 +27,6 @@ use ZipArchive;
  */
 class GedcomFileHandler
 {
-    // --------------------------------------------------------------------------------------
-    // CONSTANTS
-    // --------------------------------------------------------------------------------------
-
     /** @var int Default buffer size for file streaming */
     private const STREAM_BUFFER_SIZE = 8192;
 
@@ -46,10 +42,6 @@ class GedcomFileHandler
         private string $format,
         private string $filename
     ) {}
-
-    // --------------------------------------------------------------------------------------
-    // DOWNLOAD METHODS
-    // --------------------------------------------------------------------------------------
 
     /**
      * Download GEDCOM content as a direct file.
@@ -140,10 +132,6 @@ class GedcomFileHandler
             @unlink($file);
         }
     }
-
-    // --------------------------------------------------------------------------------------
-    // ZIP CREATION METHODS
-    // --------------------------------------------------------------------------------------
 
     /**
      * Create ZIP archive with media files.
@@ -267,10 +255,6 @@ class GedcomFileHandler
         }
     }
 
-    // --------------------------------------------------------------------------------------
-    // FILE SYSTEM OPERATIONS
-    // --------------------------------------------------------------------------------------
-
     /**
      * Ensure temp directory exists.
      *
@@ -377,10 +361,6 @@ class GedcomFileHandler
         }
     }
 
-    // --------------------------------------------------------------------------------------
-    // HELPER METHODS
-    // --------------------------------------------------------------------------------------
-
     /**
      * Get human-readable error message for ZipArchive error codes.
      *
@@ -417,10 +397,6 @@ class GedcomFileHandler
             default                    => 'Unknown error',
         };
     }
-
-    // --------------------------------------------------------------------------------------
-    // HEADER CONFIGURATION
-    // --------------------------------------------------------------------------------------
 
     /**
      * Get HTTP headers for GEDCOM download.

@@ -14,14 +14,11 @@ new class extends Component
     use AuthorizesPersonActions;
     use Interactions;
 
-    // ------------------------------------------------------------------------------
     public Person $person;
 
-    // ------------------------------------------------------------------------------
     /** @var Collection<int, Person> */
     public Collection $children;
 
-    // ------------------------------------------------------------------------------
     #[On('person_added_as_child')]
     #[On('person_disconnected_as_child')]
     #[On('couple_added')]
