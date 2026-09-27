@@ -43,55 +43,14 @@ final class JetstreamServiceProvider extends ServiceProvider
     }
 
     /**
-     * Configure the roles and permissions that are available within the application.
+     * Mirror the roles in config/teams.php into Jetstream for its remaining team and API token screens.
      */
     protected function configurePermissions(): void
     {
         Jetstream::defaultApiTokenPermissions(['read']);
 
-        Jetstream::role('administrator', 'Administrator', [
-            'user:create',
-            'user:read',
-            'user:update',
-            'user:delete',
-
-            'person:create',
-            'person:read',
-            'person:update',
-            'person:delete',
-
-            'couple:create',
-            'couple:read',
-            'couple:update',
-            'couple:delete',
-        ])->description('Administrators can perform any action and manage the application.');
-
-        Jetstream::role('manager', 'Manager', [
-            'person:create',
-            'person:read',
-            'person:update',
-            'person:delete',
-
-            'couple:create',
-            'couple:read',
-            'couple:update',
-            'couple:delete',
-        ])->description('Managers can perform any action on people.');
-
-        Jetstream::role('editor', 'Editor', [
-            'person:create',
-            'person:read',
-            'person:update',
-
-            'couple:create',
-            'couple:read',
-            'couple:update',
-        ])->description('Editors have the ability to create, read and update people.');
-
-        Jetstream::role('member', 'Member', [
-            'person:read',
-
-            'couple:read',
-        ])->description('Members have the ability to read people.');
+        foreach (config('teams.roles') as $key => $role) {
+            Jetstream::role($key, $role['name'], $role['permissions'])->description($role['description']);
+        }
     }
 }

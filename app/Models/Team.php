@@ -5,15 +5,18 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Laravel\Jetstream\Events\TeamCreated;
-use Laravel\Jetstream\Events\TeamDeleted;
-use Laravel\Jetstream\Events\TeamUpdated;
-use Laravel\Jetstream\Team as JetstreamTeam;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 
 /**
+ * A family tree workspace: people, couples and the users collaborating on them.
+ *
+ * Owns the team membership logic that used to live in Jetstream's base Team model.
+ *
  * @property int $id
  * @property int $user_id
  * @property string $name
@@ -21,9 +24,9 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property bool $personal_team
  * @property-read User $owner
  */
-final class Team extends JetstreamTeam
+final class Team extends Model
 {
-    /** @use HasFactory<\Database\Factories\PersonFactory> */
+    /** @use HasFactory<\Database\Factories\TeamFactory> */
     use HasFactory;
 
     use LogsActivity;
@@ -38,17 +41,6 @@ final class Team extends JetstreamTeam
         'name',
         'description',
         'personal_team',
-    ];
-
-    /**
-     * The event map for the model.
-     *
-     * @var array<string, class-string>
-     */
-    protected $dispatchesEvents = [
-        'created' => TeamCreated::class,
-        'updated' => TeamUpdated::class,
-        'deleted' => TeamDeleted::class,
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -83,10 +75,67 @@ final class Team extends JetstreamTeam
         if (! $currentTeam || $currentTeam->id === $this->id) {
             // Try to use the user's personal team as fallback
             $personalTeam      = $user->personalTeam();
-            $activity->team_id = $personalTeam->id;
+            $activity->team_id = $personalTeam?->id;
         } else {
             $activity->team_id = $currentTeam->id;
         }
+    }
+
+    /**
+     * @return BelongsTo<User, $this>
+     */
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Members of the team, excluding the owner.
+     *
+     * @return BelongsToMany<User, $this, Membership, 'membership'>
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, Membership::class)
+            ->withPivot('role')
+            ->withTimestamps()
+            ->as('membership');
+    }
+
+    /**
+     * @return HasMany<TeamInvitation, $this>
+     */
+    public function teamInvitations(): HasMany
+    {
+        return $this->hasMany(TeamInvitation::class);
+    }
+
+    public function hasUserWithEmail(string $email): bool
+    {
+        return $this->users->concat([$this->owner])->contains('email', $email);
+    }
+
+    public function removeUser(User $user): void
+    {
+        if ($user->current_team_id === $this->id) {
+            $user->forceFill(['current_team_id' => null])->save();
+        }
+
+        $this->users()->detach($user);
+    }
+
+    /**
+     * Detach every member and delete the team, clearing it as anyone's current team first.
+     */
+    public function purge(): void
+    {
+        $this->owner()->where('current_team_id', $this->id)->update(['current_team_id' => null]);
+
+        $this->users()->where('current_team_id', $this->id)->update(['current_team_id' => null]);
+
+        $this->users()->detach();
+
+        $this->delete();
     }
 
     public function isDeletable(): bool

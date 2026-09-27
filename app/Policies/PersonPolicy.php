@@ -9,7 +9,7 @@ use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
 /**
- * Maps person abilities to the Jetstream team permissions of the current team.
+ * Maps person abilities to the team permissions of the current team (see config/teams.php).
  *
  * Lives in a policy so routes can authorize with `->can()` middleware instead of every
  * controller action repeating the same permission check. Team isolation is not handled
