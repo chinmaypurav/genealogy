@@ -13,6 +13,7 @@ use App\Models\User;
 use App\PersonPhotos;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Facades\Activity;
@@ -67,6 +68,8 @@ final class DemoSeeder extends Seeder
         $this->attachDemoPhotos();
 
         auth()->logout();
+
+        $this->syncPrimaryKeySequences();
     }
 
     protected function importBritishRoyalsPeople(): void
@@ -492,5 +495,25 @@ final class DemoSeeder extends Seeder
 
                 new PersonPhotos($person)->save($files->map(fn (SplFileInfo $file): string => $file->getPathname())->all());
             });
+    }
+
+    /**
+     * Advance the PostgreSQL id sequences past the explicitly seeded ids,
+     * so newly created records do not collide with the demo data.
+     */
+    protected function syncPrimaryKeySequences(): void
+    {
+        if (DB::getDriverName() !== 'pgsql') {
+            return;
+        }
+
+        foreach ([new Person, new Couple] as $model) {
+            $table = $model->getTable();
+
+            DB::statement(
+                "SELECT setval(pg_get_serial_sequence(?, 'id'), (SELECT COALESCE(MAX(id), 1) FROM {$table}))",
+                [$table]
+            );
+        }
     }
 }
