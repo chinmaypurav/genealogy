@@ -434,52 +434,6 @@ The offcanvas menu allows <b>all users</b> to consult the <b>active team</b> and
 
 <img src="img/help/genealogy-100a.webp" class="rounded" alt="Team">
 
-### b. Teams & people
-
-The offcanvas menu allows <b>developers</b> to consult all <b>teams</b> and <b>people</b>.
-
-<img src="img/help/genealogy-090a.webp" class="rounded" alt="Teams">
-<img src="img/help/genealogy-090b.webp" class="rounded" alt="People">
-
-### c. Users & logging
-
-The offcanvas menu allows <b>developers</b> to consult the users and their logging information.
-
-<img src="img/help/genealogy-091.webp" class="rounded" alt="Users">
-<img src="img/help/genealogy-093.webp" class="rounded" alt="User logging 1">
-<img src="img/help/genealogy-094.webp" class="rounded" alt="User logging 2">
-<img src="img/help/genealogy-094b.webp" class="rounded" alt="User logging 3">
-
-### d. Settings
-
-The <b>Settings</b> menu item allows <b>developers</b> to manage Logging settings.
-
-<img src="img/help/genealogy-099.webp" class="rounded" alt="Settings">
-
-### e. Backups
-
-The <b>Backups</b> menu item allows <b>developers</b> to manage database backups.
-
-<img src="img/help/genealogy-095.webp" class="rounded" alt="Backups">
-
-### f. Log viewer
-
-The <b>Log Viewer</b> menu item allows <b>developers</b> to consult the application log files.
-
-<img src="img/help/genealogy-096a.webp" class="rounded" alt="Log viewer">
-
-### g. Dependencies
-
-The <b>Dependencies</b> menu item allows <b>developers</b> to consult the application dependencies.
-
-<img src="img/help/genealogy-097.webp" class="rounded" alt="Dependencies">
-
-### h. Session
-
-The <b>Session</b> menu item allows <b>developers</b> to consult the application session.
-
-<img src="img/help/genealogy-098.webp" class="rounded" alt="Session">
-
 <hr />
 
 <!-- ---------------------------------------------------------------------------------- -->

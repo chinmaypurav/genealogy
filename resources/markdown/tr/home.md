@@ -37,10 +37,6 @@ Bu demoda 2 adet soyağacı bulunmaktadır: **BRITANYA KRALİYET AİLESİ** ve *
             <td><b>member_4@genealogy.test</b><br/>password</td>
             <td><b>KENNEDY</b> ekibini normal bir <b>üye</b> olarak görüntülemek için</td>
         </tr>
-        <tr>
-            <td><b>developer@genealogy.test</b><br/>password</td>
-            <td><b>geliştirici</b>ye ayrılmış seçenekleri, örneğin <b>kullanıcı yönetimi</b> ve <b>tüm ekiplerdeki kişilere erişim</b> gibi özellikleri görüntülemek için</td>
-        </tr>
     </tbody>
 </table>
 

@@ -23,7 +23,6 @@ return [
     'confirm_new_password'    => '确认新密码',
     'language'                => '语言',
     'timezone'                => '时区',
-    'developer'               => '开发者',
     'team'                    => '家族',
     'current_team'            => '当前家族',
     'email_verified'          => '电子邮件已验证',

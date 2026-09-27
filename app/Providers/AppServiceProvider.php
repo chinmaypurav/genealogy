@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
-use Opcodes\LogViewer\Facades\LogViewer;
 use Override;
 use TallStackUi\Facades\TallStackUi;
 
@@ -43,7 +42,6 @@ final class AppServiceProvider extends ServiceProvider
         // ------------------------------------------------------------------------------
         $this->configureUrl();
         $this->configureStrictMode();
-        $this->configureLogViewer();
         $this->configureDates();
         $this->configureTallStackUiPersonalization();
 
@@ -115,24 +113,6 @@ final class AppServiceProvider extends ServiceProvider
     private function configureStrictMode(): void
     {
         Model::shouldBeStrict(app()->isLocal());
-    }
-
-    /**
-     * Configure LogViewer settings, grant access to developers.
-     */
-    private function configureLogViewer(): void
-    {
-        LogViewer::auth(function ($request) {
-            $user = $request->user();
-
-            // If user is not authenticated, deny access
-            if (! $user) {
-                return false;
-            }
-
-            // Check if user has is_developer property and it's true
-            return $user->is_developer ?? false;
-        });
     }
 
     /**

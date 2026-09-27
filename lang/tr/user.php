@@ -23,7 +23,6 @@ return [
     'confirm_new_password'    => 'Yeni şifreyi onayla',
     'language'                => 'Dil',
     'timezone'                => 'Zaman dilimi',
-    'developer'               => 'Geliştirici',
     'team'                    => 'Takım',
     'current_team'            => 'Mevcut takım',
     'email_verified'          => 'E-posta doğrulandı',

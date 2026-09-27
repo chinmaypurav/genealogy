@@ -23,7 +23,6 @@ return [
     'confirm_new_password'    => 'Neues Passwort bestätigen',
     'language'                => 'Sprache',
     'timezone'                => 'Zeitzone',
-    'developer'               => 'Entwickler',
     'team'                    => 'Team',
     'current_team'            => 'Aktuelles Team',
     'email_verified'          => 'E-Mail verifiziert',

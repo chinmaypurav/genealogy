@@ -40,7 +40,6 @@ final class UserFactory extends Factory
             'current_team_id'           => null,
             'language'                  => 'en',
             'timezone'                  => 'UTC',
-            'is_developer'              => false,
         ];
     }
 

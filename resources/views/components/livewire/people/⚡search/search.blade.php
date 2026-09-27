@@ -5,11 +5,7 @@
             {{-- header --}}
             <div class="mb-2 flex flex-wrap text-lg">
                 <div class="max-w-full flex-1 grow">
-                    @if (auth()->user()->is_developer)
-                        {!! __('app.people_search', ['scope' => strtoupper(e(__('team.all_teams')))]) !!}
-                    @else
-                        {!! __('app.people_search', ['scope' => e(auth()->user()->currentTeam->name)]) !!}
-                    @endif
+                    {!! __('app.people_search', ['scope' => e(auth()->user()->currentTeam->name)]) !!}
                 </div>
 
                 <div class="max-w-full flex-1 grow text-center">
@@ -36,7 +32,7 @@
                             __('app.people_found', [
                                 'found'   => $people->total(),
                                 'total'   => $people_db,
-                                'scope'   => auth()->user()->is_developer ? mb_strtoupper(e(__('team.all_teams'))) : e(auth()->user()->currentTeam->name),
+                                'scope'   => e(auth()->user()->currentTeam->name),
                                 'keyword' => e($search),
                             ])
                         !!}
@@ -44,7 +40,7 @@
                         {!!
                             __('app.people_available', [
                                 'total' => $people_db,
-                                'scope' => auth()->user()->is_developer ? mb_strtoupper(e(__('team.all_teams'))) : e(auth()->user()->currentTeam->name),
+                                'scope' => e(auth()->user()->currentTeam->name),
                             ])
                         !!}
                     @endif

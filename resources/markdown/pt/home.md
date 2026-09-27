@@ -37,10 +37,6 @@ Esta demo tem 2 árvores genealógicas implementadas: **BRITISH ROYALS** e **KEN
             <td><b>member_4@genealogy.test</b><br/>password</td>
             <td>para ver a equipe <b>KENNEDY</b> como <b>membro</b> normal</td>
         </tr>
-        <tr>
-            <td><b>developer@genealogy.test</b><br/>password</td>
-            <td>para ver opções reservadas para o <b>desenvolvedor</b>, como o <b>gerenciamento de usuários</b> e acesso a <b>pessoas em todas as equipes</b></td>
-        </tr>
     </tbody>
 </table>
 

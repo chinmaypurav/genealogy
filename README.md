@@ -120,11 +120,6 @@ This project is open-sourced software licensed under the [MIT license](LICENSE).
             <td>password</td>
             <td>to access team <b>KENNEDY</b> as normal <b>member</b></td>
         </tr>
-        <tr>
-            <td><b>developer@genealogy.test</b></td>
-            <td>password</td>
-            <td>to access options reserved for the <b>developer</b>, like the <b>user management</b> and access to <b>all persons</b> in <b>all teams</b></td>
-        </tr>
     </tbody>
 </table>
 
@@ -253,14 +248,6 @@ This application has a built-in <b>Backup Manager</b>:
         <li>WARNING : All detected slow (> 500 ms) queries</li>
         <li>WARNING : All detected N+1 queries</li>
         <li>ERROR   : All detected errors</li>
-   </ul>
-   <p>Logging can be enabled or disabled by the developer in Offcanvas Menu Settings.</p>
-</p>
-
-<p>This application has a built-in <b>User management & logging</b>, available to the developer :
-    <ul>
-        <li>User statistics by country of origin</li>
-        <li>User statistics by year, month, week or day</li>
    </ul>
 </p>
 

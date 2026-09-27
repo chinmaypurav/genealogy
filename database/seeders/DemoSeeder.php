@@ -25,14 +25,11 @@ final class DemoSeeder extends Seeder
 
     protected int $kennedy_team;
 
-    protected int $developer_team;
-
     public function __construct()
     {
         // Resolve the team IDs dynamically by name
         $this->british_royals_team = Team::where('name', 'BRITISH ROYALS')->value('id');
         $this->kennedy_team        = Team::where('name', 'KENNEDY')->value('id');
-        $this->developer_team      = Team::where('name', 'Team _ Developer')->value('id');
     }
 
     /**
@@ -56,14 +53,6 @@ final class DemoSeeder extends Seeder
 
         $this->importKennedyPeople();
         $this->importKennedyCouples();
-
-        auth()->logout();
-
-        $developer = User::where('surname', 'Developer')->first();
-        auth()->login($developer);
-        Activity::defaultCauser($developer);
-
-        $this->generatedeveloperTestData();
 
         $this->attachDemoPhotos();
 
@@ -454,31 +443,6 @@ final class DemoSeeder extends Seeder
                 'team_id' => $this->kennedy_team,
             ]);
         }
-    }
-
-    protected function generateDeveloperTestData(): void
-    {
-        Person::create([
-            'id'        => 209,
-            'firstname' => 'John',
-            'surname'   => 'DOE',
-            'sex'       => 'm',
-            'dob'       => '1963-01-01',
-            'yob'       => '1963',
-
-            'team_id' => $this->developer_team,
-        ]);
-
-        Person::create([
-            'id'        => 210,
-            'firstname' => 'Fu',
-            'surname'   => 'BAR',
-            'sex'       => 'm',
-            'dob'       => '1963-01-01',
-            'yob'       => '1963',
-
-            'team_id' => $this->developer_team,
-        ]);
     }
 
     /**

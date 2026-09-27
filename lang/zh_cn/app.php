@@ -5,16 +5,13 @@ declare(strict_types=1);
 return [
     // 菜单
     'about'            => '关于',
-    'dependencies'     => '依赖',
     'help'             => '帮助',
     'home'             => '主页',
     'menu'             => '菜单',
     'privacy_policy'   => '隐私政策',
-    'session'          => '会话',
     'terms_of_service' => '服务条款',
     'useful_links'     => '相关链接',
     'impressum'        => '网站声明',
-    'log_viewer'       => '日志查看',
 
     // 标签
     'all'               => '全部',
@@ -141,8 +138,6 @@ return [
     'event_invited'     => '邀请',
     'event_removed'     => '已删除',
     'event_transferred' => '转移',
-
-    'settings' => '设置',
 
     'people_logbook' => '人员日志',
     'team_logbook'   => '团队日志',

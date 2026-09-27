@@ -167,11 +167,6 @@ final class Couple extends Model
                 return;
             }
 
-            // Apply team scope if the user is not a developer
-            if ($user->is_developer) {
-                return;
-            }
-
             $builder->where('couples.team_id', $user->currentTeam?->id);
         });
     }

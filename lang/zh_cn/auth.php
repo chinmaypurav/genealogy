@@ -23,8 +23,6 @@ return [
     'change_password_success' => '密码修改成功',
     'change_password_error'   => '密码修改失败',
 
-    'developer' => '开发者',
-
     'email' => '电子邮件',
 
     'forgot_password'           => '忘记密码？',

@@ -37,10 +37,6 @@ Demo này có 2 cây gia đình được triển khai: **BRITISH ROYALS** và **
             <td><b>member_4@genealogy.test</b><br/>password</td>
             <td>để xem đội <b>KENNEDY</b> như <b>thành viên</b> bình thường</td>
         </tr>
-        <tr>
-            <td><b>developer@genealogy.test</b><br/>password</td>
-            <td>để xem các tùy chọn dành riêng cho <b>nhà phát triển</b>, như <b>quản lý người dùng</b> và truy cập vào <b>các cá nhân trong tất cả các đội</b></td>
-        </tr>
     </tbody>
 </table>
 

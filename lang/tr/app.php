@@ -5,16 +5,13 @@ declare(strict_types=1);
 return [
     // Menüler
     'about'            => 'Hakkında',
-    'dependencies'     => 'Bağımlılıklar',
     'help'             => 'Yardım',
     'home'             => 'Ana Sayfa',
     'menu'             => 'Menü',
     'privacy_policy'   => 'Gizlilik Politikası',
-    'session'          => 'Oturum',
     'terms_of_service' => 'Hizmet Şartları',
     'useful_links'     => 'Faydalı Bağlantılar',
     'impressum'        => 'Künye',
-    'log_viewer'       => 'Günlük Görüntüleyici',
 
     // Etiketler
     'all'               => 'Tümü',
@@ -141,8 +138,6 @@ return [
     'event_invited'     => 'davet edildi',
     'event_removed'     => 'kaldırıldı',
     'event_transferred' => 'aktarılmış',
-
-    'settings' => 'Ayarlar',
 
     'people_logbook' => 'Kişi günlüğü',
     'team_logbook'   => 'Takım günlüğü',

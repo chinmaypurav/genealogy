@@ -23,7 +23,6 @@ return [
     'confirm_new_password'    => 'Bevestig nieuw paswoord',
     'language'                => 'Taal',
     'timezone'                => 'Tijdzone',
-    'developer'               => 'Developer',
     'team'                    => 'Team',
     'current_team'            => 'Geselecteerd team',
     'email_verified'          => 'Email geverifieerd',

@@ -37,10 +37,6 @@
             <td><b>member_4@genealogy.test</b><br/>password</td>
             <td>टीम <b>केनेडी</b> को सामान्य <b>सदस्य</b> के रूप में देखने के लिए</td>
         </tr>
-        <tr>
-            <td><b>developer@genealogy.test</b><br/>password</td>
-            <td><b>डेवलपर</b> के लिए आरक्षित विकल्प देखने के लिए, जैसे <b>यूजर प्रबंधन</b> और <b>सभी टीमों के व्यक्तियों</b> तक पहुँच</td>
-        </tr>
     </tbody>
 </table>
 

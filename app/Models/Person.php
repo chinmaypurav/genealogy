@@ -307,7 +307,7 @@ final class Person extends Model implements HasMedia
      * @return Builder<Person>
      */
     #[Scope]
-    public function scopeSimilarTo(Builder $query, ?int $teamId, array $terms): Builder
+    public function scopeSimilarTo(Builder $query, int $teamId, array $terms): Builder
     {
         $terms = array_filter($terms);
 
@@ -315,11 +315,8 @@ final class Person extends Model implements HasMedia
             return $query->whereRaw('0 = 1');
         }
 
-        if ($teamId !== null) {
-            $query->where('team_id', $teamId);
-        }
-
         return $query
+            ->where('team_id', $teamId)
             ->where(function ($q) use ($terms): void {
                 foreach ($terms as $term) {
                     $like = '%' . $term . '%';
@@ -734,7 +731,7 @@ final class Person extends Model implements HasMedia
         self::addGlobalScope('team', function (Builder $builder): void {
             $user = auth()->user();
 
-            if (! $user || $user->is_developer) {
+            if (! $user) {
                 return;
             }
 

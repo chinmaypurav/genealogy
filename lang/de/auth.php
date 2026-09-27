@@ -24,8 +24,6 @@ return [
     'change_password_success' => 'Dein Passwort wurde geändert',
     'change_password_error'   => 'Uh-oh, dein Passwort konnte nicht geändert werden',
 
-    'developer' => 'Entwickler',
-
     'email' => 'E-Mail Adresse',
 
     'forgot_password'           => 'Passwort vergessen?',

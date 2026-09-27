@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 return [
-    'all_teams'     => 'Semua tim',
     'cancel'        => 'Batal',
     'couples'       => 'Pasangan',
     'create'        => 'Buat tim',

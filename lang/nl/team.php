@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 return [
-    'all_teams'     => 'Alle teams',
     'cancel'        => 'Afbreken',
     'couples'       => 'Koppels',
     'create'        => 'Team toevoegen',

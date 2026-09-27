@@ -35,10 +35,9 @@ return [
         'layouts' => resource_path('views/layouts'),
         'pages'   => resource_path('views/pages'),
 
-        'livewire'  => resource_path('views/components/livewire'),
-        'developer' => resource_path('views/components/livewire/developer'),
-        'gedcom'    => resource_path('views/components/livewire/gedcom'),
-        'people'    => resource_path('views/components/livewire/people'),
+        'livewire' => resource_path('views/components/livewire'),
+        'gedcom'   => resource_path('views/components/livewire/gedcom'),
+        'people'   => resource_path('views/components/livewire/people'),
     ],
 
     /*

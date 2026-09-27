@@ -24,8 +24,6 @@ return [
     'change_password_success' => 'Kata sandi Anda telah diubah',
     'change_password_error'   => 'Ups, ubah kata sandi gagal',
 
-    'developer' => 'Pengembang',
-
     'email' => 'Email',
 
     'forgot_password'           => 'Lupa Kata Sandi?',

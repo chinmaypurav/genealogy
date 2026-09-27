@@ -9,7 +9,6 @@ return [
     'change_password'           => 'Changer le mot de passe',
     'change_password_success'   => 'Votre mot de passe a changé',
     'change_password_error'     => 'Uh-oh, le changement de mot de passe a échoué',
-    'developer'                 => 'Promoteur',
     'email'                     => 'E-mail',
     'forgot_password'           => 'Mot de passe oublié ?',
     'forgot_password_message'   => 'Vous avez oublié votre mot de passe ? Aucun problème. Indiquez-nous simplement votre adresse e-mail et nous vous enverrons par e-mail un lien de réinitialisation de mot de passe qui vous permettra d\'en choisir un nouveau.',

@@ -9,7 +9,6 @@ return [
     'change_password'           => 'Alterar a senha',
     'change_password_success'   => 'Sua senha foi alterada',
     'change_password_error'     => 'Uh-oh, falha na alteração da senha',
-    'developer'                 => 'Desenvolvedor',
     'email'                     => 'E-mail',
     'forgot_password'           => 'Esqueceu sua senha?',
     'forgot_password_message'   => 'Esqueceu sua senha? Sem problemas. Basta nos informar seu endereço de e-mail e enviaremos por e-mail um link de redefinição de senha que permitirá que você escolha uma nova.',

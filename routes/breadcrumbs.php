@@ -59,13 +59,6 @@ TallStackUi::breadcrumbs()
         ->add(label: __('app.people_logbook'), link: route('peoplelog'))
     )
     // -----------------------------------------------------------------------------------
-    // pages
-    // -----------------------------------------------------------------------------------
-    ->for('test', fn (BreadcrumbTrail $trail) => $trail
-        ->parent('home')
-        ->add(label: 'Test', link: route('test'))
-    )
-    // -----------------------------------------------------------------------------------
     // people
     // -----------------------------------------------------------------------------------
     ->for('people.search', fn (BreadcrumbTrail $trail) => $trail
@@ -166,53 +159,6 @@ TallStackUi::breadcrumbs()
     ->for('gedcom.importteam', fn (BreadcrumbTrail $trail) => $trail
         ->parent('home')
         ->add(label: __('gedcom.gedcom_import'), link: route('gedcom.importteam'), icon: 'tabler.droplet-up')
-    )
-    // -----------------------------------------------------------------------------------
-    // developer - pages
-    // -----------------------------------------------------------------------------------
-    ->for('developer.settings', fn (BreadcrumbTrail $trail) => $trail
-        ->parent('home')
-        ->add(label: __('app.settings'), link: route('developer.settings'))
-    )
-    ->for('developer.teams', fn (BreadcrumbTrail $trail) => $trail
-        ->parent('home')
-        ->add(label: __('team.teams'), link: route('developer.teams'))
-    )
-    ->for('developer.people', fn (BreadcrumbTrail $trail) => $trail
-        ->parent('home')
-        ->add(label: __('person.people'), link: route('developer.people'))
-    )
-    ->for('developer.users', fn (BreadcrumbTrail $trail) => $trail
-        ->parent('home')
-        ->add(label: __('user.users'), link: route('developer.users'))
-    )
-    ->for('developer.dependencies', fn (BreadcrumbTrail $trail) => $trail
-        ->parent('home')
-        ->add(label: __('app.dependencies'), link: route('developer.dependencies'))
-    )
-    ->for('developer.session', fn (BreadcrumbTrail $trail) => $trail
-        ->parent('home')
-        ->add(label: __('app.session'), link: route('developer.session'))
-    )
-    ->for('developer.userlog.log', fn (BreadcrumbTrail $trail) => $trail
-        ->parent('home')
-        ->add(label: __('userlog.users_log'), link: route('developer.userlog.log'))
-    )->for('developer.userlog.origin', fn (BreadcrumbTrail $trail) => $trail
-    ->parent('home')
-    ->add(label: __('userlog.users_origin'), link: route('developer.userlog.origin'))
-    )->for('developer.userlog.origin-map', fn (BreadcrumbTrail $trail) => $trail
-    ->parent('home')
-    ->add(label: __('userlog.users_origin'), link: route('developer.userlog.origin-map'))
-    )->for('developer.userlog.period', fn (BreadcrumbTrail $trail) => $trail
-    ->parent('home')
-    ->add(label: __('userlog.users_stats'), link: route('developer.userlog.period'))
-    )
-    // -----------------------------------------------------------------------------------
-    // backups
-    // -----------------------------------------------------------------------------------
-    ->for('developer.backups', fn (BreadcrumbTrail $trail) => $trail
-        ->parent('home')
-        ->add(label: __('backup.backups'), link: route('developer.backups'))
     )
     // -----------------------------------------------------------------------------------
     // auth

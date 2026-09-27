@@ -5,9 +5,6 @@
         <div class="mb-2">
             <div class="text-lg font-medium">
                 <div>{{ $person->name }}</div>
-                @if (auth()->user()->is_developer)
-                    <div class="text-sm text-cyan-500">{{ $person->team->name }}</div>
-                @endif
             </div>
         </div>
 
@@ -85,10 +82,6 @@
         <div class="flex flex-wrap">
             <div class="max-w-full flex-2 grow text-lg font-medium">
                 <div>{{ $person->name }}</div>
-
-                @if (auth()->user()->is_developer)
-                    <div class="text-cyan-500">{{ $person->team->name }}</div>
-                @endif
             </div>
 
             <div class="max-w-full flex-3 grow text-end print:hidden">
