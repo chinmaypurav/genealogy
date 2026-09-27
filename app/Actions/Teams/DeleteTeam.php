@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Jetstream;
+namespace App\Actions\Teams;
 
 use App\Enums\PersonMediaCollection;
 use App\Models\Person;
@@ -10,7 +10,12 @@ use App\Models\Team;
 use Laravel\Jetstream\Contracts\DeletesTeams;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-final class DeleteTeam implements DeletesTeams
+/**
+ * Permanently deletes a team, including its people's photos on disk.
+ *
+ * Moves the acting user to another team first so they never end up on a deleted one.
+ */
+class DeleteTeam implements DeletesTeams
 {
     /**
      * Delete the given team.
@@ -37,7 +42,7 @@ final class DeleteTeam implements DeletesTeams
     /**
      * Delete the photos of all people in the team, including their files on disk.
      */
-    private function deletePhotos(Team $team): void
+    protected function deletePhotos(Team $team): void
     {
         Media::query()
             ->where('model_type', new Person()->getMorphClass())
