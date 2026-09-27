@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use App\Models\User;
 use Laravel\Jetstream\Features;
-use Laravel\Jetstream\Http\Livewire\DeleteUserForm;
 use Livewire\Livewire;
 use Spatie\Activitylog\Models\Activity;
 
@@ -27,7 +26,7 @@ test('user accounts can be deleted', function (): void {
 
     $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
-    Livewire::test(DeleteUserForm::class)
+    Livewire::test('profile::delete-user-form')
         ->set('password', 'password')
         ->call('deleteUser');
 
@@ -43,7 +42,7 @@ test('correct password must be provided before account can be deleted', function
 
     $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
-    Livewire::test(DeleteUserForm::class)
+    Livewire::test('profile::delete-user-form')
         ->set('password', 'wrong-password')
         ->call('deleteUser')
         ->assertHasErrors(['password']);

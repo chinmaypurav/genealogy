@@ -7,12 +7,11 @@ namespace App\Actions\Users;
 use App\Actions\Teams\DeleteTeam;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
-use Laravel\Jetstream\Contracts\DeletesUsers;
 
 /**
  * Deletes a user account with its owned teams, profile photo and API tokens, in one transaction.
  */
-class DeleteUser implements DeletesUsers
+class DeleteUser
 {
     /**
      * Delete the given user.

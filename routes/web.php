@@ -13,12 +13,32 @@ Route::controller(App\Http\Controllers\Front\PageController::class)->group(funct
     Route::get('help', 'help')->name('help');
 });
 
+// Still served by Jetstream until #21 steps 3b and 4 replace these screens.
+Route::get('terms-of-service', [Laravel\Jetstream\Http\Controllers\Livewire\TermsOfServiceController::class, 'show'])->name('terms.show');
+Route::get('privacy-policy', [Laravel\Jetstream\Http\Controllers\Livewire\PrivacyPolicyController::class, 'show'])->name('policy.show');
+
+// profile: reachable before email verification, so the verify-email page can link to it
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+])->group(function (): void {
+    Route::view('user/profile', 'profile.show')->name('profile.show');
+});
+
 // backend routes
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function (): void {
+    // teams: still served by Jetstream until #21 step 3b
+    Route::get('teams/create', [Laravel\Jetstream\Http\Controllers\Livewire\TeamController::class, 'create'])->name('teams.create');
+    Route::get('teams/{team}', [Laravel\Jetstream\Http\Controllers\Livewire\TeamController::class, 'show'])->name('teams.show');
+    Route::put('current-team', [Laravel\Jetstream\Http\Controllers\CurrentTeamController::class, 'update'])->name('current-team.update');
+    Route::get('team-invitations/{invitation}', [Laravel\Jetstream\Http\Controllers\TeamInvitationController::class, 'accept'])
+        ->middleware('signed')
+        ->name('team-invitations.accept');
+
     // pages
     Route::livewire('team', 'livewire::team')->name('team');
     Route::livewire('teamlog', 'livewire::teamlog')->name('teamlog');
