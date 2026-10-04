@@ -4,18 +4,14 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Models\Setting;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterval;
-use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Http\Client\RequestException;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Override;
@@ -55,31 +51,9 @@ final class AppServiceProvider extends ServiceProvider
         // Block migrate:fresh, db:wipe and friends in production to prevent accidental data loss.
         DB::prohibitDestructiveCommands(app()->isProduction());
 
-        // Enable or disable logging based on application settings
-        if ($this->isDatabaseOnline() && Schema::hasTable('settings')) {
-            // Cache the applications settings
-            $this->app->singleton('settings', fn () => Cache::rememberForever('settings', fn () => Setting::pluck('value', 'key')));
-
-            $this->logAllQueries();
-            $this->LogAllQueriesSlow();
-            $this->logAllQueriesNplusone();
-        }
-    }
-
-    /**
-     * Check if the database connection is available.
-     */
-    protected function isDatabaseOnline(): bool
-    {
-        try {
-            DB::connection()->getPdo();
-
-            return true;
-        } catch (Exception) {
-            // Log the exception if needed for debugging
-            // Log::error('Database connection error: ' . $e->getMessage());
-            return false;
-        }
+        $this->logAllQueries();
+        $this->logSlowQueries();
+        $this->logLazyLoading();
     }
 
     /**
@@ -207,36 +181,40 @@ final class AppServiceProvider extends ServiceProvider
      */
     private function logAllQueries(): void
     {
-        if (settings('log_all_queries')) {
+        if (config('app.query_logging.all')) {
             DB::listen(fn ($query) => Log::debug($query->toRawSQL()));
         }
     }
 
     /**
-     * Log all slow queries for debugging purposes.
+     * Log individual queries slower than the configured threshold.
      */
-    private function LogAllQueriesSlow(): void
+    private function logSlowQueries(): void
     {
-        if (settings('log_all_queries_slow')) {
-            DB::listen(function ($query): void {
-                if ($query->time > (int) settings('log_all_queries_slow_threshold')) {
-                    Log::warning('An individual database query exceeded ' . settings('log_all_queries_slow_threshold') . ' ms.', [
-                        'sql'       => $query->sql,
-                        'raw'       => $query->toRawSQL(),
-                        'time'      => $query->time,
-                        'formatted' => CarbonInterval::milliseconds($query->time)->cascade()->forHumans(['short' => true, 'parts' => 3, 'join' => true]),
-                    ]);
-                }
-            });
+        if (! config('app.query_logging.slow')) {
+            return;
         }
+
+        DB::listen(function ($query): void {
+            $threshold = (int) config('app.query_logging.slow_threshold');
+
+            if ($query->time > $threshold) {
+                Log::warning('An individual database query exceeded ' . $threshold . ' ms.', [
+                    'sql'       => $query->sql,
+                    'raw'       => $query->toRawSQL(),
+                    'time'      => $query->time,
+                    'formatted' => CarbonInterval::milliseconds($query->time)->cascade()->forHumans(['short' => true, 'parts' => 3, 'join' => true]),
+                ]);
+            }
+        });
     }
 
     /**
-     * Log all (N+1) queries for debugging purposes.
+     * Log lazy loading (N+1) violations instead of throwing when strict mode is on.
      */
-    private function logAllQueriesNplusone(): void
+    private function logLazyLoading(): void
     {
-        if (settings('log_all_queries_n+1')) {
+        if (config('app.query_logging.lazy_loading')) {
             Model::handleLazyLoadingViolationUsing(function ($model, $relation): void {
                 Log::warning(sprintf(
                     'N+1 Query detected in model %s on relation %s.',

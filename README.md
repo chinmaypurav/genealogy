@@ -242,9 +242,9 @@ This application ships with scheduled <b>Backups</b>:
 <p>The application log (<code>storage/logs</code>) records:
     <ul>
         <li>INFO    : All scheduled backups</li>
-        <li>DEBUG   : All executed database queries (off by default)</li>
-        <li>WARNING : All detected slow (> 500 ms) queries</li>
-        <li>WARNING : All detected N+1 queries</li>
+        <li>DEBUG   : All executed database queries (<code>LOG_ALL_QUERIES</code>, off by default)</li>
+        <li>WARNING : All slow queries (<code>LOG_SLOW_QUERIES</code>, over <code>LOG_SLOW_QUERIES_THRESHOLD</code> ms, on by default)</li>
+        <li>WARNING : All detected N+1 queries (<code>LOG_LAZY_LOADING</code>, local only, off by default)</li>
         <li>ERROR   : All detected errors</li>
    </ul>
 </p>

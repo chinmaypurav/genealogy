@@ -145,6 +145,13 @@ return [
     | Custom values used in the application outside of the config files
     |--------------------------------------------------------------------------
     */
+    'query_logging' => [
+        'all'            => env('LOG_ALL_QUERIES', false),
+        'slow'           => env('LOG_SLOW_QUERIES', true),
+        'slow_threshold' => (int) env('LOG_SLOW_QUERIES_THRESHOLD', 500),
+        'lazy_loading'   => env('LOG_LAZY_LOADING', false),
+    ],
+
     'backup' => [
         'disk'          => env('BACKUP_DISK', 'backups'),
         'daily_cleanup' => env('BACKUP_DAILY_CLEANUP', '22:30'),
