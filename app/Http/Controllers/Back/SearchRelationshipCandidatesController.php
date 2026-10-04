@@ -7,8 +7,10 @@ namespace App\Http\Controllers\Back;
 use App\Actions\People\SearchRelationshipCandidates;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SearchRelationshipCandidatesRequest;
+use App\Models\Couple;
 use App\Models\Person;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 /**
  * Serves compact, authorized relationship-picker results to TallStackUI.
@@ -20,13 +22,8 @@ class SearchRelationshipCandidatesController extends Controller
 {
     public function __invoke(SearchRelationshipCandidatesRequest $request, Person $person, string $relationship): JsonResponse
     {
-        $user = $request->user();
-
-        abort_unless($user?->current_team_id === $person->team_id, 403, __('app.unauthorized_access'));
-
-        $permission = $relationship === 'partner' ? 'couple:create' : 'person:create';
-
-        abort_unless($user->hasPermission($permission), 403, __('app.unauthorized_access'));
+        Gate::authorize('view', $person);
+        Gate::authorize('create', $relationship === 'partner' ? Couple::class : Person::class);
 
         return response()->json(
             app(SearchRelationshipCandidates::class)->handle(

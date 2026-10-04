@@ -9,7 +9,6 @@ use Livewire\Component;
 
 new class extends Component
 {
-    use App\Livewire\Traits\AuthorizesPersonActions;
     use App\Livewire\Traits\HandlesPhotoUploads, \App\Livewire\Traits\SavesPersonPhotos;
     use App\Livewire\Traits\TrimStringsAndConvertEmptyStringsToNull;
     use Livewire\WithFileUploads, TallStackUi\Traits\Interactions;
@@ -29,7 +28,7 @@ new class extends Component
 
     public function saveChild(): void
     {
-        $this->authorizePermission('person:create');
+        $this->authorize('create', Person::class);
 
         $validated = $this->validate();
 

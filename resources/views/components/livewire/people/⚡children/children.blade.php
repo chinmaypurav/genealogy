@@ -8,7 +8,7 @@
                 @endif
             </div>
 
-            @if (auth()->user()->hasPermission('person:create'))
+            @can('create', App\Models\Person::class)
                 <div class="max-w-min min-w-max flex-1 grow text-end">
                     <x-ts-dropdown icon="tabler.menu-2" position="bottom-end">
                         <a href="/people/{{ $person->id }}/add-child">
@@ -18,7 +18,7 @@
                             </x-ts-dropdown.items>
                         </a>
 
-                        @if (auth()->user()->hasPermission('person:update') and $person->children->count() > 0)
+                        @if (auth()->user()->can('update', $person) and $person->children->count() > 0)
                             <hr />
 
                             @foreach ($children as $child)
@@ -36,7 +36,7 @@
                         @endif
                     </x-ts-dropdown>
                 </div>
-            @endif
+            @endcan
         </div>
     </div>
 

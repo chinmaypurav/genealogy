@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Livewire\Traits\AuthorizesPersonActions;
 use App\Models\Couple;
 use App\Models\Person;
 use Livewire\Attributes\On;
@@ -11,7 +10,6 @@ use TallStackUi\Traits\Interactions;
 
 new class extends Component
 {
-    use AuthorizesPersonActions;
     use Interactions;
 
     public Person $person;
@@ -27,7 +25,7 @@ new class extends Component
 
     public function confirm(int $id, string $name): void
     {
-        $this->authorizePermission('couple:delete');
+        $this->authorize('delete', $this->findCouple($id));
 
         $this->dialog()
             ->question(__('app.attention') . '!', __('app.are_you_sure'))
@@ -50,17 +48,25 @@ new class extends Component
      */
     public function delete(array $couple): void
     {
-        $this->authorizePermission('couple:delete');
+        $model = $this->findCouple($couple['id']);
 
-        $couple = Couple::where(function ($q): void {
-            $q->where('person1_id', $this->person->id)
-                ->orWhere('person2_id', $this->person->id);
-        })->findOrFail($couple['id']);
+        $this->authorize('delete', $model);
 
-        $couple->delete();
+        $model->delete();
 
-        $this->toast()->success(__('app.delete'), e($couple['name']) . ' ' . __('app.deleted') . '.')->send();
+        $this->toast()->success(__('app.delete'), e($model->name) . ' ' . __('app.deleted') . '.')->send();
 
         $this->dispatch('couple_deleted');
+    }
+
+    /**
+     * Only couples this person is part of may be targeted from their partners list.
+     */
+    protected function findCouple(int $id): Couple
+    {
+        return Couple::where(function ($q): void {
+            $q->where('person1_id', $this->person->id)
+                ->orWhere('person2_id', $this->person->id);
+        })->findOrFail($id);
     }
 };

@@ -8,20 +8,20 @@
                 @endif
             </div>
 
-            @if (auth()->user()->hasPermission('person:update') or auth()->user()->hasPermission('person:delete'))
+            @canany(['update', 'delete'], $person)
                 <div class="max-w-min min-w-max flex-1 grow text-end">
                     <x-ts-dropdown icon="tabler.menu-2" position="bottom-end">
-                        @if (auth()->user()->hasPermission('person:update'))
+                        @can('update', $person)
                             <a href="/people/{{ $person->id }}/edit-files">
                                 <x-ts-dropdown.items>
                                     <x-ts-icon icon="tabler.files" class="mr-2 inline-block size-5" />
                                     {{ __('person.edit_files') }}
                                 </x-ts-dropdown.items>
                             </a>
-                        @endif
+                        @endcan
                     </x-ts-dropdown>
                 </div>
-            @endif
+            @endcanany
         </div>
     </div>
 

@@ -18,7 +18,7 @@ beforeEach(function (): void {
     $this->user->currentTeam()->associate($this->team);
     $this->user->save();
 
-    $this->person = Person::factory()->create();
+    $this->person = Person::factory()->create(['team_id' => $this->team->id]);
 
     $this->actingAs($this->user);
 });
