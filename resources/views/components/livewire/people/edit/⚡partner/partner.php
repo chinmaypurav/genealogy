@@ -58,9 +58,11 @@ new class extends Component
             return;
         }
 
+        $partnerId = $this->resolvePartnerId($validated['partner_id']);
+
         if ($this->person->id === $this->couple->person1_id) {
             $this->couple->update([
-                'person2_id' => $validated['partner_id'],
+                'person2_id' => $partnerId,
                 'date_start' => $validated['date_start'] ?? null,
                 'date_end'   => $validated['date_end'] ?? null,
                 'is_married' => $validated['is_married'],
@@ -68,7 +70,7 @@ new class extends Component
             ]);
         } elseif ($this->person->id === $this->couple->person2_id) {
             $this->couple->update([
-                'person1_id' => $validated['partner_id'],
+                'person1_id' => $partnerId,
                 'date_start' => $validated['date_start'] ?? null,
                 'date_end'   => $validated['date_end'] ?? null,
                 'is_married' => $validated['is_married'],
@@ -117,6 +119,20 @@ new class extends Component
             'is_married' => __('couple.is_married'),
             'has_ended'  => __('couple.has_ended'),
         ];
+    }
+
+    /**
+     * The `exists` rule bypasses the team scope, so the partner must be
+     * re-resolved within the person's team to prevent cross-team linking.
+     */
+    private function resolvePartnerId(int $partnerId): int
+    {
+        return Person::query()
+            ->whereKey($partnerId)
+            ->where('team_id', $this->person->team_id)
+            ->where('id', '!=', $this->person->id)
+            ->firstOrFail()
+            ->id;
     }
 
     private function loadData(): void

@@ -68,3 +68,26 @@ test('an editor cannot assign parents from another team through the family edito
     expect($person->fresh()->father_id)->toBeNull()
         ->and($person->fresh()->parents_id)->toBeNull();
 });
+
+test('an editor cannot relink an existing couple to a partner from another team', function (): void {
+    $editor = $this->memberWithRole('editor');
+    $this->actingAs($editor);
+
+    $person         = Person::factory()->create(['team_id' => $editor->current_team_id]);
+    $partner        = Person::factory()->create(['team_id' => $editor->current_team_id]);
+    $foreignPartner = Person::factory()->create(['team_id' => Team::factory()->create()->id]);
+    $couple         = Couple::query()->create([
+        'person1_id' => $person->id,
+        'person2_id' => $partner->id,
+        'team_id'    => $editor->current_team_id,
+        'is_married' => false,
+        'has_ended'  => false,
+    ]);
+
+    Livewire::test('people::edit.partner', ['person' => $person, 'couple' => $couple])
+        ->set('partner_id', $foreignPartner->id)
+        ->call('savePartner')
+        ->assertNotFound();
+
+    expect($couple->fresh()->person2_id)->toBe($partner->id);
+});
