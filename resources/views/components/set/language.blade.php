@@ -10,7 +10,11 @@
             @if ($available_locale === app()->getLocale())
                 <x-dropdown-link href="#" :active="true"> {{ $locale_name }} </x-dropdown-link>
             @else
-                <x-dropdown-link href="/language/{{ $available_locale }}"> {{ $locale_name }} </x-dropdown-link>
+                <form method="POST" action="{{ route('language.update', $available_locale) }}" x-data>
+                    @csrf
+
+                    <x-dropdown-link href="{{ route('language.update', $available_locale) }}" @click.prevent="$root.submit()"> {{ $locale_name }} </x-dropdown-link>
+                </form>
             @endif
         @endforeach
     </x-slot>
