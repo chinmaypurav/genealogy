@@ -232,18 +232,16 @@ This project is open-sourced software licensed under the [MIT license](LICENSE).
 
 ### Special features
 
-This application has a built-in <b>Backup Manager</b>:
+This application ships with scheduled <b>Backups</b>:
 
 <ul>
-    <li>Backups can be initiated and managed manually.</li>
     <li>Daily backup and cleanup tasks are scheduled through Laravel's scheduler.</li>
     <li>An email is sent after each backup.</li>
 </ul>
 
-<p>This application has a built-in <b>Log Viewer</b>, on demand showing :
+<p>The application log (<code>storage/logs</code>) records:
     <ul>
         <li>INFO    : All scheduled backups</li>
-        <li>DEBUG   : All executed requests (off by default)</li>
         <li>DEBUG   : All executed database queries (off by default)</li>
         <li>WARNING : All detected slow (> 500 ms) queries</li>
         <li>WARNING : All detected N+1 queries</li>
