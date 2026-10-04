@@ -48,6 +48,8 @@ test('search by firstname returns matching results', function (): void {
         'firstname' => 'Jane',
         'surname'   => 'Smith',
         'team_id'   => $this->team->id,
+        'birthname' => null,
+        'nickname'  => null,
     ]);
 
     Livewire::test('people::search')
@@ -130,11 +132,15 @@ test('search with multiple words uses AND logic', function (): void {
         'firstname' => 'John',
         'surname'   => 'Smith',
         'team_id'   => $this->team->id,
+        'birthname' => null,
+        'nickname'  => null,
     ]);
     Person::factory()->create([
         'firstname' => 'Jane',
         'surname'   => 'Doe',
         'team_id'   => $this->team->id,
+        'birthname' => null,
+        'nickname'  => null,
     ]);
 
     Livewire::test('people::search')
@@ -154,6 +160,8 @@ test('search with quoted phrase treats it as single term', function (): void {
         'firstname' => 'John',
         'surname'   => 'Smith',
         'team_id'   => $this->team->id,
+        'birthname' => null,
+        'nickname'  => null,
     ]);
 
     Livewire::test('people::search')
