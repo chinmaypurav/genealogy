@@ -20,7 +20,12 @@ final class Localization
         // Check and apply the locale from session if it differs from the current app locale
         $locale = session('locale');
 
-        if ($locale && $locale !== app()->getLocale()) {
+        // Sessions written before the locale route was validated may still hold arbitrary strings, which would make the translator throw
+        if (! in_array($locale, config('app.available_locales'), true)) {
+            return $next($request);
+        }
+
+        if ($locale !== app()->getLocale()) {
             app()->setLocale($locale);
             Carbon::setLocale($locale);
             Number::useLocale($locale);

@@ -82,10 +82,6 @@ Route::middleware([
     Route::livewire('importteam', 'gedcom::importteam')->name('gedcom.importteam');
 });
 
-// set application language in session
-// actual language switching wil be handled by App\Http\Middleware\Localization::class
-Route::get('language/{locale}', function ($locale) {
-    session()->put('locale', $locale);
-
-    return back();
-});
+Route::post('language/{locale}', App\Http\Controllers\Front\SwitchLanguageController::class)
+    ->whereIn('locale', config('app.available_locales'))
+    ->name('language.update');
