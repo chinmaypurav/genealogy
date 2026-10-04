@@ -239,10 +239,9 @@ This application ships with scheduled <b>Backups</b>:
     <li>An email is sent after each backup.</li>
 </ul>
 
-<p>This application has a built-in <b>Log Viewer</b>, on demand showing :
+<p>The application log (<code>storage/logs</code>) records:
     <ul>
         <li>INFO    : All scheduled backups</li>
-        <li>DEBUG   : All executed requests (off by default)</li>
         <li>DEBUG   : All executed database queries (off by default)</li>
         <li>WARNING : All detected slow (> 500 ms) queries</li>
         <li>WARNING : All detected N+1 queries</li>
