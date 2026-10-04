@@ -5,96 +5,72 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Back;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TransferTeamOwnershipRequest;
 use App\Models\Team;
-use App\Models\User;
 use App\Notifications\OwnershipTransferred;
 use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
 use TallStackUi\Traits\Interactions;
 
-final class TeamController extends Controller
+/**
+ * Handles team ownership transfers.
+ *
+ * Authorization and eligibility of the new owner live in TransferTeamOwnershipRequest.
+ * Side effects (activity log, notification, success toast) only run once the
+ * ownership change has committed, so a failed transfer never reports success.
+ */
+class TeamController extends Controller
 {
     use Interactions;
 
-    public function transferOwnership(Request $request, Team $team): RedirectResponse
+    public function transferOwnership(TransferTeamOwnershipRequest $request, Team $team): RedirectResponse
     {
-        // Authorization — three independent guards, all must pass.
-
-        // 1. Only the current team owner may initiate a transfer.
-        Gate::authorize('update', $team);
-
-        // 2. Personal teams cannot be transferred.
-        if ($team->personal_team) {
-            abort(403, 'Personal teams cannot be transferred.');
-        }
-
-        $validated = $request->validate([
-            'new_owner_id' => ['required', 'exists:users,id'],
-        ]);
-
-        /** @var User $currentOwner */
         $currentOwner = $team->owner;
-        /** @var User $newOwner */
-        $newOwner = User::findOrFail($validated['new_owner_id']);
-
-        // 3. The designated new owner must already be a member of this team.
-        if (! $newOwner->belongsToTeam($team)) {
-            abort(422, 'The new owner must already be a member of this team.');
-        }
-
-        /** @var User $currentOwner */
-        $currentOwner = $team->owner;
-        /** @var User $newOwner */
-        $newOwner = User::findOrFail($validated['new_owner_id']);
+        $newOwner     = $request->newOwner();
 
         try {
             DB::transaction(function () use ($team, $currentOwner, $newOwner): void {
-                $currentOwner_as_teamUser = $team->users()->find($currentOwner->id);  // `find()` retrieves the user with membership
+                $currentOwnerMembership = $team->users()->find($currentOwner->id);
 
-                if (! $currentOwner_as_teamUser) {
-                    // If the current owner is not in the pivot table, attach them
-                    $team->users()->attach($currentOwner->id, [
-                        'role' => 'administrator',
-                    ]);
-                } elseif (empty($currentOwner_as_teamUser->pivot->role)) {
-                    // If the pivot entry exists but no role is set, update it
-                    $team->users()->updateExistingPivot($currentOwner->id, [
-                        'role' => 'administrator',
-                    ]);
+                // The previous owner stays on the team as an administrator.
+                if (! $currentOwnerMembership) {
+                    $team->users()->attach($currentOwner->id, ['role' => 'administrator']);
+                } elseif (empty($currentOwnerMembership->membership->role)) {
+                    $team->users()->updateExistingPivot($currentOwner->id, ['role' => 'administrator']);
                 }
 
-                // Remove the new owner's previous role
+                // Owners are tracked on the team itself, not in the membership pivot.
                 $team->users()->detach($newOwner->id);
 
-                // Transfer ownership to the new owner
                 $team->user_id = $newOwner->id;
                 $team->save();
-
-                // Log activity: Transfer Team Membership
-                defer(function () use ($team, $currentOwner, $newOwner): void {
-                    activity()
-                        ->useLog('user_team')
-                        ->performedOn($team)
-                        ->causedBy($currentOwner)
-                        ->event(__('app.event_transferred'))
-                        ->withProperties([
-                            'email' => $newOwner->email,
-                            'name'  => $newOwner->name,
-                        ])
-                        ->log(__('team.membership') . ' ' . __('app.event_transferred'));
-                });
-
-                // Notify the new owner synchronously
-                $newOwner->notify(new OwnershipTransferred($team));
-
-                $this->toast()->success(__('team.transfer'), __('team.transferred_to') . e($newOwner->name) . '.')->flash()->send();
             });
-        } catch (Exception) {
+        } catch (Exception $exception) {
+            report($exception);
+
             $this->toast()->error(__('team.transfer'), __('team.transfer_failed'))->flash()->send();
+
+            return back();
         }
+
+        defer(function () use ($team, $currentOwner, $newOwner): void {
+            activity()
+                ->useLog('user_team')
+                ->performedOn($team)
+                ->causedBy($currentOwner)
+                ->event(__('app.event_transferred'))
+                ->withProperties([
+                    'email' => $newOwner->email,
+                    'name'  => $newOwner->name,
+                ])
+                ->log(__('team.membership') . ' ' . __('app.event_transferred'));
+        });
+
+        // The transfer has committed; a mail failure must not turn it into an error response.
+        rescue(fn () => $newOwner->notify(new OwnershipTransferred($team)));
+
+        $this->toast()->success(__('team.transfer'), __('team.transferred_to') . e($newOwner->name) . '.')->flash()->send();
 
         return back();
     }
