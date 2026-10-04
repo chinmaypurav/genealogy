@@ -9,7 +9,7 @@
                 </div>
 
                 <div class="max-w-full flex-1 grow text-center">
-                    @if (auth()->user()->hasPermission('person:create'))
+                    @can('create', App\Models\Person::class)
                         {{-- add button --}}
                         <div class="md:hidden">
                             <x-ts-button href="/people/add" color="emerald" class="text-sm">
@@ -23,7 +23,7 @@
                                 {{ __('person.add_person') }}
                             </x-ts-button>
                         </div>
-                    @endif
+                    @endcan
                 </div>
 
                 <div class="max-w-full flex-1 grow text-end">

@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Livewire\Traits\AuthorizesPersonActions;
 use App\Models\Person;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -10,7 +9,6 @@ use TallStackUi\Traits\Interactions;
 
 new class extends Component
 {
-    use AuthorizesPersonActions;
     use Interactions;
 
     public Person $person;
@@ -27,7 +25,7 @@ new class extends Component
 
     public function confirm(): void
     {
-        $this->authorizePermission('person:delete');
+        $this->authorize('delete', $this->person);
 
         $this->dialog()
             ->question(__('app.attention') . '!', __('app.are_you_sure'))
@@ -43,7 +41,7 @@ new class extends Component
 
     public function delete(): void
     {
-        $this->authorizePermission('person:delete');
+        $this->authorize('delete', $this->person);
 
         if ($this->person->isDeletable()) {
             $this->person->delete();

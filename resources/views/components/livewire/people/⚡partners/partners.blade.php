@@ -8,7 +8,7 @@
                 @endif
             </div>
 
-            @if (auth()->user()->hasPermission('couple:create'))
+            @can('create', App\Models\Couple::class)
                 <div class="max-w-min min-w-max flex-1 grow text-end">
                     <x-ts-dropdown icon="tabler.menu-2" position="bottom-end">
                         <a href="/people/{{ $person->id }}/add-partner">
@@ -18,7 +18,7 @@
                             </x-ts-dropdown.items>
                         </a>
 
-                        @if (auth()->user()->hasPermission('couple:update') and $person->couples->count() > 0)
+                        @if ($person->couples->contains(fn ($couple) => auth()->user()->can('update', $couple)))
                             <hr />
 
                             @foreach ($person->couples->sortBy('date_start') as $couple)
@@ -34,7 +34,7 @@
                             @endforeach
                         @endif
 
-                        @if (auth()->user()->hasPermission('couple:delete') and $person->couples->count() > 0)
+                        @if ($person->couples->contains(fn ($couple) => auth()->user()->can('delete', $couple)))
                             <hr />
 
                             @foreach ($person->couples->sortBy('date_start') as $couple)
@@ -53,7 +53,7 @@
                         @endif
                     </x-ts-dropdown>
                 </div>
-            @endif
+            @endcan
         </div>
     </div>
 

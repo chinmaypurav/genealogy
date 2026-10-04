@@ -5,10 +5,10 @@
                 {{ __('person.profile') }}
             </div>
 
-            @if (auth()->user()->hasPermission('person:update') or auth()->user()->hasPermission('person:delete'))
+            @canany(['update', 'delete'], $person)
                 <div class="max-w-min min-w-max flex-1 grow text-end">
                     <x-ts-dropdown icon="tabler.menu-2" position="bottom-end">
-                        @if (auth()->user()->hasPermission('person:update'))
+                        @can('update', $person)
                             <a href="/people/{{ $person->id }}/edit-profile">
                                 <x-ts-dropdown.items>
                                     <x-ts-icon icon="tabler.id" class="mr-2 inline-block size-5" />
@@ -46,9 +46,9 @@
                                     {{ __('person.edit_photos') }}
                                 </x-ts-dropdown.items>
                             </a>
-                        @endif
+                        @endcan
 
-                        @if (auth()->user()->hasPermission('person:delete') and $person->isDeletable())
+                        @if (auth()->user()->can('delete', $person) and $person->isDeletable())
                             <hr />
 
                             <x-ts-dropdown.items
@@ -62,7 +62,7 @@
                         @endif
                     </x-ts-dropdown>
                 </div>
-            @endif
+            @endcanany
         </div>
     </div>
 

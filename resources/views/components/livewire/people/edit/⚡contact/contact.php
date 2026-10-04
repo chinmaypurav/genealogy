@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Livewire\Traits\AuthorizesPersonActions;
 use App\Livewire\Traits\TrimStringsAndConvertEmptyStringsToNull;
 use App\Models\Person;
 use App\Support\Countries;
@@ -13,7 +12,6 @@ use TallStackUi\Traits\Interactions;
 
 new class extends Component
 {
-    use AuthorizesPersonActions;
     use Interactions;
     use TrimStringsAndConvertEmptyStringsToNull;
 
@@ -49,7 +47,7 @@ new class extends Component
 
     public function saveContact(): void
     {
-        $this->authorizePermission('person:update');
+        $this->authorize('update', $this->person);
 
         $validated = $this->validate();
 

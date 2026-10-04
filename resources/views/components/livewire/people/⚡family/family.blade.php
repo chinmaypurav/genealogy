@@ -5,7 +5,7 @@
                 {{ __('person.family') }}
             </div>
 
-            @if (auth()->user()->hasPermission('person:update'))
+            @can('update', $person)
                 <div class="max-w-min min-w-max flex-1 grow text-end">
                     <x-ts-dropdown icon="tabler.menu-2" position="bottom-end">
                         @if ((! isset($person->father_id) or ! isset($person->mother_id)) and ! isset($person->parents_id))
@@ -38,7 +38,7 @@
                         </a>
                     </x-ts-dropdown>
                 </div>
-            @endif
+            @endcan
         </div>
     </div>
 

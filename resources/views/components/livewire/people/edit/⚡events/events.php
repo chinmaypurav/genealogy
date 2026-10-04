@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Livewire\Traits\AuthorizesPersonActions;
 use App\Models\Person;
 use App\Models\PersonEvent;
 use App\Support\Countries;
@@ -16,7 +15,6 @@ use TallStackUi\Traits\Interactions;
 
 new class extends Component
 {
-    use AuthorizesPersonActions;
     use Interactions;
 
     #[Locked]
@@ -85,7 +83,7 @@ new class extends Component
 
     public function openModal(?int $eventId = null): void
     {
-        $this->authorizePermission('person:update');
+        $this->authorize('update', $this->person);
 
         $this->resetValidation();
 
@@ -120,7 +118,7 @@ new class extends Component
 
     public function save(): void
     {
-        $this->authorizePermission('person:update');
+        $this->authorize('update', $this->person);
 
         $this->validate([
             'type'        => 'required|in:' . implode(',', PersonEvent::EVENT_TYPES),
@@ -166,7 +164,7 @@ new class extends Component
 
     public function confirm(string $id): void
     {
-        $this->authorizePermission('person:update');
+        $this->authorize('update', $this->person);
 
         $this->dialog()
             ->question(__('app.attention') . '!', __('app.are_you_sure'))
@@ -183,7 +181,7 @@ new class extends Component
 
     public function delete(int $eventId): void
     {
-        $this->authorizePermission('person:update');
+        $this->authorize('update', $this->person);
 
         $event = PersonEvent::where('person_id', $this->person->id)->findOrFail($eventId);
 
