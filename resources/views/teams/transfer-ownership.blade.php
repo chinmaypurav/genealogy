@@ -36,6 +36,8 @@
                                         @endif
                                     @endforeach
                                 </select>
+
+                                <x-input-error for="new_owner_id" class="mt-2" />
                             </div>
                         </div>
                     </div>
