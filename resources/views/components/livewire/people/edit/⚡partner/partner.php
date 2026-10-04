@@ -131,8 +131,7 @@ new class extends Component
             ->whereKey($partnerId)
             ->where('team_id', $this->person->team_id)
             ->where('id', '!=', $this->person->id)
-            ->firstOrFail()
-            ->id;
+            ->valueOrFail('id');
     }
 
     private function loadData(): void
