@@ -535,11 +535,8 @@ final class Person extends Model implements HasMedia
                 return;
             }
 
-            $currentTeam = $user->currentTeam;
-
-            if ($currentTeam) {
-                $builder->where('people.team_id', $currentTeam->id);
-            }
+            // Fail closed: a missing or dangling current team yields `team_id IS NULL` (no rows), never every team's people.
+            $builder->where('people.team_id', $user->currentTeam?->id);
         });
 
         // Handle force deletes (permanent deletion only)
