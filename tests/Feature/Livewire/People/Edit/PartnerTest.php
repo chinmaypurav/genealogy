@@ -24,8 +24,8 @@ it('can save an existing couple without triggering a false overlap error', funct
     $this->actingAs($user);
 
     // Create a person and their partner
-    $person  = Person::factory()->create(['yob' => 1980]);
-    $partner = Person::factory()->create(['yob' => 1982]);
+    $person  = Person::factory()->create(['yob' => 1980, 'team_id' => $team->id]);
+    $partner = Person::factory()->create(['yob' => 1982, 'team_id' => $team->id]);
 
     // Create a couple with a known date range
     $couple = Couple::factory()->create([
