@@ -100,3 +100,15 @@ test('similar persons are limited to the given team', function (): void {
     expect(Person::query()->withoutGlobalScopes()->similarTo($user->current_team_id, ['John'])->pluck('id')->all())
         ->toBe([$ownTeamMatch->id]);
 });
+
+test('the team scope returns no people when the user has no current team', function (): void {
+    Person::factory()->withUser(User::factory()->withPersonalTeam()->create())->create();
+
+    // A dangling current_team_id (e.g. a team removed outside DeleteTeam) resolves to no current team.
+    $user = User::factory()->create(['current_team_id' => 999_999]);
+
+    $this->actingAs($user);
+
+    expect($user->currentTeam)->toBeNull()
+        ->and(Person::count())->toBe(0);
+});
