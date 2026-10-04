@@ -21,7 +21,7 @@ class TransferTeamOwnershipRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return ! $this->team()->personal_team && $this->user()->can('update', $this->team());
+        return ! $this->team()->personal_team && $this->user()?->can('update', $this->team()) === true;
     }
 
     /** @return array<string, ValidationRule|array<mixed>|string> */
@@ -38,11 +38,15 @@ class TransferTeamOwnershipRequest extends FormRequest
 
     public function team(): Team
     {
-        return $this->route('team');
+        $team = $this->route('team');
+
+        abort_unless($team instanceof Team, 404);
+
+        return $team;
     }
 
     public function newOwner(): User
     {
-        return User::findOrFail($this->validated('new_owner_id'));
+        return User::findOrFail($this->integer('new_owner_id'));
     }
 }
