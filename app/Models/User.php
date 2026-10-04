@@ -11,7 +11,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -162,16 +161,6 @@ final class User extends Authenticatable
         );
 
         return $this->isDeletableCache = ($totalAssociations === 0);
-    }
-
-    /**
-     * Returns ALL USERLOGS (n Userlog)
-     *
-     * @return HasMany<Userlog, $this>
-     */
-    public function userlogs(): HasMany
-    {
-        return $this->hasMany(Userlog::class);
     }
 
     /**

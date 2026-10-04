@@ -145,9 +145,6 @@ return [
     | Custom values used in the application outside of the config files
     |--------------------------------------------------------------------------
     */
-    // hashed IP address to exclude developer's own visits from user location logging
-    'dev_ip_hash' => env('DEV_IP_HASH', null),
-
     'query_logging' => [
         'all'            => env('LOG_ALL_QUERIES', false),
         'slow'           => env('LOG_SLOW_QUERIES', true),
