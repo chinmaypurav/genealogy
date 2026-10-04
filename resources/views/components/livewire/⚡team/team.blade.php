@@ -153,7 +153,7 @@
                                             {{ __('team.persons') }}
                                         </th>
                                         <th class="px-6 py-3 text-center text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-400">
-                                            {{ __('backup.actions') }}
+                                            {{ __('Actions') }}
                                         </th>
                                     </tr>
                                 </thead>
@@ -192,7 +192,7 @@
                                             {{ __('team.couples') }}
                                         </th>
                                         <th class="px-6 py-3 text-center text-xs font-medium tracking-wider text-gray-500 uppercase dark:text-gray-400">
-                                            {{ __('backup.actions') }}
+                                            {{ __('Actions') }}
                                         </th>
                                     </tr>
                                 </thead>

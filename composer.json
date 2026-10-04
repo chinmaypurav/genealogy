@@ -47,7 +47,6 @@
         "spatie/laravel-backup": "^10.3",
         "spatie/laravel-medialibrary": "^11.23",
         "stefangabos/world_countries": "^3.3",
-        "stevebauman/location": "^7.6",
         "tallstackui/tallstackui": "^4.0"
     },
     "require-dev": {

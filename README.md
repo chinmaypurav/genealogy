@@ -232,10 +232,9 @@ This project is open-sourced software licensed under the [MIT license](LICENSE).
 
 ### Special features
 
-This application has a built-in <b>Backup Manager</b>:
+This application ships with scheduled <b>Backups</b>:
 
 <ul>
-    <li>Backups can be initiated and managed manually.</li>
     <li>Daily backup and cleanup tasks are scheduled through Laravel's scheduler.</li>
     <li>An email is sent after each backup.</li>
 </ul>
